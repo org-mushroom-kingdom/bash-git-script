@@ -9,6 +9,7 @@ VERBOSE=false
 readonly DASH="-------"
 readonly MAIN_OPT="[main] Main menu"
 readonly QUIT_OPT="[q] Quit"
+readonly EXIT_MSG="\nQuitting. Bye!"
 readonly RED="\e[31m"
 readonly GREEN="\e[32m"
 readonly YELLOW="\e[33m"
@@ -28,11 +29,11 @@ readonly WHITE="\e[97m"
 readonly GREY_BG="\e[47m"
 readonly VERBOSE_FORMAT="\e[1;100m"
 readonly DONE="\e[0m"
- 
+
 run()
 {
-    echo -e "Welcome!\n"
-    verbose_echo "VERBOSE is on"
+    echo -e "\nWelcome!\n"
+    verbose_echo "VERBOSE is on\n"
     list_choices_and_execute_for "main"
 }
 
@@ -75,7 +76,12 @@ verbose_echo()
     #If VERBOSE global is on (true), then echo
     V_STRING=$1 #String
     if $VERBOSE; then
-        echo "${VERBOSE_FORMAT}${V_STRING}${DONE}"
+        if [[ $V_STRING == *"\n"* ]]
+        then
+            [[ $V_STRING == "\n"* ]] && echo -e "\n" || :
+            echo -e "${VERBOSE_FORMAT}${V_STRING}${DONE}" | xargs
+            [[ $V_STRING == *"\n" ]] && echo -e "\n" || :
+        fi
     fi
 }
 
@@ -144,6 +150,15 @@ execute_based_on_choice()
                 3)
                     list_choices_and_execute_for "debug"
                     ;;
+                von)
+                    echo -e "Setting VERBOSE to on!\n"
+                    VERBOSE=true
+                    run
+                    ;;
+                q)
+                    echo -e $EXIT_MSG
+                    exit
+                    ;;
                 *)
                     echo "OK"
                     ;;
@@ -153,7 +168,10 @@ execute_based_on_choice()
             verbose_echo "execute_based_on_choice(): CODEOWNERS hit! CHOICE = ${CHOICE}"
             case $CHOICE in
                 1)
-                    echo "OMG"
+                    verbose_echo "User selected "$(cyanize "Read thru Codeowners")
+                    ;;
+                main)
+                    run
                     ;;
                 *)
                     echo "YAY"
@@ -184,6 +202,9 @@ execute_based_on_choice()
                 q)
                     echo "Qutting. Hope you liked Debug Mode!"
                     ;;
+                main)
+                    run
+                    ;;
                 *)
                     echo "Invalid debug menu option. Quitting for now"
                     exit
@@ -212,7 +233,7 @@ continue_or_quit()
     then
         list_choices_and_execute_for "debug"
     else
-        echo "Quitting. Bye!"
+        echo -e $EXIT_MSG
         exit
     fi
 }
