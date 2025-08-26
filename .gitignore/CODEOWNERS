@@ -4,3 +4,6 @@
 
 #Anything in shell-scripts/ that is a *.sh file is owned by TBD
 # /shell-scripts/*.sh @username
+
+# README is also owned by Peach's team
+README.md @org-mushroom-kingdom/team-peach
