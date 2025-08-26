@@ -1,0 +1,6 @@
+#Bblablabalba
+
+# Format: /path/to/file @username @org/team
+
+#Anything in shell-scripts/ that is a *.sh file is owned by TBD
+# /shell-scripts/*.sh @username
