@@ -169,6 +169,7 @@ execute_based_on_choice()
             case $CHOICE in
                 1)
                     verbose_echo "User selected "$(cyanize "Read thru Codeowners")
+                    read_thru_codeowners
                     ;;
                 main)
                     run
@@ -201,6 +202,7 @@ execute_based_on_choice()
                     ;;
                 q)
                     echo "Qutting. Hope you liked Debug Mode!"
+                    exit
                     ;;
                 main)
                     run
@@ -218,13 +220,22 @@ execute_based_on_choice()
     esac
 }
 
+read_thru_codeowners()
+{
+    # Iterate thru the CODEOWNERS file
+    # echo the filepath and owner in the form of filepath | owner (ex. /shell-scripts/*.sh | @org-mushroom-kingdom/team-mario)
+    echo "read_thru_codeowners..."
+    echo $P
+    continue_or_quit "main"
+}
+
 continue_or_quit()
 {
     menu_type=$1
     debug_return_msg=""
     #TODO EXPLAIN shorthand
-    [[ $menu_type = "debug" ]] && debug_return_msg="To return to the debug menu, type 1." || :
-    echo -e "\nTo return to the main menu, type main. ${debug_return_msg} To quit, press q or any other key \n"
+    [[ $menu_type = "debug" ]] && debug_return_msg=" To return to the debug menu, type 1." || :
+    echo -e "\nTo return to the main menu, type "$(cyanize "main")".${debug_return_msg} To quit, press "$(cyanize "q")" or any other key \n"
     read decision
     if [ $decision = "main" ]
     then
