@@ -233,7 +233,7 @@ continue_or_quit()
 {
     menu_type=$1
     debug_return_msg=""
-    #TODO EXPLAIN shorthand
+    #TODO EXPLAIN shorthand and :
     [[ $menu_type = "debug" ]] && debug_return_msg=" To return to the debug menu, type 1." || :
     echo -e "\nTo return to the main menu, type "$(cyanize "main")".${debug_return_msg} To quit, press "$(cyanize "q")" or any other key \n"
     read decision
