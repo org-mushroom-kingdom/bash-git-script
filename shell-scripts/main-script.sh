@@ -1,6 +1,15 @@
 #!/bin/bash
 # ^Shebang line. It TODO EXPLAIN
 
+# Users: Use Git Bash to run this (have not tested with other terminals.) 
+# Install Git Bash and Github Desktop if not already done!
+# To run this script:
+# 1. Copy this repo locally.
+# 2. Open Github Desktop (if not already done)
+# 3. Use Github Desktop to open Git Bash (Ctrl+`) or Repository-->Open in Git Bash (Your working directory should be something like C/git/bash-git-script)
+# 4. Run this command:
+# ./shell-scripts/main-script.sh
+
 # Globals, defined outside the scope of a function
 # Turn this on if you want a lot of echo's TODO: Better explanaiton
 VERBOSE=false
@@ -245,7 +254,12 @@ read_thru_codeowners()
     # echo the filepath and owner in the form of filepath | owner (ex. /shell-scripts/*.sh | @org-mushroom-kingdom/team-mario)
     echo "read_thru_codeowners option was hit."
     echo "Attempting to call read_thru_codeowners.sh..."
-    bash ./read-thru-codeowners.sh
+    #Example of how to escape $ using \
+    # echo "\$PWD = ${PWD}"
+    
+    # The reason this needs ./shell-scripts is because Git Bash (the main terminal I am using for this), at the time of running
+    # is pointed at my local's top-level (the top level of bash-git-script). So we need to direct
+    ./shell-scripts/read-thru-codeowners.sh
     continue_or_quit "main"
 }
 
