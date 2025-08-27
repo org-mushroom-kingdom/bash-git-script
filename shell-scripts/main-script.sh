@@ -184,7 +184,7 @@ execute_based_on_choice()
             case $CHOICE in
                 1)
                     verbose_echo "User selected "$(cyanize "Read thru Codeowners")
-                    read_thru_codeowners
+                    call_read_thru_codeowners
                     ;;
                 main)
                     run
@@ -248,12 +248,12 @@ execute_based_on_choice()
     esac
 }
 
-read_thru_codeowners()
+call_read_thru_codeowners()
 {
     # Iterate thru the CODEOWNERS file
     # echo the filepath and owner in the form of filepath | owner (ex. /shell-scripts/*.sh | @org-mushroom-kingdom/team-mario)
-    echo "read_thru_codeowners option was hit."
-    echo "Attempting to call read_thru_codeowners.sh..."
+    echo "call_read_thru_codeowners option was hit."
+    echo "Attempting to call read-thru-codeowners.sh..."
     #Example of how to escape $ using \
     # echo "\$PWD = ${PWD}"
     
