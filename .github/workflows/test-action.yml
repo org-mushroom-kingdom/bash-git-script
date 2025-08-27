@@ -34,3 +34,6 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+      - name: State the organization
+        run: echo The organization name is: github.repository_owner
+      - name: State the teams in this organization
