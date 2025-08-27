@@ -132,7 +132,8 @@ list_choices()
         help)
             echo -e "\n${DASH}Help Menu (Debug Mode)${DASH}\n"
             echo -e "[1] How to use this app"
-            echo -e "[2] Color meanings" $(cyanize "cyanize()")
+            echo -e "[2] Color meanings"
+            ;;
         *)
             echo "Invalid selection"
             ;;
