@@ -245,6 +245,7 @@ read_thru_codeowners()
     # echo the filepath and owner in the form of filepath | owner (ex. /shell-scripts/*.sh | @org-mushroom-kingdom/team-mario)
     echo "read_thru_codeowners option was hit."
     echo "Attempting to call read_thru_codeowners.sh..."
+    ./read_thru_codeowners.sh
     continue_or_quit "main"
 }
 
