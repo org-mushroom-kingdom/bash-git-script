@@ -1,6 +1,6 @@
-# This is a basic workflow to help you get started with Actions
+# This action is used to test stuff with PRs.
 
-name: CI
+name: Test PR Action 1
 
 # Controls when the workflow will run
 on:
@@ -23,6 +23,14 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Get changed files
+        # Use github.event.pull_request to get the base SHA* (the SHA where the PR originated from) with the head branch's commit SHA (the latest commit in the PR) 
+        # and output only the names of the changed files. 
+        # The base SHA represents the specific point in the history of the target branch (the branch the PR is merging into, usually main for this repo) 
+        # from which the changes in the pull request diverge. It's the common ancestor commit between the head of the pull request's branch and the base branch.
+        # ex. The branch feature/matt-add-group-profile-pic has a SHA of 59d780bc575a65aba2c7ada2d0551bf19556cf5f. In history, this is before a profile pic was added and before a description was added to cyanize()
+        # To get the base SHA of a feature branch, you can use $ git merge-base --fork-point <target-branch> <feature-branch> 
+        # ex. $ git merge-base --fork-point main feature/matt-add-group-profile-pic
+        
+        run: |
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
