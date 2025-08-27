@@ -23,6 +23,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - name: Output target branch
+        run: echo Target branch "${{ github.event.pull_request.base.ref }}"
       - name: Get changed files
         # Use github.event.pull_request to get the base SHA* (the SHA where the PR originated from) with the head branch's commit SHA (the latest commit in the PR) 
         # and output only the names of the changed files. 
