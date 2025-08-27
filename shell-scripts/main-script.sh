@@ -49,6 +49,7 @@ run()
 
 test_cyanize()
 {
+    # Take a string (stdin, AKA user input) and output a cyan version of it
     test_cyan_string="" #User input. A string to make cyan
     echo -e "Enter a string. It will become a ${CYAN}cyan-colored string${DONE}\n"
     read test_cyan_string
