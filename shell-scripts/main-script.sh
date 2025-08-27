@@ -184,9 +184,8 @@ execute_based_on_choice()
                     echo "YAY"
                     ;;
             esac
-            ;;
-        
-    github)
+            ;;    
+        github)
             verbose_echo "execute_based_on_choice(): github hit! CHOICE = ${CHOICE}"
             case $CHOICE in
                 1)
@@ -197,7 +196,7 @@ execute_based_on_choice()
                     ;;
             esac
             ;;
-    debug)
+        debug)
             verbose_echo -e "\nexecute_based_on_choice(): debug hit! CHOICE = ${CHOICE}"
             case $CHOICE in
                 1)
@@ -209,33 +208,34 @@ execute_based_on_choice()
                 q)
                     echo "Qutting. Hope you liked Debug Mode!"
                     exit
-                    ;;
-                main)
-                    run
-                    ;;
-                *)
-                    echo "Invalid debug menu option. Quitting for now"
-                    exit
-                    ;;
-            esac
-            continue_or_quit "debug"
-            ;;
-    help)
-        verbose_echo -e "\nexecute_based_on_choice(): help hit! CHOICE = ${CHOICE}"
-        case $CHOICE in
-                1)
-                    echo "How to use --TBD"
-                    ;;
-                2)
-                    echo $(cyanize "cyan") "| keys (or words) that a user can type as input into this app"
-                    echo "Rest of colors to be discussed. TBD"
-                    ;;
+                ;;
+            main)
+                run
+                ;;
+            *)
+                echo "Invalid debug menu option. Quitting for now"
+                exit
+                ;;
         esac
-        #TODO: Stay on help menu option, edit continue_or_quit?
-        continue_or_quit "main"
-    *)
-        verbose_echo "execute_based_on_choice: Invalid TYPE"
-        echo "Invalid TYPE"
+        continue_or_quit "debug"
+        ;;
+        help)
+            verbose_echo -e "\nexecute_based_on_choice(): help hit! CHOICE = ${CHOICE}"
+            case $CHOICE in
+                    1)
+                        echo "How to use --TBD"
+                        ;;
+                    2)
+                        echo $(cyanize "cyan") "| keys (or words) that a user can type as input into this app"
+                        echo "Rest of colors to be discussed. TBD"
+                        ;;
+            esac
+            #TODO: Stay on help menu option, edit continue_or_quit?
+            continue_or_quit "main"
+            ;;
+        *)
+            verbose_echo "execute_based_on_choice: Invalid TYPE"
+            echo "Invalid TYPE"
     esac
 }
 
