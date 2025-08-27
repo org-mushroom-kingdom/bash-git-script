@@ -94,6 +94,7 @@ list_choices_and_execute_for()
     execute_based_on_choice $user_choice $set
 }
 
+# lc
 list_choices()
 {
     #This only lists strings
@@ -128,6 +129,10 @@ list_choices()
             echo -e "${MAIN_OPT} \n"
             # echo -e "Other debug menu options TBD \n"
             ;;
+        help)
+            echo -e "\n${DASH}Help Menu (Debug Mode)${DASH}\n"
+            echo -e "[1] How to use this app"
+            echo -e "[2] Color meanings" $(cyanize "cyanize()")
         *)
             echo "Invalid selection"
             ;;
@@ -214,9 +219,22 @@ execute_based_on_choice()
             esac
             continue_or_quit "debug"
             ;;
-        *)
-            verbose_echo "execute_based_on_choice: Invalid TYPE"
-            echo "Invalid TYPE"
+    help)
+        verbose_echo -e "\nexecute_based_on_choice(): help hit! CHOICE = ${CHOICE}"
+        case $CHOICE in
+                1)
+                    echo "How to use --TBD"
+                    ;;
+                2)
+                    echo $(cyanize "cyan") "| keys (or words) that a user can type as input into this app"
+                    echo "Rest of colors to be discussed. TBD"
+                    ;;
+        esac
+        #TODO: Stay on help menu option, edit continue_or_quit?
+        continue_or_quit "main"
+    *)
+        verbose_echo "execute_based_on_choice: Invalid TYPE"
+        echo "Invalid TYPE"
     esac
 }
 
@@ -224,8 +242,8 @@ read_thru_codeowners()
 {
     # Iterate thru the CODEOWNERS file
     # echo the filepath and owner in the form of filepath | owner (ex. /shell-scripts/*.sh | @org-mushroom-kingdom/team-mario)
-    echo "read_thru_codeowners..."
-    echo $P
+    echo "read_thru_codeowners option was hit."
+    echo "Attempting to call read_thru_codeowners.sh..."
     continue_or_quit "main"
 }
 
@@ -243,6 +261,11 @@ continue_or_quit()
     elif [ $menu_type = "debug" ]
     then
         list_choices_and_execute_for "debug"
+    
+    elif [ $menu_type = "help" ]
+    then
+        list_choices_and_execute_for "help"
+    
     else
         echo -e $EXIT_MSG
         exit
