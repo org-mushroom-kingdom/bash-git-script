@@ -1,6 +1,6 @@
 # This action is used to test stuff with PRs.
 
-name: CI
+name: Test PR Action 1
 
 # Controls when the workflow will run
 on:
