@@ -30,29 +30,11 @@ jobs:
         run: |
           echo "github.event.number = ${{ github.event.number }}"
           echo "github.event.pull_request.number = ${{ github.event.pull_request.number }}"
-          echo "github.head_ref	= ${{github.head_ref}}"
+          echo "Incoming branch (github.head_ref)	= ${{github.head_ref}}"
+          echo Target branch (github.event.pull_request.base.ref) "${{ github.event.pull_request.base.ref }}"
           echo "github.ref	= ${{github.ref}}"
       # Use GitHub API to create a comment on the PR
       - name: Automated comment on PR
-        # uses: actions/github-script@v7
-        # with:
-        #   script: |
-        #     const { Octokit } = require("@octokit/action");
-        #     const octokit = new Octokit({
-        #       auth: "${{ secrets.GITHUB_TOKEN }}"
-        #     })
-            
-        #     const issue_num = "${{ github.event.pull_request.number }}"
-            
-        #     await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-        #       owner: 'org-mushroom-kingdom',
-        #       repo: 'bash-git-script',
-        #       issue_number: issue_num,
-        #       body: 'T',
-        #       headers: {
-        #         'X-GitHub-Api-Version': '2022-11-28'
-        #       }
-        #     })
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           # Try just the number...
@@ -69,9 +51,7 @@ jobs:
         # run: echo "Attempting to get most most recent hash of workflow..."
           # You can use GitHub's API to query the last run of your workflow, getting the git hash of that commit. 
           # Then compare with the current hash to find the list of changed files - regardless of how many commits were pushed at a time.
-      
-      - name: Output target branch
-        run: echo Target branch "${{ github.event.pull_request.base.ref }}"
+
       # - name: Get changed files
       #   # Use github.event.pull_request to get the base SHA* (the SHA where the PR originated from) with the head branch's commit SHA (the latest commit in the PR) 
       #   # and output only the names of the changed files. 
