@@ -31,8 +31,9 @@ jobs:
           PR_NUMBER=${{ github.event.number }}
           COMMENT="This is an automated comment"
           GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          COMMENT_URL="https://api.github.com/org-mushroom-kingdom/repos/${{github.repository}}/issues/${PR_NUMBER}/comments"
-      
+          COMMENT_URL="https://api.github.com/org-mushroom-kingdom/${{github.repository}}/issues/${PR_NUMBER}/comments"
+
+          # -H = custom curl header
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
       - name: Get most recent hash of this workflow
