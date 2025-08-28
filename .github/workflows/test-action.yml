@@ -42,4 +42,4 @@ jobs:
         run: echo "Teams TBD"
 
       - name: State WORKSPACE var
-        run: echo "GITHUB_WORKSPACE = ${{GITHUB_WORKSPACE}}"
+        run: echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
