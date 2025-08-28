@@ -26,8 +26,17 @@ jobs:
       - name: Output target branch
         run: echo Target branch "${{ github.event.pull_request.base.ref }}"
 
+      # Use GitHub API to create a comment on the PR
+      - name: Automated comment on PR
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          COMMENT="This is an automated comment"
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          COMMENT_URL="https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments"
+      
       - name: Get most recent hash of this workflow
-        run: echo "Attempting to get most most recent hash of workflow..."
+        run: echo "Most recent hash--TBD"
+        # run: echo "Attempting to get most most recent hash of workflow..."
           # You can use GitHub's API to query the last run of your workflow, getting the git hash of that commit. 
           # Then compare with the current hash to find the list of changed files - regardless of how many commits were pushed at a time.
 
