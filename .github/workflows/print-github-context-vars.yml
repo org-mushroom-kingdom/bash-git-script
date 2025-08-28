@@ -1,0 +1,22 @@
+# This workflow echo's various Github 'github' context variables within the context of the git-bash-script repo for informational purposes
+# See https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context
+
+name: Print Github Context Variables
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  echo-env-vars:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Echo Github Context Variables
+        run: |
+          echo "Github repo owner (who owns the repo) = ${{github.repository_owner}}"
+          echo "Github repo owner AND repo name = ${{github.repository}}"
+          echo "Github Workflow SHA (commit SHA for workflow) = ${{github.workflow_sha}}"
+          
