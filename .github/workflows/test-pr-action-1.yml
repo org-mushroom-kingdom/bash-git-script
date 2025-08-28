@@ -29,7 +29,7 @@ jobs:
         with:
           script: |
             const octokit = new Octokit({
-              auth: 'YOUR-TOKEN'
+              auth: "${{ secrets.GITHUB_TOKEN }}"
             })
             const issue_num = "${{ github.event.pull_request.number }}"
             await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
