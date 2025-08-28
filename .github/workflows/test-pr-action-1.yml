@@ -25,6 +25,12 @@ jobs:
 
       - name: Output target branch
         run: echo Target branch "${{ github.event.pull_request.base.ref }}"
+
+      - name: Get most recent hash of this workflow
+        run: echo "Attempting to get most most recent hash of workflow..."
+          # You can use GitHub's API to query the last run of your workflow, getting the git hash of that commit. 
+          # Then compare with the current hash to find the list of changed files - regardless of how many commits were pushed at a time.
+
       - name: Get changed files
         # Use github.event.pull_request to get the base SHA* (the SHA where the PR originated from) with the head branch's commit SHA (the latest commit in the PR) 
         # and output only the names of the changed files. 
@@ -36,3 +42,7 @@ jobs:
         
         run: |
           git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+
+
+
+

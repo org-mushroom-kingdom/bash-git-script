@@ -37,6 +37,10 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
          
+        # Example of how to run a shell script from within a workflow
+      - name: Run the say-hello.sh shell script
+        run: ./shell-scripts/say-hello.sh
+      
       - name: State the organization
         run: echo "The organization name is:${{github.repository_owner}}"
 
