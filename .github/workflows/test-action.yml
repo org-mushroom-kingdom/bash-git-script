@@ -37,6 +37,9 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
          
+      - name: Make shell scripts executable
+        run: chmod +x ./shell-scripts/*.sh # Gives execute permissions to the script
+      
         # Example of how to run a shell script from within a workflow
       - name: Run the say-hello.sh shell script
         run: ./shell-scripts/say-hello.sh
