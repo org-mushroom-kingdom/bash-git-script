@@ -52,5 +52,5 @@ jobs:
 
       # GITHUB_WORKSPACE is an environmental variable whose value is the default working directory on the runner for steps 
       # This is also the default location of your repository when using the checkout action. Ex. /home/runner/work/bash-git-script/bash-git-script
-      - name: State WORKSPACE var
+      - name: State GITHUB_WORKSPACE var
         run: echo "Github Workspace = $GITHUB_WORKSPACE"
