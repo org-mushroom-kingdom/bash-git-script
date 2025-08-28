@@ -27,10 +27,14 @@ jobs:
       - name: Automated comment on PR
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
+          # Try just the number...
+          PR_NUMBER=${{ github.event.number }}
           COMMENT="This is an automated comment"
           GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          COMMENT_URL="https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments"
+          COMMENT_URL="https://api.github.com/org-mushroom-kingdom/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments"
       
+          curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
+
       - name: Get most recent hash of this workflow
         run: echo "Most recent hash--TBD"
         # run: echo "Attempting to get most most recent hash of workflow..."
