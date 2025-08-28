@@ -30,6 +30,8 @@ jobs:
         run: |
           echo "github.event.number = ${{ github.event.number }}"
           echo "github.event.pull_request.number = ${{ github.event.pull_request.number }}"
+          echo "github.head_ref	= ${{github.head_ref}}"
+          echo "github.ref	= ${{github.ref}}"
       # Use GitHub API to create a comment on the PR
       - name: Automated comment on PR
         # uses: actions/github-script@v7
@@ -59,7 +61,7 @@ jobs:
           GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
           COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/${PR_NUMBER}/comments"
           echo "COMMENT_URL = ${COMMENT_URL}"
-          # -H = custom curl header
+          # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
       # - name: Get most recent hash of this workflow
