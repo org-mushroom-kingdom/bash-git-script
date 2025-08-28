@@ -11,4 +11,7 @@ This repo is for testing CODEOWNERS, among other things. A sample organization h
 
 A sample CODEOWNERS file has been made, with teams being assigned to various items within. Some items will purposefully NOT be in CODEOWNERS for testing purposes. 
 
-This repo also holds several Github Actions. Some of them are purely informative and don't do much besides echo/print things. 
+# Github Actions
+
+This repo also holds several Github Actions. Some of them are purely informative and don't do much besides echo/print things.
+
