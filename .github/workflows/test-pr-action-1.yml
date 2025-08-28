@@ -16,6 +16,9 @@ jobs:
   get-filenames-in-pr:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     name: PR Activity 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
