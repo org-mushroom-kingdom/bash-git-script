@@ -8,3 +8,5 @@ This repo is for testing CODEOWNERS, among other things. A sample organization h
 - team-luigi
 - team-peach
 - team-toad
+
+A sample CODEOWNERS file has been made, with teams being assigned to various items within. Some items will purposefully NOT be in CODEOWNERS for testing purposes. 
