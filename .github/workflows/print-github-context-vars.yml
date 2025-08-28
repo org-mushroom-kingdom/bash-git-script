@@ -16,7 +16,7 @@ jobs:
 
       - name: Echo Github Context Variables
         run: |
-          echo "Github repo owner (who owns the repo) = ${{github.repository_owner}}"
-          echo "Github repo owner AND repo name = ${{github.repository}}"
-          echo "Github Workflow SHA (commit SHA for workflow) = ${{github.workflow_sha}}"
+          echo "Github repo owner (who owns the repo AKA github.repository_owner) = ${{github.repository_owner}}"
+          echo "Github repo owner AND repo name AKA github.repository = ${{github.repository}}"
+          echo "Github Workflow SHA (commit SHA for workflow AKA github.workflow_sha) = ${{github.workflow_sha}}"
           
