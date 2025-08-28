@@ -17,8 +17,6 @@ jobs:
       - name: Echo Github Context Variables
         run: |
           echo "Github repo owner (who owns the repo) = ${{github.repository_owner}}"
-          # echo "Github event name (the event that trigged the workflow) = $GITHUB_EVENT_NAME"
-          # echo "Github API URL = $GITHUB_API_URL"
-          # echo "Github SHA (SHA that triggered the workflow) = $GITHUB_SHA"
-          # echo "Github Workflow SHA (commit SHA for workflow) = $GITHUB_WORKFLOW_SHA"
-          # echo "Github Workspace = $GITHUB_WORKSPACE"
+          echo "Github repo owner AND repo name = ${{github.repository}}"
+          echo "Github Workflow SHA (commit SHA for workflow) = ${{github.workflow_sha}}"
+          
