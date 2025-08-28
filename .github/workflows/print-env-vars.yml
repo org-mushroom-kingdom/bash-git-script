@@ -1,0 +1,27 @@
+# This workflow echo's various environmental variables within the context of the git-bash-script repo for informational purposes
+
+name: Echo Environmental Variables
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "test-job"
+  echo-env-vars:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Echo Environmental Variables
+        run: |
+          echo "Github actor (who initiated the workflow) = $GITHUB_ACTOR"
+          echo "Github event name (the event that trigged the workflow) = $GITHUB_EVENT_NAME"
+          echo "Github API URL = $GITHUB_API_URL"
+          echo "Github SHA (SHA that triggered the workflow) = $GITHUB_SHA"
+          echo "Github Workflow SHA (commit SHA for workflow) = $GITHUB_WORKFLOW_SHA"
+          echo "Github Workspace = $GITHUB_WORKSPACE"
