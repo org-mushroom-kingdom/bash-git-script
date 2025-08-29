@@ -47,13 +47,14 @@ jobs:
           echo "PR_NUMBER = $PR_NUMBER"
           echo "$ {PR_NUMBER} = ${PR_NUMBER}"
 
-      # Shows how to 
+      # Use simple Bash ${string/substring-to-replace/replacement} logic on job-env var COMMENT_URL 
       - name: Modify COMMENT_URL    
         run: |  
           echo "URL before:  $COMMENT_URL"
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           echo "URL after:  $COMMENT_URL"
       
+      # Shows how change in above step does NOT persist in future step (surprising)
       - name: Echo COMMENT_URL after modification in different step
         run: echo $COMMENT_URL
 
