@@ -1,0 +1,83 @@
+# Business: This action is used to test stuff with CODEOWNERS.
+
+# Walk thru what we want to do:
+# 1. Get the names of the files that are changed in a PR as a var changed_file_list
+# 2. Get the CODEOWNERS file
+# 3. Set a not_in_codeowners_comment string with an initial message
+# 4. FOR EACH changed_filename in changed_file_list, do:        (See Loop pseudocode for more detail)
+#    - Set a var in_codeowners = false
+#    Check if the file is in CODEOWNERS by:   
+#        FOR EACH line in CODEOWNERS, do
+#            - If line is commented out (starts with #), 'continue' the loop (no point in looking at comments)
+#            - If line is actually legit, then
+#            a. See if the changed_file filepath matches anything in CODEOWNERS 
+#               aa. Do this search in a granular way (ex. changed_file = dummy/scripts/mario-script-1.sh, look for dummy/* --> dummy/scripts/*--> dummy/scripts/mario-script-1.sh)
+#               ab. If a match is found, set in_codeowners=true and somehow exit 
+#        DONE with CODEOWNERS loop
+#    If in_codeowners is still false at this point, then we should add this to a not_in_codeowners_comment string (end with \n in case of multiple)
+#    # Continue this process for all the changed_filename items in changed_file_list
+#    DONE with changed_filename loop
+# 5. At this point, assess the not_in_codeowners_comment string and see if it differs from its intial message (if it does means there are files not in CODEOWNERS)
+# 6. Take the comment and put it in the PR
+
+
+# Loop pseudocode
+# not_in_codeowners_comment="The following files are not in CODEOWNERS"
+# for each changed_filename in changed_file_list
+#   in_codeowners=false
+#   
+#    for each line in CODEOWNERS
+#       if line.startsWith("#")
+#       then
+#           continue
+#       fi
+#       #ex. dummy/scripts/mario-script-1.sh
+#       if line.startsWith("dummy/") && nextChar=*
+#       then
+#           in_codeowners=true   
+#       fi
+#
+#       if $in_codeowners
+#       then
+#          
+#          (exit the CODEOWNERS loop early)
+#       fi
+#    done
+#
+#    if !in_codeowners
+#    then
+#      # Add to not_in_codeowners_comment
+#       not_in_codeowners_comment+="${changed_filename} is not in CODEOWNERS! \n"
+#    fi
+# done
+#
+# #Check if $not_in_codeowners_comment was added to by assessing its initial value. If it was added to, make a comment on the PR 
+# if $not_in_codeowners_comment != "The following files are not in CODEOWNERS"
+# then
+#    (Make the comment in the PR, using logic based on test-pr-action to do so)
+# fi
+
+
+name: CODEOWNERS Interactions
+
+# Controls when the workflow will run
+on:
+  # TODO: Eventually this should be commented back in because we want to check if the files in the PR are in CODEOWNERS
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # This workflow contains a single job called "automated-pr-comments"
+  automated-pr-comments:
+    name: Codeowners Interactions 
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+
+        # Get the file so we can do stuff to it
+        - name: Get CODEOWNERS
+        - run: 
