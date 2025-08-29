@@ -41,17 +41,17 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-      # TODO: EXPLAIN   
-      - name: Echo env vars
+      # Shows how the variables described in job-level env can be used by subsequent steps   
+      - name: Echo job env vars
         run: |
           echo "PR_NUMBER = $PR_NUMBER"
           echo "$ {PR_NUMBER} = ${PR_NUMBER}"
 
-      #TODO: EXPLAIN
+      # Shows how to 
       - name: Modify COMMENT_URL    
         run: |  
           echo "URL before:  $COMMENT_URL"
-          COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
+          $COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           echo "URL after:  $COMMENT_URL"
       
       - name: Echo COMMENT_URL after modification in different step
