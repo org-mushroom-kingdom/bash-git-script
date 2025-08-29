@@ -15,7 +15,12 @@ A sample CODEOWNERS file has been made, with teams being assigned to various ite
 
 # Github Actions
 
-This repo also holds several Github Actions. Some of them are purely informative and don't do much besides echo/print things. 
+This repo also holds several Github Actions, which help automate various processes in the CI/CD workflow. 
+
+In this repo, we will define actions into either *Business* or *Informative* categories. This designation will in the top comment of each workflow (see .github/workflows).  
+
+TODO: Do something with this line --> Some of these actions are mainly informative and don't do much besides echo/print things. 
+TODO: Put a table or something here in the readme that denotes which actions are business and which are informative. 
 
 # Shell Scripts
 

@@ -1,4 +1,4 @@
-# This workflow echo's various environmental variables within the context of the git-bash-script repo for informational purposes
+# Informative: This workflow echo's various environmental variables within the context of the git-bash-script repo for informational purposes
 
 name: Echo Environmental Variables
 
