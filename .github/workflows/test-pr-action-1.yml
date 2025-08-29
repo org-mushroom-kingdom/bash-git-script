@@ -27,20 +27,24 @@ jobs:
       # Try just the number...
       # PR_NUMBER=${{ github.event.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      COMMENT_URL: "https://api.github.com/repos/${{github.repository}}/issues/${PR_NUMBER}/comments"
+      COMMENT_URL: "https://api.github.com/repos/${{github.repository}}/issues/$PR_NUMBER/comments"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - name: Echo PR vars
+      - name: Echo PR vars AND env vars 
         run: |
           echo "github.event.number = ${{ github.event.number }}"
           echo "github.event.pull_request.number = ${{ github.event.pull_request.number }}"
           echo "Incoming branch/feature branch (github.head_ref)	= ${{github.head_ref}}"
           echo "Target branch (github.event.pull_request.base.ref) = ${{ github.event.pull_request.base.ref }}"
           echo "github.ref	= ${{github.ref}}"  
+          echo "---------------------"
+          echo $FEATURE_BRANCH
+          echo $PR_NUMBER
+          echo $COMMENT_URL
       
       # Use GitHub API to create a comment on the PR (POST to specific issue URL /comments)
       - name: Automated comment on PR (Unconditional)
@@ -60,7 +64,6 @@ jobs:
       - name: Conditional comment on PR (if feature branch contains 'readme')
         if: contains(env.FEATURE_BRANCH, 'readme') || contains(env.FEATURE_BRANCH, 'README')
         run: | 
-          echo $FEATURE_BRANCH
           COMMENT="This is an automated comment that only shows up if the feature branch contains 'readme' or 'README'"
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
