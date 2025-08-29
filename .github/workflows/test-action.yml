@@ -44,7 +44,7 @@ jobs:
       - name: Echo env vars
         run: |
           echo "PR_NUMBER = $PR_NUMBER"
-          echo "{{PR_NUMBER}} = ${PR_NUMBER}"
+          echo "$${PR_NUMBER} = ${PR_NUMBER}"
           echo $COMMENT_URL
       
       - name: Make shell scripts executable
