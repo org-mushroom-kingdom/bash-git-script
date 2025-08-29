@@ -24,7 +24,7 @@ TODO: Put a table or something here in the readme that denotes which actions are
 
 | Business | Informative |
 | -------- | -------- |
-| test-pr-action-1.yml | test-action.yml |
+| test-pr-action-1.yml<br> | test-action.yml<br>print-env-vars.yml |
 
 # Shell Scripts
 
