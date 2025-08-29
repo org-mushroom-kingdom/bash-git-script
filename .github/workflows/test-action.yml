@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+# Informative: This is a basic workflow to help you get started with Actions
 
 #The name at top-level gives the job a name that is seen in the Actions tab.
 name: Test Github Action
