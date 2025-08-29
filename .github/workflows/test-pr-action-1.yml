@@ -64,7 +64,7 @@ jobs:
         run: | 
           COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/NUM/comments"
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
-          COMMENT="This is an automated comment that only shows up if the feature branch contains 'readme' or 'README'\n This is a multiline comment."
+          COMMENT="This is an automated comment that only shows up if the feature branch contains 'readme' or 'README'"<br> This is a multiline comment."
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
       #TODO: Use a conditional here to alter a comment's text
