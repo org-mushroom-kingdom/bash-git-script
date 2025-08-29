@@ -51,7 +51,7 @@ jobs:
       - name: Modify COMMENT_URL    
         run: |  
           echo "URL before:  $COMMENT_URL"
-          $COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
+          COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           echo "URL after:  $COMMENT_URL"
       
       - name: Echo COMMENT_URL after modification in different step
