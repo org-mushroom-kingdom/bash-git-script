@@ -22,7 +22,7 @@ jobs:
       pull-requests: write
     # Job-specific variables can be used by steps (and the job itself)
     env:
-      FEATURE_BRANCH: github.head_ref
+      FEATURE_BRANCH: ${{github.head_ref}}
       PR_NUMBER: ${{ github.event.pull_request.number }}
       # Try just the number...
       # PR_NUMBER=${{ github.event.number }}
