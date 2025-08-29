@@ -55,7 +55,7 @@ jobs:
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
         #Example of using a conditional (incoming/feature branch contains 'readme' or 'README')
-        - name: Conditional comment on PR (if feature branch contains 'readme')
+      - name: Conditional comment on PR (if feature branch contains 'readme')
         if: contains(env.FEATURE_BRANCH, 'readme') || contains(env.FEATURE_BRANCH, 'README')
         run: | 
           COMMENT="This is an automated comment that only shows up if the feature branch contains 'readme' or 'README'"
