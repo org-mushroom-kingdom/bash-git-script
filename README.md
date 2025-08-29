@@ -22,6 +22,10 @@ In this repo, we will define actions into either *Business* or *Informative* cat
 TODO: Do something with this line --> Some of these actions are mainly informative and don't do much besides echo/print things. 
 TODO: Put a table or something here in the readme that denotes which actions are business and which are informative. 
 
+| Business | Informative |
+| -------- | -------- |
+| test-pr-action-1.yml | test-action.yml |
+
 # Shell Scripts
 
 As of 8-28-2025, the main shell script of note is main-script.sh. It shows how Bash works, how various Github commands work, and how Bash and Git can work together. It's the reason this repo is **called bash-git-script** in the first place. 
