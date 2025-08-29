@@ -53,12 +53,14 @@ jobs:
           # COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/${PR_NUMBER}/comments"
           # echo "COMMENT_URL = ${COMMENT_URL}"
           # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
+          echo $COMMENT_URL
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
         #Example of using a conditional (incoming/feature branch contains 'readme' or 'README')
       - name: Conditional comment on PR (if feature branch contains 'readme')
         if: contains(env.FEATURE_BRANCH, 'readme') || contains(env.FEATURE_BRANCH, 'README')
         run: | 
+          echo $FEATURE_BRANCH
           COMMENT="This is an automated comment that only shows up if the feature branch contains 'readme' or 'README'"
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
