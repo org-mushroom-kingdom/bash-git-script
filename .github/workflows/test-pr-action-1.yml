@@ -12,14 +12,22 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  get-filenames-in-pr:
+  # This workflow contains a single job called "automated-pr-comments"
+  automated-pr-comments:
+    name: Automated PR Comments 
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
-    name: Automated PR Comments 
+    # Job-specific variables can be used by steps (and the job itself)
+    env:
+      FEATURE_BRANCH: github.head_ref
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      # Try just the number...
+      # PR_NUMBER=${{ github.event.number }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      COMMENT_URL: "https://api.github.com/repos/${{github.repository}}/issues/${PR_NUMBER}/comments"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -30,22 +38,31 @@ jobs:
         run: |
           echo "github.event.number = ${{ github.event.number }}"
           echo "github.event.pull_request.number = ${{ github.event.pull_request.number }}"
-          echo "Incoming branch (github.head_ref)	= ${{github.head_ref}}"
+          echo "Incoming branch/feature branch (github.head_ref)	= ${{github.head_ref}}"
           echo Target branch (github.event.pull_request.base.ref) "${{ github.event.pull_request.base.ref }}"
           echo "github.ref	= ${{github.ref}}"
-      # Use GitHub API to create a comment on the PR
-      - name: Automated comment on PR
+
+      # Use GitHub API to create a comment on the PR (POST to specific issue URL /comments)
+      - name: Automated comment on PR (Unconditional)
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          # Try just the number...
-          # PR_NUMBER=${{ github.event.number }}
-          COMMENT="This is an automated comment"
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/${PR_NUMBER}/comments"
-          echo "COMMENT_URL = ${COMMENT_URL}"
-          # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
+          # PR_NUMBER=${{ github.event.pull_request.number }}
+          # # Try just the number...
+          # # PR_NUMBER=${{ github.event.number }}
+          COMMENT="This is an automated comment that goes in every pull request in the bash-git-script repo."
+          # GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          # COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/${PR_NUMBER}/comments"
+          # echo "COMMENT_URL = ${COMMENT_URL}"
+          # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
 
+        #Example of using a conditional (incoming/feature branch contains 'readme' or 'README')
+        -name: Conditional comment on PR (if feature branch contains 'readme')
+        if: contains(env.FEATURE_BRANCH, 'readme') || contains(env.FEATURE_BRANCH, 'README')
+        run: 
+          COMMENT="This is an automated comment that only shows up if the feature branch contains 'readme' or 'README'"
+          curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
+
+      
       #TODO: Use a conditional here to decide whether post a comment
       #TODO: Use a conditional here to alter a comment's text
 
