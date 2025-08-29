@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PR_NUMBER: "33"
-      COMMENT_URL: "https://api.github.com/repos/${{github.repository}}/issues/${{PR_NUMBER}}/comments"
+      COMMENT_URL: "https://api.github.com/repos/${{github.repository}}/issues/$PR_NUMBER/comments"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
