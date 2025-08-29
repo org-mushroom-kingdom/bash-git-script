@@ -46,7 +46,7 @@ jobs:
           echo "PR_NUMBER = $PR_NUMBER"
           echo "$ {PR_NUMBER} = ${PR_NUMBER}"
           echo "URL before:  $COMMENT_URL"
-          COMMENT_URL="${COMMENT_URL}/NUM/${PR_NUMBER}"
+          COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           echo "URL after:  $COMMENT_URL"
       - name: Make shell scripts executable
         run: chmod +x ./shell-scripts/*.sh # Gives execute permissions to the script
