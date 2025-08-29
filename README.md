@@ -32,13 +32,12 @@ As of 8-28-2025, the main shell script of note is main-script.sh. It shows how B
 
 The main script is used for various things.
 
-TODO: Currently, it doesn't do a ton, just lists choices for things with the ability to go back to certain menus. In a while it should be able to fun things like reading through CODEOWNERS, perhaps.
-
+TODO: Currently, it doesn't do a ton, just lists choices for things with the ability to go back to certain menus. In a while it should be able to fun things like reading through CODEOWNERS, perhaps.  
 TODO 8-28-2025: Really, I should fork this repo, keep just the Bash and Bash-relevant stuff for portfolio and knowledge transer purposes, but I'm not doing that for a minute haha.
 
 # To-Do List
 
 Space for things I want to do in general, not just the TODO's in the README (though those should be done too!)
 
-TODO: Come up with a way to make a very basic PR with a simple change to a non-important file/script so I don't have to manually make a branch and PR all the time to test Test PR Action (ironically, making a feature/PR is probaly best handled by another action)
+TODO: Come up with a way to make a very basic PR with a simple change to a non-important file/script so I don't have to manually make a branch and PR all the time to test Test PR Action (ironically, making a feature/PR is probaly best handled by another action)  
 TODO: Capture the HTTP status of the Github API comment and mark action as failed if HTTP status != 200 
