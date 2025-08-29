@@ -1,6 +1,8 @@
 # bash-git-script
 
-A repo for testing various Bash and Github related things, often tied together. Yay!
+A repo for testing various Bash and Github related things, often tied together. This repo also tests Github Actions.
+
+# Background Info
 
 This repo is for testing CODEOWNERS, among other things. A sample organization had to be made due to this. Thus, this repo is owned by the organization **org-mushroom-kingdom**, which is split into four sample teams:
 
