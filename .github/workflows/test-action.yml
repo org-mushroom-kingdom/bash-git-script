@@ -40,14 +40,23 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-         
+
+      # TODO: EXPLAIN   
       - name: Echo env vars
         run: |
           echo "PR_NUMBER = $PR_NUMBER"
           echo "$ {PR_NUMBER} = ${PR_NUMBER}"
+
+      #TODO: EXPLAIN
+      - name: Modify COMMENT_URL    
+        run: |  
           echo "URL before:  $COMMENT_URL"
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           echo "URL after:  $COMMENT_URL"
+      
+      - name: Echo COMMENT_URL after modification in different step
+        run: echo $COMMENT_URL
+
       - name: Make shell scripts executable
         run: chmod +x ./shell-scripts/*.sh # Gives execute permissions to the script
       
