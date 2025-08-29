@@ -59,6 +59,7 @@ jobs:
 
       #Example of using a conditional (incoming/feature branch contains 'readme' or 'README')
       - name: Conditional comment on PR (if feature branch contains 'readme')
+        # Note the if: and contains() syntax
         if: contains(env.FEATURE_BRANCH, 'readme') || contains(env.FEATURE_BRANCH, 'README')
         run: | 
           COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/NUM/comments"
