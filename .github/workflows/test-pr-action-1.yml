@@ -40,8 +40,7 @@ jobs:
           echo "github.event.pull_request.number = ${{ github.event.pull_request.number }}"
           echo "Incoming branch/feature branch (github.head_ref)	= ${{github.head_ref}}"
           echo "Target branch (github.event.pull_request.base.ref) = ${{ github.event.pull_request.base.ref }}"
-          echo "github.ref	= ${{github.ref}}"
-
+          echo "github.ref	= ${{github.ref}}"  
       - name: Automated comment on PR (Unconditional)
         run: |
           # PR_NUMBER=${{ github.event.pull_request.number }}
