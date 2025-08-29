@@ -18,12 +18,12 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "test-job"
-  env:
-    PR_NUMBER: "33"
-    COMMENT_URL: "https://api.github.com/repos/${{github.repository}}/issues/$PR_NUMBER/comments"
   test-job:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: "33"
+      COMMENT_URL: "https://api.github.com/repos/${{github.repository}}/issues/$PR_NUMBER/comments"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
