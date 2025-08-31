@@ -34,5 +34,5 @@ is_divisible_by_2()
 #     # echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
 #     # echo "$NUM_TO_DIVIDE is_divisible_by_2 = " $(is_divisible_by_2 $NUM_TO_DIVIDE)
 # fi
-# echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
-echo "DIVIDING"
+echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
+# echo "DIVIDING"
