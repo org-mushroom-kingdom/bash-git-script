@@ -47,6 +47,10 @@ jobs:
           echo "PR_NUMBER = $PR_NUMBER"
           echo "$ {PR_NUMBER} = ${PR_NUMBER}"
 
+      # An example of how to use the 'github' context
+      - name: Print the organization
+        run: echo "The organization name is:${{github.repository_owner}}"
+      
       # Use simple Bash ${string/substring-to-replace/replacement} logic on job-env var COMMENT_URL 
       - name: Modify COMMENT_URL    
         run: |  
@@ -65,9 +69,15 @@ jobs:
       - name: Run the say-hello.sh shell script
         run: ./shell-scripts/say-hello.sh
       
-      - name: State the organization
-        run: echo "The organization name is:${{github.repository_owner}}"
+      # Example of a step-level env var, calling Bash script with arg and getting return value
+      - name: Give shell script an arg (even num), return boolean value that action can use
+        env: 
+          DIVISIBLE_BY_2: false 
+        run: |
+          # ./shell-scripts/divide.sh is_divisible_by_2 >> $GITHUB_OUTPUT
+          echo "TBD"
 
+      # TODO: Figure out how to list teams
       - name: State the teams in this organization
         run: echo "TODO Teams TBD"
 
