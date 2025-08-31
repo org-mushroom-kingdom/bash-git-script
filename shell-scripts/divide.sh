@@ -10,6 +10,8 @@
 FXN_TO_CALL=$1
 NUM_TO_DIVIDE=$2
 
+
+
 is_divisible_by_2()
 {
     NUM=$1 # Integer
@@ -18,10 +20,10 @@ is_divisible_by_2()
     echo "NUM = $NUM"
     if (($NUM % 2 == 0))
     then
-        echo "Divisible by 2"
+        # echo "Divisible by 2"
         DIVIDES_BY_2=true
     else
-        echo "NOT Divisible by 2"
+        # echo "NOT Divisible by 2"
         DIVIDES_BY_2=false
     fi
     echo "${DIVIDES_BY_2}"
@@ -32,4 +34,4 @@ then
     echo "$NUM_TO_DIVIDE is_divisible_by_2 = " $(is_divisible_by_2 $NUM_TO_DIVIDE)
 fi
 
-echo "DIVIDING"
+# echo "DIVIDING"
