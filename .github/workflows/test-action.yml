@@ -74,8 +74,8 @@ jobs:
         env: 
           DIVISIBLE_BY_2: false 
         run: |
-          # ./shell-scripts/divide.sh is_divisible_by_2 >> $GITHUB_OUTPUT
-          echo "TBD"
+          # ./shell-scripts/divide.sh is_divisible_by_2 2 >> $GITHUB_OUTPUT 
+          echo "GITHUB_OUTPUT = $GITHUB_OUTPUT"
 
       # TODO: Figure out how to list teams
       - name: State the teams in this organization
