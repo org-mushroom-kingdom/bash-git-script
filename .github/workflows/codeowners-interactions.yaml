@@ -14,7 +14,7 @@
 #               aa. Do this search in a granular way (ex. changed_file = dummy/scripts/mario-script-1.sh, look for dummy/* --> dummy/scripts/*--> dummy/scripts/mario-script-1.sh)
 #               ab. If a match is found, set in_codeowners=true and somehow exit 
 #        DONE with CODEOWNERS loop
-#    If in_codeowners is still false at this point, then we should add this to a not_in_codeowners_comment string (end with \n in case of multiple)
+#    If in_codeowners is still false at this point, then we should add this to a not_in_codeowners_comment string (end with <br> in case of multiple)
 #    # Continue this process for all the changed_filename items in changed_file_list
 #    DONE with changed_filename loop
 # 5. At this point, assess the not_in_codeowners_comment string and see if it differs from its intial message (if it does means there are files not in CODEOWNERS)
@@ -47,7 +47,7 @@
 #    if !in_codeowners
 #    then
 #      # Add to not_in_codeowners_comment
-#       not_in_codeowners_comment+="${changed_filename} is not in CODEOWNERS! \n"
+#       not_in_codeowners_comment+="<br> ${changed_filename} is not in CODEOWNERS!"
 #    fi
 # done
 #
@@ -78,6 +78,14 @@ jobs:
       steps:
         - uses: actions/checkout@v4
 
-        # Get the file so we can do stuff to it
+        # Get the file so we can do stuff to it --part of sh?
         - name: Get CODEOWNERS
         - run: 
+          echo "Get CODEOWNERS TBD"
+
+        - name: Evaluate CODEOWNERS
+        - run:
+            echo "Evaluate CODEOWNERS TBD"
+        - name: Comment on PR if file(s) not in CODEOWNERS
+        - run:
+            echo "CODEOWNERS Comment logic TBD"
