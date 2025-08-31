@@ -80,7 +80,8 @@ jobs:
       
       - name: Return boolean value from previous step 
         run: |
-          echo "DIVISIBLE_BY_2 = ${{env.DIVISIBLE_BY_2}}"
+          echo "DIVISIBLE_BY_2 = $env.DIVISIBLE_BY_2"
+          echo "DIVISIBLE_BY_2 (env)= ${{env.DIVISIBLE_BY_2}}"
 
 
       # TODO: Figure out how to list teams
