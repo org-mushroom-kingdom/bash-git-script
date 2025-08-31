@@ -21,10 +21,10 @@ is_divisible_by_2()
     if (($NUM % 2 == 0))
     then
         # echo "Divisible by 2"
-        DIVIDES_BY_2="true"
+        DIVIDES_BY_2="is true"
     else
         # echo "NOT Divisible by 2"
-        DIVIDES_BY_2="false"
+        DIVIDES_BY_2="is false"
     fi
     echo "${DIVIDES_BY_2}"
 }
