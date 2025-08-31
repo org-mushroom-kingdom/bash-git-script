@@ -6,6 +6,8 @@
 # To call a specific function from this script from Git Bash:
 # $ source ./shell-scripts/divide.sh
 # function_name arg1 arg2 arg3 ...
+
+
 is_divisible_by_2()
 {
     NUM_TO_DIVIDE=$1 # Integer
@@ -22,3 +24,5 @@ is_divisible_by_2()
     fi
     echo "NUM_TO_DIVIDE divisible by 2 = ${DIVIDES_BY_2}"
 }
+
+echo "DIVIDING"
