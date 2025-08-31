@@ -70,13 +70,13 @@ jobs:
         run: ./shell-scripts/say-hello.sh
       
       # Example of a step-level env var, calling Bash script with arg and getting return value
-      - name: Give shell script an arg (even num), return boolean value that action can use
+      - name: Give shell script an arg (even num), assign boolean value that action can use
         env: 
           DIVISIBLE_BY_2: false 
         run: |
-          echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh is_divisible_by_2 2)" 
+          echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh is_divisible_by_2 2)" >> $GITHUB_ENV
       
-      - name: Give shell script an arg (even num), return boolean value that action can use
+      - name: Return boolean value from previous step
         env: 
           DIVISIBLE_BY_2: false 
         run: |
