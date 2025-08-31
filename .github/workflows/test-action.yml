@@ -74,9 +74,9 @@ jobs:
       # GITHUB_ENV is the environment file. TBD TODO: ELABORATE
       - name: Give shell script an arg (even num), assign boolean value that action can use
         env: 
-          DIVISIBLE_BY_2: false 
+          # DIVISIBLE_BY_2: false 
         run: |
-          echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh is_divisible_by_2 2)" >> $GITHUB_ENV
+          echo "$(./shell-scripts/divide.sh is_divisible_by_2 2)" >> $GITHUB_ENV
       
       - name: Return boolean value from previous step 
         run: |
