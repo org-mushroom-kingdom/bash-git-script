@@ -84,7 +84,7 @@ jobs:
           echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh 'is_divisible_by_2' 2)" >> $GITHUB_ENV
       
       - name: Return boolean value from previous step 
-        env:
+        # env:
           # DIVISIBLE_BY_2: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2 }}
           # DIVISIBLE_BY_2_B: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_B }}
           # DIVISIBLE_BY_2_C: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_C }}
