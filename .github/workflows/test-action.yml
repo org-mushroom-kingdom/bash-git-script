@@ -74,8 +74,14 @@ jobs:
         env: 
           DIVISIBLE_BY_2: false 
         run: |
-          ./shell-scripts/divide.sh is_divisible_by_2 2 >> $GITHUB_OUTPUT 
-          echo "GITHUB_OUTPUT = $GITHUB_OUTPUT"
+          echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh is_divisible_by_2 2)" 
+      
+      - name: Give shell script an arg (even num), return boolean value that action can use
+        env: 
+          DIVISIBLE_BY_2: false 
+        run: |
+          echo "${{env.DIVISIBLE_BY_2}}"
+
 
       # TODO: Figure out how to list teams
       - name: State the teams in this organization
