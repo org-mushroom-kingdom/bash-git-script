@@ -73,7 +73,7 @@ jobs:
       # In Bash, >> redirects the standard output to whatever is to the right of >>
       # GITHUB_ENV is the environment file. TBD TODO: ELABORATE
       - name: Give shell script an arg (even num), assign boolean value that action can use
-        env: 
+        # env: 
           # DIVISIBLE_BY_2: false 
         run: |
           echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh is_divisible_by_2 2)" >> $GITHUB_ENV
