@@ -29,10 +29,10 @@ is_divisible_by_2()
     echo "${DIVIDES_BY_2}"
 }
 
-# if ( "$FXN_TO_CALL" = "is_divisible_by_2")
-# then
-#     # echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
-#     # echo "$NUM_TO_DIVIDE is_divisible_by_2 = " $(is_divisible_by_2 $NUM_TO_DIVIDE)
-# fi
-echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
+if ( "$FXN_TO_CALL" = "is_divisible_by_2")
+then
+    # echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
+    # echo "$NUM_TO_DIVIDE is_divisible_by_2 = " $(is_divisible_by_2 $NUM_TO_DIVIDE)
+fi
+# echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
 # echo "DIVIDING"
