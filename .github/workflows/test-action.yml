@@ -84,7 +84,7 @@ jobs:
       - name: Return boolean value from previous step 
         env:
           DIVISIBLE_BY_2_B: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_B }}
-          DIVISIBLE_BY_2_B: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_c }}
+          DIVISIBLE_BY_2_C: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_C }}
         run: |
           echo "DIVISIBLE_BY_2 = $DIVISIBLE_BY_2"
           echo "DIVISIBLE_BY_2 (env)= ${{env.DIVISIBLE_BY_2}}"
