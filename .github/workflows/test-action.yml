@@ -72,25 +72,27 @@ jobs:
       # Example of a step-level env var, calling Bash script with arg and getting return value
       # In Bash, >> redirects the standard output to whatever is to the right of >>
       # GITHUB_ENV is the environment file. TBD Subsequent steps have access TODO: ELABORATE
+      #TODO: GITHUB_OUTPUT WHAT IS IT
+      #TODO: ALL 2_B stuff WORKS!!!
       - name: Give shell script an arg (even num), assign boolean value that action can use
         id: divis-by-2
         # env: 
           # DIVISIBLE_BY_2: false 
-          # echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh 'is_divisible_by_2' 2)" >> $GITHUB_ENV
           # echo "DIVISIBLE_BY_2_C=$(./shell-scripts/divide.sh 'is_divisible_by_2' 2)" >> $GITHUB_OUTPUT
+          # echo "DIVISIBLE_BY_2_B=$(./shell-scripts/divide.sh 'is_divisible_by_2' 2)" >> $GITHUB_OUTPUT
         run: |
-          echo "DIVISIBLE_BY_2_B=$(./shell-scripts/divide.sh 'is_divisible_by_2' 2)" >> $GITHUB_OUTPUT
+          echo "DIVISIBLE_BY_2=$(./shell-scripts/divide.sh 'is_divisible_by_2' 2)" >> $GITHUB_ENV
       
       - name: Return boolean value from previous step 
         env:
           # DIVISIBLE_BY_2: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2 }}
-          DIVISIBLE_BY_2_B: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_B }}
+          # DIVISIBLE_BY_2_B: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_B }}
           # DIVISIBLE_BY_2_C: ${{ steps.divis-by-2.outputs.DIVISIBLE_BY_2_C }}
           # echo "DIVISIBLE_BY_2 (env)= ${{env.DIVISIBLE_BY_2}}"
-          # echo "DIVISIBLE_BY_2 = $DIVISIBLE_BY_2"
+          # echo "DIVISIBLE_BY_2_B = $DIVISIBLE_BY_2_B"
           # echo "DIVISIBLE_BY_2_C = $DIVISIBLE_BY_2_C"
         run: |
-          echo "DIVISIBLE_BY_2_B = $DIVISIBLE_BY_2_B"
+          echo "DIVISIBLE_BY_2 = $DIVISIBLE_BY_2"
 
 
       # TODO: Figure out how to list teams
