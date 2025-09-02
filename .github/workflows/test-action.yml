@@ -80,7 +80,7 @@ jobs:
         # Call shell script with 2 args: method_name and num_to_divide
         run: |
           DIVISIBLE_BY_2_A=$(./shell-scripts/divide.sh 'is_divisible_by_2' '2')
-          echo "DIVISIBLE_BY_2_B=DIVISIBLE_BY_2_A" >> $GITHUB_OUTPUT
+          echo "DIVISIBLE_BY_2_B=$DIVISIBLE_BY_2_A" >> $GITHUB_OUTPUT
       
       # Example of how to reference output from another previous, step-level env var
       - name: Return value from previous step via GITHUB_OUTPUT 
