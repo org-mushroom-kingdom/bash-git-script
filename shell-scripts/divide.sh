@@ -19,16 +19,16 @@ is_divisible_by_2()
     NUM=$1 # Integer
     DIVIDES_BY_2="is false!!"
 
-    # echo "NUM = $NUM"
-    if (( NUM % 2 == 0 ))
-    then
-        # echo "Divisible by 2"
-        DIVIDES_BY_2="is true!!"
-    else
-        # echo "NOT Divisible by 2"
-        DIVIDES_BY_2="is false!!"
-    fi
-    echo "${DIVIDES_BY_2}"
+    echo "NUM = $NUM"
+    # if (( NUM % 2 == 0 ))
+    # then
+    #     # echo "Divisible by 2"
+    #     DIVIDES_BY_2="is true!!"
+    # else
+    #     # echo "NOT Divisible by 2"
+    #     DIVIDES_BY_2="is false!!"
+    # fi
+    # echo "${DIVIDES_BY_2}"
 }
 
 if ( "$FXN_TO_CALL" = "is_divisible_by_2" )
