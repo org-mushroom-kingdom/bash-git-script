@@ -19,7 +19,7 @@ is_divisible_by_2()
     NUM=$1 # Integer
     DIVIDES_BY_2="is false!!"
 
-    echo "NUM = $NUM"
+    # echo "NUM = $NUM"
     # if (( NUM % 2 == 0 ))
     # then
     #     # echo "Divisible by 2"
