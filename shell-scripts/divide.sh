@@ -37,7 +37,7 @@ then
     # echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
     # echo "$NUM_TO_DIVIDE is_divisible_by_2 = " $(is_divisible_by_2 $NUM_TO_DIVIDE)
     IS_IT_DIVISIBLE=$(is_divisible_by_2 "${NUM_TO_DIVIDE}")
-    echo $IS_IT_DIVISIBLE
+    echo -n $IS_IT_DIVISIBLE
 fi
 # echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
 # echo "DIVIDING"
