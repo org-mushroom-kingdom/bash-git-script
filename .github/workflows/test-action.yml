@@ -78,15 +78,13 @@ jobs:
         # Items written to GITHUB_OUTPUT can be referenced by later steps via the syntax steps.step_name.outputs.VAR_NAME
         # An id must be present in the step where GITHUB_OUTPUT is written to so the step can be referenced via the above syntax
         # Call shell script with 2 args: method_name and num_to_divide
-        run: |
-          echo "DIVISIBLE_BY_2_B=$(./shell-scripts/divide.sh 'is_divisible_by_2' '2')" >> $GITHUB_OUTPUT
+        run: echo "DIVISIBLE_BY_2_B=$(./shell-scripts/divide.sh 'is_divisible_by_2' '2')" >> $GITHUB_OUTPUT
       
       # Example of how to reference output from another previous, step-level env var
       - name: Return value from previous step via GITHUB_OUTPUT 
         env:
           DIVISIBLE_BY_2_B: ${{ steps.divis_by_2.outputs.DIVISIBLE_BY_2_B }}
-        run: |
-          echo "DIVISIBLE_BY_2_B = $DIVISIBLE_BY_2_B"
+        run: echo "DIVISIBLE_BY_2_B = $DIVISIBLE_BY_2_B"
 
 
       # TODO: Figure out how to list teams
