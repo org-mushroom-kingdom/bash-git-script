@@ -79,7 +79,7 @@ jobs:
         # An id must be present in the step where GITHUB_OUTPUT is written to so the step can be referenced via the above syntax
         # Call shell script with 2 args: method_name and num_to_divide
         run: |
-          echo "DIVISIBLE_BY_2_B=$(./shell-scripts/divide.sh 'is_divisible_by_2' 2)" >> $GITHUB_OUTPUT
+          echo "DIVISIBLE_BY_2_B=$(./shell-scripts/divide.sh 'is_divisible_by_2' '2')" >> $GITHUB_OUTPUT
       
       # Example of how to reference output from another previous, step-level env var
       - name: Return value from previous step via GITHUB_OUTPUT 
