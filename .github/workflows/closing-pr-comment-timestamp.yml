@@ -44,7 +44,7 @@ jobs:
           echo $COMMENT_URL
           # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
           echo "RESPONSE=$(curl -s -H 'Authorization: token ${GITHUB_TOKEN}' -X POST $COMMENT_URL -d '{\'body\':\'$COMMENT\'}')" >> $GITHUB_ENV
-          # STATUS_CODE= ${{ fromJson(RESPONSE).status }}
+          
           # echo "STATUS_CODE = $STATUS_CODE"
           # echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_OUTPUT
       
