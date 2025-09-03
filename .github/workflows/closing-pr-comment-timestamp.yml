@@ -15,7 +15,7 @@ on:
         description: "PR number to use when this action is manually triggered"
         required: true
         type: string
-        default: ''
+        default: 'default'
 
 jobs:
   closing-pr-comment-job:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Assess pr_number_manual input
-        if: ${{ inputs.pr_number_manual }} != ''
+        if: ${{ inputs.pr_number_manual }} != 'default'
         run: | 
           echo "Job manually started: Setting PR_NUMBER to value of inputs.pr_number_manual (${{ inputs.pr_number_manual }})"
           echo "PR_NUMBER=${{ inputs.pr_number_manual }}" >> $GITHUB_ENV
