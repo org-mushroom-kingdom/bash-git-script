@@ -43,7 +43,7 @@ jobs:
           
           echo $COMMENT_URL
           # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
-          STATUS_CODE=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -w "%{http_code} -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
+          STATUS_CODE=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -w '%{http_code}' -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
           echo "STATUS_CODE = $STATUS_CODE.status"
           # echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_OUTPUT
       - name: Print Status Code 
