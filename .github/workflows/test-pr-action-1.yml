@@ -45,7 +45,7 @@ jobs:
           echo $PR_NUMBER
           echo $COMMENT_URL
       
-      # Use GitHub API to create a comment on the PR (POST to specific issue URL /comments)
+      # Use curl and GitHub API to create a comment on the PR (POST to specific issue URL /comments)
       # COMMENT_URL is declared and then immediately changed because 
       - name: Automated comment on PR (Unconditional)
         run: |

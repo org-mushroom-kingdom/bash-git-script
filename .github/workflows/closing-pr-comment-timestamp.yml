@@ -45,15 +45,15 @@ jobs:
         run: |
           echo "Adding closing comment to PR Number: $PR_NUMBER"
           COMMENT="This pull request was closed on ${{ env.TIMESTAMP }}."
-          echo "COMMENT = $COMMENT"
-          echo "TIMESTAMP = ${{ env.TIMESTAMP }}"
           COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/NUM/comments"
           # Replace "NUM" with with the PR_NUMBER env var
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           
-          # echo $COMMENT_URL
-          # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
-          # RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -w "%{http_code}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
+          # curl is a command-line tool to test APIs, amongst other uses. The curl command here reaches out to Github API via a POST request to make a PR comment.
+          # -s = silent (won't display progress meter or error messages), -o redirects output to entity to right
+          # In this case, entity to right of -o is /dev/null, which is a data black hole--any data written to it is immediately discarded.
+          # We use /dev/null here because we only want to capture the HTTP status code (we use -w "%{http_code}" to get it) 
+          # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
           RESPONSE=$(curl -s -o /dev/null -H "Authorization: token ${GITHUB_TOKEN}" -w "%{http_code}" -X POST -i $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
           echo "RESPONSE=$RESPONSE" >> $GITHUB_OUTPUT
       - name: Evaluate Status Code 
