@@ -41,6 +41,7 @@ jobs:
         run: |
           echo "Adding closing comment to PR Number: $PR_NUMBER"
           COMMENT="This pull request was closed on $TIMESTAMP."
+          echo "COMMENT = $COMMENT"
           COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/NUM/comments"
           # Replace "NUM" with with the PR_NUMBER env var
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
