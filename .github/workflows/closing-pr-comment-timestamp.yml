@@ -57,7 +57,7 @@ jobs:
           echo $RESPONSE
           # echo "STATUS_CODE = $STATUS_CODE.status"
           # echo "RESPONSE=$RESPONSE" >> $GITHUB_OUTPUT
-          # echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
+          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
       - name: Print Status Code 
         run: |
           # echo "Status code = ${{ steps.closing_comment_step.RESPONSE }}"
