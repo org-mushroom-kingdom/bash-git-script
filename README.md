@@ -23,15 +23,18 @@ TODO: Do something with this line --> Some of these actions are mainly informati
 TODO: Put a table or something here in the readme that denotes which actions are business and which are informative. 
 
 ## Business Actions
-
+<br>
 | Name | Purpose |
 | -------- | -------- |
 | test-pr-action-1.yml| Prints PR-related variables <br> Unconditionally adds a comment to all PRs <br> Conditionally adds a multiline comment to PRs (if feature branch contains the word 'readme')  | 
 | closing-pr-comment-timestamp.yml | Adds a comment when the PR is closed with the timestamp of when it was closed |
 
 ## Informative Actions
-TBD
-<!-- test-action.yml<br>print-env-vars.yml | -->
+<br>
+| Name | Purpose |
+| -------- | -------- |
+ test-action.yml | Showcases several different action aspects (printing, using shell scripts/results from script, using GITHUB_OUTPUT)
+ <!-- <br>print-env-vars.yml | -->
 
 
 # Shell Scripts
