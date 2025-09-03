@@ -15,6 +15,7 @@ on:
         description: "PR number to use when this action is manually triggered"
         required: true
         type: string
+        default: ''
 
 jobs:
   closing-pr-comment-job:
