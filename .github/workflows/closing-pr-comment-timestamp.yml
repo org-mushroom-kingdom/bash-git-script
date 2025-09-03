@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Assess pr_number_manual input
-        if: ${{ inputs.pr_number_manual == "" }}
+        if: ${{ inputs.pr_number_manual == '' }}
         run: echo "pr_number_manual is blank :("
       - name: Closing comment on PR
         id: closing_comment_step
