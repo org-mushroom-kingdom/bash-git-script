@@ -58,5 +58,5 @@ jobs:
           echo "RESPONSE=$RESPONSE" >> $GITHUB_OUTPUT
       - name: Evaluate Status Code 
         run: |
-          echo "Status code = ${{ steps.closing_comment_step.RESPONSE }}"
+          echo "Status code = ${{ steps.closing_comment_step.outputs.RESPONSE }}"
           # echo "Status code = ${{ env.RESPONSE.status }}"
