@@ -49,6 +49,6 @@ jobs:
           # echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_OUTPUT
       
       - name: Print Status Code 1
-        run: echo STATUS_CODE= ${{ fromJson(RESPONSE).status }}
+        run: echo STATUS_CODE= ${{ fromJson(env.RESPONSE).status }}
       - name: Print Status Code 2
         run: echo "Status code = ${{ steps.closing_comment_step.STATUS_CODE }}"
