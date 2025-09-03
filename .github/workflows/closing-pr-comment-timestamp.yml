@@ -1,0 +1,35 @@
+# Business: This automatically adds a comment with the time a pull request was closed. This applies to ALL pull requests in the repo
+
+name: Closing PR Comment w timestamp
+
+
+on:
+  pull_request:
+    types: [closed]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  # This workflow contains a single job called "test-job"
+  closing-pr-comment-job:
+    
+    runs-on: ubuntu-latest
+    env:
+      TIMESTAMP: $(date +"%Y-%m-%d %H:%M:%S")
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Closing comment on PR
+        run: |
+          COMMENT="This pull request was closed on $TIMESTAMP."
+          COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/NUM/comments"
+          # Replace "NUM" with with the PR_NUMBER env var
+          COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
+          # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
+          
+          echo $COMMENT_URL
+          curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
