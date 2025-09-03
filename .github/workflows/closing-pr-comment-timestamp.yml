@@ -44,7 +44,7 @@ jobs:
           
           echo $COMMENT_URL
           STATUS_CODE=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
-          echo "STATUS_CODE = $STATUS_CODE"
+          echo "STATUS_CODE = $STATUS_CODE.status"
           # echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_OUTPUT
       - name: Print Status Code 
         run: echo "Status code = ${{ steps.closing_comment_step.STATUS_CODE }}"
