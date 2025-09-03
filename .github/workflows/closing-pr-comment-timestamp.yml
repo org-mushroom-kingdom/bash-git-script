@@ -1,7 +1,7 @@
 # Business: This automatically adds a comment with the time a pull request was closed. This applies to ALL pull requests in the repo
+# There's plenty of info in the comments here though
 
 name: Closing PR Comment w timestamp
-
 
 on:
   pull_request:

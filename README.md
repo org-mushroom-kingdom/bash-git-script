@@ -19,8 +19,9 @@ This repo also holds several Github Actions, which help automate various process
 
 In this repo, we will define actions into either *Business* or *Informative* categories. This designation will in the top comment of each workflow (see .github/workflows).  
 
-TODO: Do something with this line --> Some of these actions are mainly informative and don't do much besides echo/print things. 
-TODO: Put a table or something here in the readme that denotes which actions are business and which are informative. 
+Business actions can be defined as actions that perform some sort of logic aside from print/echo/write statements. Informative actions mainly informative just echo/print things. Note that regardless of the category, the actions in this repo usually have a moderate to heavy amount of comments that elaborate how action logic and other logic works (this repo is a huge learning experience for me, so why not share the information?)
+
+TODO: Finish this table  
 
 ## Business Actions
 <br>
@@ -28,6 +29,7 @@ TODO: Put a table or something here in the readme that denotes which actions are
 | -------- | -------- |
 | test-pr-action-1.yml| Prints PR-related variables <br> Unconditionally adds a comment to all PRs <br> Conditionally adds a multiline comment to PRs (if feature branch contains the word 'readme')  | 
 | closing-pr-comment-timestamp.yml | Adds a comment when the PR is closed with the timestamp of when it was closed |
+| codeowners-interactions.yaml | TODO: EXPLAIN WHAT THIS DOES WHEN FLESHED OUT |
 
 ## Informative Actions
 <br>
