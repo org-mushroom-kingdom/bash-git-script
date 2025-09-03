@@ -38,7 +38,7 @@ jobs:
 
       - name: Set TIMESTAMP
         id: set-timestamp
-        run: echo "TIMESTAMP=$(date +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
+        run: echo "TIMESTAMP=$(date +"%Y-%m-%d- %H:%M:%S")" >> $GITHUB_ENV
 
       - name: Closing comment on PR
         id: closing_comment_step
@@ -53,11 +53,11 @@ jobs:
           
           echo $COMMENT_URL
           # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
-          RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
-          echo $RESPONSE
+          # RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
+          # echo $RESPONSE
           # echo "STATUS_CODE = $STATUS_CODE.status"
           # echo "RESPONSE=$RESPONSE" >> $GITHUB_OUTPUT
-          echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
+          # echo "RESPONSE=$RESPONSE" >> $GITHUB_ENV
       - name: Print Status Code 
         run: |
           # echo "Status code = ${{ steps.closing_comment_step.RESPONSE }}"
