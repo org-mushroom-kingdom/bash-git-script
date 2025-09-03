@@ -34,7 +34,7 @@ TODO: Put a table or something here in the readme that denotes which actions are
 | Name | Purpose |
 | -------- | -------- |
  test-action.yml | Showcases several different action aspects (printing, using shell scripts/results from script, using GITHUB_OUTPUT)
- <!-- <br>print-env-vars.yml | -->
+ print-env-vars.yml | Prints various environmental variables (e.g $GITHUB)
 
 
 # Shell Scripts
