@@ -13,6 +13,8 @@ This repo is for testing CODEOWNERS, among other things. A sample organization h
 
 A sample CODEOWNERS file has been made, with teams being assigned to various items within. Some items will purposefully NOT be in CODEOWNERS for testing purposes. 
 
+TODO: Dummy users -- incorporate and explain
+
 # Github Actions
 
 This repo also holds several Github Actions, which help automate various processes in the CI/CD workflow. 
