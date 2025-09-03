@@ -10,7 +10,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+    inputs:
+      pr_number_manual:
+        description: "PR number to use when this action is manually triggered"
+        required: true
+        type: string
 
 jobs:
   closing-pr-comment-job:
@@ -23,6 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Assess pr_number_manual input
+        if: ${{ inputs.pr_number_manual == "" }}
+        run: echo "pr_number_manual is blank :("
       - name: Closing comment on PR
         id: closing_comment_step
         run: |
