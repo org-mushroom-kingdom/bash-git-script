@@ -70,20 +70,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "automated-pr-comments"
-  automated-pr-comments:
+  # This workflow contains a single job called "codeowners-interactions-job"
+  codeowners-interactions-job:
     name: Codeowners Interactions 
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    
-      steps:
+    steps:
         # Checkout the repo so GITHUB_WORKSPACE has access to it
         - uses: actions/checkout@v4
 
         # Get the file so we can do stuff to it --part of sh?
         - name: Get CODEOWNERS
         - run: 
-          echo "Get CODEOWNERS TBD"
+            echo "Get CODEOWNERS TBD"
 
         - name: Evaluate CODEOWNERS
         - run:
