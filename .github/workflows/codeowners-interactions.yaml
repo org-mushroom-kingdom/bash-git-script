@@ -81,12 +81,12 @@ jobs:
 
         # Get the file so we can do stuff to it --part of sh?
         - name: Get CODEOWNERS
-        - run: 
+        - run: |
             echo "Get CODEOWNERS TBD"
 
         - name: Evaluate CODEOWNERS
-        - run:
+        - run: |
             echo "Evaluate CODEOWNERS TBD"
         - name: Comment on PR if file(s) not in CODEOWNERS
-        - run:
+        - run: |
             echo "CODEOWNERS Comment logic TBD"
