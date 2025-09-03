@@ -26,8 +26,11 @@ is_divisible_by_2()
     echo "${DIVIDES_BY_2}"
 }
 
-# Double brackets in bash 
-if [ "$FXN_TO_CALL" == "is_divisible_by_2" ]
+# Double brackets in Bash are more versatile than single brackets, but single brackets could be used here too. 
+# (Double brackets don't do word splitting, allows easier use of ==, BUT aren't usable with all shells)
+# Brackets are needed in any case because parentheses won't work (parentheses are used for commands) 
+# Brackets test expressions inside [] (or [[]]). True expressions evaluate to result code 0, false evaluates to result code 1. (You could literally do if [ 0 ] to prove this)
+if [[ "$FXN_TO_CALL" == "is_divisible_by_2" ]]
 then
     # echo "NUM_TO_DIVIDE = $NUM_TO_DIVIDE"
     # echo "$NUM_TO_DIVIDE is_divisible_by_2 = " $(is_divisible_by_2 $NUM_TO_DIVIDE)
