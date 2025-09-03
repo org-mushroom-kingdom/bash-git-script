@@ -76,6 +76,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
       steps:
+        # Checkout the repo so GITHUB_WORKSPACE has access to it
         - uses: actions/checkout@v4
 
         # Get the file so we can do stuff to it --part of sh?
