@@ -23,7 +23,7 @@ jobs:
     permissions:
       pull-requests: write
     env:
-      TIMESTAMP: $(date +"%Y-%m-%d %H:%M:%S")
+      # TIMESTAMP: $(date +"%Y-%m-%d %H:%M:%S")
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -38,7 +38,7 @@ jobs:
 
       - name: Set TIMESTAMP
         id: set-timestamp
-        run: echo "TIMESTAMP=$(date +"%Y-%m-%d- %H:%M:%S")" >> $GITHUB_ENV
+        run: echo "TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
 
       - name: Closing comment on PR
         id: closing_comment_step
@@ -51,7 +51,7 @@ jobs:
           # Replace "NUM" with with the PR_NUMBER env var
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           
-          echo $COMMENT_URL
+          # echo $COMMENT_URL
           # # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
           RESPONSE=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
           echo $RESPONSE
