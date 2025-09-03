@@ -28,7 +28,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # The uses keyword indicates the step uses a prebuilt action.
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
       # Pretty much all Github Actions need and utilize this
       - uses: actions/checkout@v4
 
