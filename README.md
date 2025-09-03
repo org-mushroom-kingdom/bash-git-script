@@ -22,9 +22,17 @@ In this repo, we will define actions into either *Business* or *Informative* cat
 TODO: Do something with this line --> Some of these actions are mainly informative and don't do much besides echo/print things. 
 TODO: Put a table or something here in the readme that denotes which actions are business and which are informative. 
 
-| Business | Informative |
+## Business Actions
+
+| Name | Purpose |
 | -------- | -------- |
-| test-pr-action-1.yml<br> | test-action.yml<br>print-env-vars.yml |
+| test-pr-action-1.yml| Prints PR-related variables <br> Unconditionally adds a comment to all PRs <br> Conditionally adds a multiline comment to PRs (if feature branch contains the word 'readme')  | 
+| closing-pr-comment-timestamp.yml | Adds a comment when the PR is closed with the timestamp of when it was closed |
+
+## Informative Actions
+TBD
+<!-- test-action.yml<br>print-env-vars.yml | -->
+
 
 # Shell Scripts
 
