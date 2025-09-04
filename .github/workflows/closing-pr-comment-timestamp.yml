@@ -32,7 +32,7 @@ jobs:
       # If auto run use PR_NUMBER
       # Issue is when auto run, pr_number_manual still being used 
       - name: Assess pr_number_manual input
-        if: [[ ${{ github.event.inputs.pr_number_manual }} != 'default' ]]
+        if: github.event.inputs.pr_number_manual != 'default'
         run: | 
           if [[ ${{ github.event.inputs.pr_number_manual }} != 'default' ]]
           then
