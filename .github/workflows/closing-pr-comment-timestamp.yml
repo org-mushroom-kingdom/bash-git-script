@@ -24,25 +24,29 @@ jobs:
     permissions:
       pull-requests: write
     env:
-      # TIMESTAMP: $(date +"%Y-%m-%d %H:%M:%S")
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-
+      # If manually run, use value of pr_number_manual
+      # If auto run use PR_NUMBER
+      # Issue is when auto run, pr_number_manual still being used 
       - name: Assess pr_number_manual input
-        if: ${{ inputs.pr_number_manual }} != 'default'
+        if: ${{ github.event.inputs.pr_number_manual }} != 'default'
         run: | 
+          if [[${{ github.event.inputs.pr_number_manual }} != 'default']]
+          then
+            echo "NOT DEFAULT: ${{ github.event.inputs.pr_number_manual }}"
+          fi
           echo "Job manually started: Setting PR_NUMBER to value of inputs.pr_number_manual (${{ inputs.pr_number_manual }})"
           echo "PR_NUMBER=${{ inputs.pr_number_manual }}" >> $GITHUB_ENV
-      # Keep getting Resource not accessible by integration
 
       - name: Set TIMESTAMP
         id: set-timestamp
         run: echo "TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
 
       - name: Closing comment on PR
-        id: closing_comment_step
+        id: closing_comment_step 
         run: |
           echo "Adding closing comment to PR Number: $PR_NUMBER"
           COMMENT="This pull request was closed on ${{ env.TIMESTAMP }}."
@@ -55,9 +59,10 @@ jobs:
           # In this case, entity to right of -o is /dev/null, which is a data black hole--any data written to it is immediately discarded.
           # We use /dev/null here because we only want to capture the HTTP status code (we use -w "%{http_code}" to get it) 
           # -H = custom curl header, -X used to specify HTTP method, -d indicates the data to send
-          RESPONSE=$(curl -s -o /dev/null -H "Authorization: token ${GITHUB_TOKEN}" -w "%{http_code}" -X POST -i $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
-          echo "RESPONSE=$RESPONSE" >> $GITHUB_OUTPUT
+          # RESPONSE=$(curl -s -o /dev/null -H "Authorization: token ${GITHUB_TOKEN}" -w "%{http_code}" -X POST -i $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
+          # echo "RESPONSE=$RESPONSE" >> $GITHUB_OUTPUT
       - name: Evaluate Status Code 
         run: |
-          echo "Status code = ${{ steps.closing_comment_step.outputs.RESPONSE }}"
+          echo "Not doing anything currently. TODO: DELETE ME WHEN DONE DEBUGGING"
+          # echo "Status code = ${{ steps.closing_comment_step.outputs.RESPONSE }}"
           # echo "Status code = ${{ env.RESPONSE.status }}"
