@@ -60,7 +60,7 @@ jobs:
           STATUS_CODE=$(curl -s -o /dev/null -H "Authorization: token ${GITHUB_TOKEN}" -w "%{http_code}" -X POST -i $COMMENT_URL -d "{\"body\":\"$COMMENT\"}")
           echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_OUTPUT
       - name: Mark as Fail if Bad Status Code 
-        if: ${{ !startsWith(steps.closing_comment_step.outputs.STATUS_CODE,  '2' }}
+        if: ${{ !startsWith(steps.closing_comment_step.outputs.STATUS_CODE, '2') }}
         run: |
           # echo "Not doing anything currently. TODO: DELETE ME WHEN DONE DEBUGGING"
           echo "Status code is non-200  (${{ steps.closing_comment_step.outputs.STATUS_CODE }}), marking as failure."
