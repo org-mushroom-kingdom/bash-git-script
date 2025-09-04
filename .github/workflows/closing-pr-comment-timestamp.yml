@@ -34,7 +34,7 @@ jobs:
       - name: Assess pr_number_manual input
         if: ${{ github.event.inputs.pr_number_manual }} != 'default'
         run: | 
-          if [[${{ github.event.inputs.pr_number_manual }} != 'default']]
+          if [[${{ github.event.inputs.pr_number_manual }} != 'default' ]]
           then
             echo "NOT DEFAULT: ${{ github.event.inputs.pr_number_manual }}"
           fi
