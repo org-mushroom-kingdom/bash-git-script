@@ -43,7 +43,7 @@ TODO: Finish this table
 
 # Shell Scripts
 
-As of 8-28-2025, the main shell script of note is main-script.sh. It shows how Bash works, how various Github commands work, and how Bash and Git can work together. It's the reason this repo is **called bash-git-script** in the first place. 
+As of 8-28-2025, the main shell script of note is main-script.sh. It shows how Bash works, how various Github commands work, and how Bash and Git can work together. It's the reason this repo is **called bash-git-script** in the first place, even though this repo has taken on new functionality since then. 
 
 The main script is used for various things.
 
