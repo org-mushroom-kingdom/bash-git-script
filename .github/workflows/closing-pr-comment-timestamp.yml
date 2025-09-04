@@ -15,7 +15,6 @@ on:
         description: "PR number to use when this action is manually triggered"
         required: true
         type: string
-        default: 'default'
 
 jobs:
   closing-pr-comment-job:
@@ -64,3 +63,4 @@ jobs:
         run: |
           # echo "Not doing anything currently. TODO: DELETE ME WHEN DONE DEBUGGING"
           echo "Status code is non-200  (${{ steps.closing_comment_step.outputs.STATUS_CODE }}), marking as failure."
+          exit 1
