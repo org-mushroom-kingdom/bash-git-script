@@ -13,14 +13,42 @@ on:
   #   branches: [ "main" ]
 
   # workflow_dispatch allows you to run this workflow manually from the Actions tab
-  # The inputs context TODO EXPLAIN
+  # The inputs context allows you to put in inputs when you run a workflow manually (reference via github.event.inputs)
+  # They will appear when you hit the 'Run Workflow' buttons on the Action page, in a pop-up form format
+  # Inputs can be customized into types to be required and have default values (see below for an example of each input type)
+  # When a workflow is triggered (i.e. NOT manually), these inputs will be null. TODO: Wording
   workflow_dispatch:
     inputs:
-      example_input:
-        description: "This text appears because of the 'description' keyword. Type 1 here to see an example of a conditional step."
+      example_string_input:
+        description: "This text appears because of the 'description' keyword. Type ex here to see an example of a conditional step."
         required: false
         type: string
-        default: ''
+        default: 'default value'
+      example_number_input:
+        description: "Example number input"
+        required: false
+        type: number
+      example_bool_input:
+        description: "Example boolean input"
+        required: false
+        type: boolean
+        default: false
+      example_choice_input:
+        description: "Example choice input"
+        required: false
+        type: choice
+        options: 
+          - option 1
+          - option 2
+          - option 3
+      #TODO: This one is a mystery. There isn't much about it. See github/docs/issues/25938
+      example_environment_input:
+        description: "Example environment input"
+        required: false
+        type: boolean
+          
+
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -55,6 +83,14 @@ jobs:
           echo "PR_NUMBER = $PR_NUMBER"
           echo "$ {PR_NUMBER} = ${PR_NUMBER}"
 
+      - name: Echo inputs
+        run: |
+          echo "example_string_input = ${{ github.events.inputs.example_string_input }}"
+          echo "example_number_input = ${{ github.events.inputs.example_number_input }}"
+          echo "example_bool_input = ${{ github.events.inputs.example_bool_input }}"
+          echo "example_choice_input = ${{ github.events.inputs.example_choice_input }}"
+          echo "example_environment_input = ${{ github.events.inputs.example_environment_input }}"
+      
       # Example of how to use the 'github' context
       - name: Print the organization
         run: echo "The organization name is:${{github.repository_owner}}"
@@ -66,6 +102,7 @@ jobs:
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           echo "URL after:  $COMMENT_URL"
       
+      # TODO: Rework this. This is because we didn't >> GITHUB_ENV
       # Shows how change in above step does NOT persist in future step (surprising)
       - name: Echo COMMENT_URL after modification in different step
         run: echo $COMMENT_URL
@@ -77,6 +114,7 @@ jobs:
       - name: Run the say-hello.sh shell script
         run: ./shell-scripts/say-hello.sh
       
+      # TODO: Rework this to use inputs?
       # Example of a step with an id, calling Bash script with arg and writing return value to GITHUB_OUTPUT
       - name: Give shell script an arg (the int 2), write result to GITHUB_OUTPUT
         # A step id is used by other steps in the workflow. It is distinct from name, which is more for display purposes. (see below for details)
@@ -95,9 +133,9 @@ jobs:
           DIVISIBLE_BY_2_B: ${{ steps.divis_by_2.outputs.DIVISIBLE_BY_2_B }}
         run: echo "DIVISIBLE_BY_2_B = $DIVISIBLE_BY_2_B"
 
-      - name: Example conditional (Runs if inputs.example_input is true)
-        if: github.event.inputs.example_input == '1'
-        run: echo "You are seeing this statement because inputs.example_input was true!"
+      - name: Example conditional (Runs if inputs.example_string_input is true)
+        if: github.event.inputs.example_string_input == 'ex'
+        run: echo "You are seeing this statement because you put 'ex' in example_string_input!"
       # TODO: Figure out how to list teams
       - name: State the teams in this organization
         run: echo "TODO Teams TBD"
