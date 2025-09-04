@@ -16,10 +16,11 @@ on:
   # The inputs context TODO EXPLAIN
   workflow_dispatch:
     inputs:
-      pr_number_manual:
-        description: "PR number to use when this action is manually triggered"
-        required: true
+      example_input:
+        description: "This text appears because of the 'description' keyword. Type 1 here to see an example of a conditional step."
+        required: false
         type: string
+        default: ''
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -94,7 +95,9 @@ jobs:
           DIVISIBLE_BY_2_B: ${{ steps.divis_by_2.outputs.DIVISIBLE_BY_2_B }}
         run: echo "DIVISIBLE_BY_2_B = $DIVISIBLE_BY_2_B"
 
-
+      - name: Example conditional (Runs if inputs.example_input is true)
+        if: github.event.inputs.example_input == '1'
+        run: echo "You are seeing this statement because inputs.example_input was true!"
       # TODO: Figure out how to list teams
       - name: State the teams in this organization
         run: echo "TODO Teams TBD"

@@ -37,7 +37,7 @@ TODO: Finish this table
 <br>
 | Name | Purpose |
 | -------- | -------- |
- test-action.yml | Showcases several different action aspects (printing, using shell scripts/results from script, using GITHUB_OUTPUT)
+ test-action.yml | Showcases several different action aspects (printing, using shell scripts/results from script, various step keywords, using GITHUB_OUTPUT)
  print-env-vars.yml | Prints various environmental variables (e.g $GITHUB)
 
 
