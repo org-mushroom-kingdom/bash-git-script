@@ -85,11 +85,11 @@ jobs:
 
       - name: Echo inputs
         run: |
-          echo "example_string_input = ${{ github.events.inputs.example_string_input }}"
-          echo "example_number_input = ${{ github.events.inputs.example_number_input }}"
-          echo "example_bool_input = ${{ github.events.inputs.example_bool_input }}"
-          echo "example_choice_input = ${{ github.events.inputs.example_choice_input }}"
-          echo "example_environment_input = ${{ github.events.inputs.example_environment_input }}"
+          echo "example_string_input = ${{ github.event.inputs.example_string_input }}"
+          echo "example_number_input = ${{ github.event.inputs.example_number_input }}"
+          echo "example_bool_input = ${{ github.event.inputs.example_bool_input }}"
+          echo "example_choice_input = ${{ github.event.inputs.example_choice_input }}"
+          echo "example_environment_input = ${{ github.event.inputs.example_environment_input }}"
       
       # Example of how to use the 'github' context
       - name: Print the organization
