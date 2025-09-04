@@ -36,8 +36,8 @@ jobs:
         # If input is default value, skip this step
         if: ${{ github.event.inputs.pr_number_manual != null }}
         run: |
-          echo "Job manually started: Setting PR_NUMBER to value of inputs.pr_number_manual (${{ github.events.inputs.pr_number_manual }})"
-          echo "PR_NUMBER=${{ github.events.inputs.pr_number_manual }}" >> $GITHUB_ENV
+          echo "Job manually started: Setting PR_NUMBER to value of inputs.pr_number_manual (${{ inputs.pr_number_manual }})"
+          echo "PR_NUMBER=${{ inputs.pr_number_manual }}" >> $GITHUB_ENV
 
       - name: Set TIMESTAMP
         id: set-timestamp
