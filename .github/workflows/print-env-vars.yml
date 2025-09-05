@@ -20,6 +20,7 @@ jobs:
       - name: Echo Environmental Variables
         run: |
           echo "Github actor (who initiated the workflow) = $GITHUB_ACTOR"
+          echo "Github actor ID (ID of who initiated the workflow) = $GITHUB_ACTOR_ID"
           echo "Github event name (the event that trigged the workflow) = $GITHUB_EVENT_NAME"
           echo "Github API URL = $GITHUB_API_URL"
           echo "Github SHA (SHA that triggered the workflow) = $GITHUB_SHA"
