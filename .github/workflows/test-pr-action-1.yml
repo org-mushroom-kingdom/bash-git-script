@@ -89,7 +89,7 @@ jobs:
         run: |
           echo "PR_CREATOR_ID = ${{ env.PR_CREATOR_ID }}"
           echo "Username of PR creator = $GITHUB_ACTOR"
-          echo "ASSIGNEE URL = $ASSIGNEE_URL"
+          echo "ASSIGNEE URL = $ADD_ASSIGNEE_URL"
           echo "Add PR Creator TBD"
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
