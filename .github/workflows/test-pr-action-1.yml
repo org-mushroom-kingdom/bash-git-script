@@ -78,7 +78,9 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      ADD_ASSIGNEE_URL: "https://api.github.com/repos/${{github.repository}}/issues/$PR_NUMBER/assignees"
     steps:
       - name: "Get PR Creator"
         run: echo "PR_CREATOR_ID=$GITHUB_ACTOR_ID" >> $GITHUB_ENV
@@ -87,6 +89,7 @@ jobs:
         run: |
           echo "PR_CREATOR_ID = ${{ env.PR_CREATOR_ID }}"
           echo "Username of PR creator = $GITHUB_ACTOR"
+          echo "ASSIGNEE URL = $ASSIGNEE_URL"
           echo "Add PR Creator TBD"
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
