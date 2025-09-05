@@ -112,6 +112,21 @@ jobs:
         run: |
           echo "Exit code from previous step ${{steps.add_assignee.name}} is non-zero value. ${{env.EXIT_CODE}}"
           exit "${{env.EXIT_CODE}}"
+      
+      - name: Add label(s) to PR based on assignee
+        run: |
+          echo "get-label.sh: Give username as arg, get the teams they are on, assign the team."
+          echo "OR loop thru all teams for user. Have some sort of in-this-team flag. When loop done, add labels based on flags"
+          # echo "Note: This does NOT account for the user being a part of multiple teams!"
+          echo "add-label.sh TBD"
+      
+      - name: Add label to PR based on target branch
+        run: |
+          echo "if the branch is 'env/dev', add a 'dev' label."
+          echo "if the branch is 'env/qa1', add a 'qa' label."
+          echo "Otherwise do nothing"
+
+
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
       #   run: echo "Most recent hash--TBD"
