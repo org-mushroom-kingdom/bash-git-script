@@ -81,20 +81,13 @@ jobs:
       issues: write
       pull-requests: write
     env:
-      ADD_ASSIGNEE_URL: "https://api.github.com/repos/${{github.repository}}/issues/${{github.event.pull_request.number}}/assignees"
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
-      
-      - name: "Get PR Creator"
-        run: echo "PR_CREATOR_ID=$GITHUB_ACTOR_ID" >> $GITHUB_ENV
-      
+
       - name: Add PR Creator to Assignees
         run: |
-          # echo "PR_CREATOR_ID = ${{ env.PR_CREATOR_ID }}"
-          echo "Username of PR creator = $GITHUB_ACTOR"
-          # echo "ASSIGNEE URL = $ADD_ASSIGNEE_URL"
-          # echo "Add PR Creator TBD"
+          echo "Assigning user $GITHUB_ACTOR to PR #${{ github.event.pull_request.number }}"
           gh pr edit ${{ github.event.pull_request.number }} --add-assignee $GITHUB_ACTOR
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
