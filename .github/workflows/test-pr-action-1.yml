@@ -80,8 +80,13 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: "Get Assignee"
-        run: echo "Get Assignee TBD"
+      - name: "Get PR Creator"
+        run: echo "PR_CREATOR_ID=$GITHUB_ACTOR_ID" >> $GITHUB_ENV
+      
+      - name: Add PR Creator to Assignees
+        run: |
+          echo "PR_CREATOR_ID = ${{ env.PR_CREATOR_ID }}"
+          "echo Add PR Creator TBD"
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
       #   run: echo "Most recent hash--TBD"
