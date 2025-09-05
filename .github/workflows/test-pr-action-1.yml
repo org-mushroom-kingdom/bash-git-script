@@ -86,7 +86,7 @@ jobs:
       - name: Add PR Creator to Assignees
         run: |
           echo "PR_CREATOR_ID = ${{ env.PR_CREATOR_ID }}"
-          "echo Add PR Creator TBD"
+          echo "Add PR Creator TBD"
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
       #   run: echo "Most recent hash--TBD"
