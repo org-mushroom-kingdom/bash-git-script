@@ -21,7 +21,7 @@ This repo also holds several Github Actions, which help automate various process
 
 In this repo, we will define actions into either *Business* or *Informative* categories. This designation will in the top comment of each workflow (see .github/workflows).  
 
-Business actions can be defined as actions that perform some sort of logic aside from print/echo/write statements. Informative actions mainly informative just echo/print things. Note that regardless of the category, the actions in this repo usually have a moderate to heavy amount of comments that elaborate how action logic and other logic works (this repo is a huge learning experience for me, so why not share the information?)
+Business actions can be defined as actions that perform some sort of logic aside from print/echo/write statements. Informative actions mainly informative just echo/print things. Note that regardless of the category, the actions in this repo usually have a moderate to heavy amount of comments that elaborate how action logic and other logic works (this repo is a huge learning experience for me, so why not share the information?). It's important to look at the comments of each action as they explain why I set something up the way I did and to elaborate on different ways to do things (ex. using cURL vs. Github CLI)
 
 TODO: Finish this table  
 
@@ -29,7 +29,7 @@ TODO: Finish this table
 <br>
 | Name | Purpose |
 | -------- | -------- |
-| test-pr-action-1.yml| Prints PR-related variables <br> Unconditionally adds a comment to all PRs <br> Conditionally adds a multiline comment to PRs (if feature branch contains the word 'readme')  | 
+| test-pr-action-1.yml| Prints PR-related variables <br> Unconditionally adds a comment to all PRs <br> Conditionally adds a multiline comment to PRs (if feature branch contains the word 'readme') <br> Add the pull request creator as an assignee (in progress) | 
 | closing-pr-comment-timestamp.yml | Adds a comment when the PR is closed with the timestamp of when it was closed |
 | codeowners-interactions.yaml | TODO: EXPLAIN WHAT THIS DOES WHEN FLESHED OUT |
 
