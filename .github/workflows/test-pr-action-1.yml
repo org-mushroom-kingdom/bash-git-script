@@ -61,14 +61,27 @@ jobs:
       - name: Conditional comment on PR (if feature branch contains 'readme')
         # Note the if: and contains() syntax
         if: contains(env.FEATURE_BRANCH, 'readme') || contains(env.FEATURE_BRANCH, 'README')
+        # A multiline comment in a PR can be made using <br> as a line break
+        #TODO: For a bigger multiline comment, try multiple echos and EOF or messing with \n-<br> replacement
         run: | 
           COMMENT_URL="https://api.github.com/repos/${{github.repository}}/issues/NUM/comments"
           COMMENT_URL="${COMMENT_URL/NUM/$PR_NUMBER}"
           COMMENT="This is an automated comment that only shows up if the feature branch contains 'readme' or 'README'<br> This is a multiline comment."
           curl -s -H "Authorization: token ${GITHUB_TOKEN}" -X POST $COMMENT_URL -d "{\"body\":\"$COMMENT\"}"
+        #TODO: Use a conditional here to alter a comment's text
 
-      #TODO: Use a conditional here to alter a comment's text
+  add-creator-to-assignees:
+    name: Assign PR Creator to Assignees 
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    permissions:
+      issues: write
+      pull-requests: write
 
+    steps:
+      - name: "Get Assignee"
+        run: echo "Get Assignee TBD"
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
       #   run: echo "Most recent hash--TBD"
