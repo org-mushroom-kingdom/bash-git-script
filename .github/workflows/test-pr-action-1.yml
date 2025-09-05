@@ -89,6 +89,8 @@ jobs:
         run: |
           echo "Assigning user $GITHUB_ACTOR to PR #${{ github.event.pull_request.number }}"
           gh pr edit ${{ github.event.pull_request.number }} --add-assignee $GITHUB_ACTOR
+          echo "EXIT_CODE=$?" >> $GITHUB_ENV
+          echo "exit code = $?"
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
       #   run: echo "Most recent hash--TBD"
