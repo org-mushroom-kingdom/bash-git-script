@@ -12,6 +12,11 @@
 # /orgs/org-mushroom-kingdom/teams/team-peach/members
 
 # Add labels to PR based on target branch
-# Given a PR number from test-pr-action
-# pr_number=$1
-echo "pr-labels.sh says: pr_number = ${PR_NUMBER}" 
+
+# We can reference $PR_NUMBER from test-pr-action 
+echo "pr-labels.sh says: pr_number = ${PR_NUMBER}"
+# Given the PR and target branch  
+if [$TARGET_BRANCH == 'env/dev']
+then
+    echo 'label adding logic for label 'dev' here'
+fi
