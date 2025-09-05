@@ -14,4 +14,4 @@
 # Add labels to PR based on target branch
 # Given a PR number from test-pr-action
 # pr_number=$1
-echo "pr-labels.sh says: pr_number = $$PR_NUMBER" 
+echo "pr-labels.sh says: pr_number = ${PR_NUMBER}" 
