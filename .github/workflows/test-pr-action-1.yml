@@ -89,6 +89,7 @@ jobs:
       - name: "Get PR Creator"
         run: echo "PR_CREATOR_ID=$GITHUB_ACTOR_ID" >> $GITHUB_ENV
       
+      # The 'gh pr edit' is an example of how to use Github CLI, which actions can access/utilize by TBD
       - name: Add PR Creator to Assignees
         run: |
           # echo "PR_CREATOR_ID = ${{ env.PR_CREATOR_ID }}"
