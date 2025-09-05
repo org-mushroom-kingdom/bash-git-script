@@ -130,7 +130,7 @@ jobs:
           # echo "if the branch is 'env/dev', add a 'dev' label."
           # echo "if the branch is 'env/qa1', add a 'qa' label."
           # echo "Otherwise do nothing"
-          ./shell-scripts/pr-labels.sh
+          ./shell-scripts/pr-labels.sh '$PR_NUMBER'
 
 
 
