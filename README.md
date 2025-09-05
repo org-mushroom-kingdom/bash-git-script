@@ -29,7 +29,7 @@ TODO: Finish this table
 <br>
 | Name | Purpose |
 | -------- | -------- |
-| test-pr-action-1.yml| Prints PR-related variables <br> Unconditionally adds a comment to all PRs <br> Conditionally adds a multiline comment to PRs (if feature branch contains the word 'readme') <br> Add the pull request creator as an assignee (in progress) | 
+| test-pr-action-1.yml| Prints PR-related variables <br> Unconditionally adds a comment to all PRs <br> Conditionally adds a multiline comment to PRs (if feature branch contains the word 'readme') <br> Add the pull request creator as an assignee (in progress) <br> Add a label to a PR based on assignee's team (in progress) | 
 | closing-pr-comment-timestamp.yml | Adds a comment when the PR is closed with the timestamp of when it was closed |
 | codeowners-interactions.yaml | TODO: EXPLAIN WHAT THIS DOES WHEN FLESHED OUT |
 
