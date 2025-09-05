@@ -82,6 +82,7 @@ jobs:
       pull-requests: write
     env:
       ADD_ASSIGNEE_URL: "https://api.github.com/repos/${{github.repository}}/issues/${{github.event.pull_request.number}}/assignees"
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: "Get PR Creator"
         run: echo "PR_CREATOR_ID=$GITHUB_ACTOR_ID" >> $GITHUB_ENV
