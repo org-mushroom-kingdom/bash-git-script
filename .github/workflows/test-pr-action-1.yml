@@ -78,7 +78,8 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-
+    env:
+      PR_CREATOR: ${{ GITHUB_ACTOR }}
     steps:
       - name: "Get PR Creator"
         run: echo "PR_CREATOR_ID=$GITHUB_ACTOR_ID" >> $GITHUB_ENV
@@ -86,6 +87,7 @@ jobs:
       - name: Add PR Creator to Assignees
         run: |
           echo "PR_CREATOR_ID = ${{ env.PR_CREATOR_ID }}"
+          echo "PR_CREATOR = $PR_CREATOR"
           echo "Add PR Creator TBD"
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
