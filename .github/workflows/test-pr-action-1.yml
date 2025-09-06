@@ -7,7 +7,6 @@ name: Test PR Action 1
 # Controls when the workflow will run
 on:
   pull_request:
-    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -84,9 +83,11 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
+    
     env:
       GH_TOKEN: ${{ github.token }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
+      TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
     steps:
       - uses: actions/checkout@v4
       
@@ -97,6 +98,9 @@ jobs:
         run: |
           echo "Job manually started: Setting PR_NUMBER to value of github.event.inputs.pr_number_manual (${{ github.event.inputs.pr_number_manual }})"
           echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
+      
+      - name: Make shell scripts executable
+        run: chmod +x ./shell-scripts/*.sh # Gives execute permissions to the script
 
       - name: Add PR Creator to Assignees
         id: add_assignee
@@ -122,9 +126,13 @@ jobs:
       
       - name: Add label to PR based on target branch
         run: |
-          echo "if the branch is 'env/dev', add a 'dev' label."
-          echo "if the branch is 'env/qa1', add a 'qa' label."
-          echo "Otherwise do nothing"
+          
+          # echo "if the branch is 'env/dev', add a 'dev' label."
+          # echo "if the branch is 'env/qa1', add a 'qa' label."
+          # echo "Otherwise do nothing"
+          ./shell-scripts/pr-labels.sh
+
+
 
 
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
