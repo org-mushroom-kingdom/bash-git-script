@@ -144,3 +144,9 @@ jobs:
       # This is also the default location of your repository when using the checkout action. Ex. /home/runner/work/bash-git-script/bash-git-script
       - name: State GITHUB_WORKSPACE var
         run: echo "Github Workspace = $GITHUB_WORKSPACE"
+
+      #TODO Throw this or something like it in a step
+      # if [[ 2 -gt 1 ]]
+      # then
+      # echo "TEST"
+      # fi
