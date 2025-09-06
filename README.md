@@ -62,5 +62,6 @@ TODO: Finish this table
 
 Space for things I want to do in general, not just the TODO's in the README (though those should be done too!)
 
-TODO: Come up with a way to make a very basic PR with a simple change to a non-important file/script so I don't have to manually make a branch and PR all the time to test Test PR Action (ironically, making a feature/PR is probaly best handled by another action)  
-TODO: Capture the HTTP status of the Github API comment and mark action as failed if HTTP status != 200 
+TODO: Come up with a way to make a very basic PR with a simple change to a non-important file/script so I don't have to manually make a branch and PR all the time to test Test PR Action (ironically, making a feature/PR is probaly best handled by another action) <--Is this done? 
+TODO: Capture the HTTP status of the Github API comment and mark action as failed if HTTP status != 200 <--Is this done?
+TODO:  Explain in this README the env/dev and env/qa1 branches
