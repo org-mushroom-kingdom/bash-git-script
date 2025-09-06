@@ -19,13 +19,10 @@ echo "pr-labels.sh says: pr_number = ${PR_NUMBER}"
 
 echo "Target branch = ${TARGET_BRANCH} ."
 
-LABEL=$(echo "$TARGET_BRANCH" | cut -d'/' -f2)
-echo "LABEL = $LABEL"
-if [[ "${TARGET_BRANCH}" == "env/dev" ]]
+env_label=$(echo "$TARGET_BRANCH" | cut -d'/' -f2)
+echo "env_label = $env_label"
+
+if [[ "${TARGET_BRANCH}" == "env/dev" || "${TARGET_BRANCH}" == "env/qa1" ]]
 then
-    echo 'label adding logic for label 'dev' here!'
-    gh pr edit "$PR_NUMBER" --add-label 'dev'
-elif [[ "${TARGET_BRANCH}" == "env/qa1" ]]
-then
-    gh pr edit "$PR_NUMBER" --add-label 'qa1'
+    gh pr edit "$PR_NUMBER" --add-label "$env_label"
 fi
