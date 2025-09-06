@@ -52,6 +52,7 @@ TODO: User branch deletion stuff? Branch search stuff? Stale?
 TODO 8-28-2025: Really, I should fork this repo, keep just the Bash and Bash-relevant stuff for portfolio and knowledge transer purposes, but I'm not doing that for a minute haha.
 TODO: Finish this table!!!
 
+
 | Name | Purpose |
 | -------- | -------- |
 | divide.sh | Examples of division and modulo in Bash |
