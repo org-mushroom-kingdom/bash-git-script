@@ -17,7 +17,7 @@
 echo "pr-labels.sh says: pr_number = ${PR_NUMBER}"
 # Given the PR and target branch  
 echo "Target branch = $TARGET_BRANCH"
-if [ "$TARGET_BRANCH" == "env/dev" ]
+if [[ "$TARGET_BRANCH" == "env/dev" ]]
 then
     echo 'label adding logic for label 'dev' here!'
 fi
