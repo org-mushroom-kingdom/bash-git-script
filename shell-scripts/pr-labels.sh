@@ -22,4 +22,5 @@ echo "Target branch = ${TARGET_BRANCH} ."
 if [[ "${TARGET_BRANCH}" == "env/dev" ]]
 then
     echo 'label adding logic for label 'dev' here!'
+    gh pr edit "$PR_NUMBER" --add-label 'dev'
 fi
