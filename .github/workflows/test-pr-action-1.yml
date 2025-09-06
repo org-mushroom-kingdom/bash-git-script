@@ -87,7 +87,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
-      TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}"
+      TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
     steps:
       - uses: actions/checkout@v4
       
