@@ -55,7 +55,8 @@ TODO: Finish this table
 | Name | Purpose |
 | -------- | -------- |
 | divide.sh | Examples of division and modulo in Bash |
-| main-script.sh | TODO: A LOT |
+| main-script.sh | TODO: DESCRIPTION, but maybe its own section too |
+| pr-labels.sh | TODO: DESCRIPTION |
 
 
 # To-Do List
