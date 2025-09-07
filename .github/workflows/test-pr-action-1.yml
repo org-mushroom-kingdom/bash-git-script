@@ -88,6 +88,7 @@ jobs:
       issues: write
       pull-requests: write
     
+    # Trying to use $GITHUB_ACTOR will not work here (just stays as literal string "$GITHUB_ACTOR"), so use github.actor context instead
     env:
       GH_TOKEN: ${{ github.token }}
       PR_NUMBER: ${{ github.event.pull_request.number }}

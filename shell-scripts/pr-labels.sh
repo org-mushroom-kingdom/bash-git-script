@@ -12,13 +12,13 @@
 # /orgs/org-mushroom-kingdom/teams/team-peach/members
 
 # gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
-gh api /orgs/org-mushroom-kingdom/teams/team-peach/members
+gh api orgs/org-mushroom-kingdom/teams/team-peach/members
 
 
 # Add labels to PR based on target branch
 
 # We can reference $PR_NUMBER from test-pr-action 
-echo "\n pr-labels.sh says: pr_number = ${PR_NUMBER}"
+echo -e "\n pr-labels.sh says: pr_number = ${PR_NUMBER}"
 # Given the PR and target branch  
 
 echo "Target branch = ${TARGET_BRANCH} ."
