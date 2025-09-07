@@ -11,6 +11,15 @@
 # -H "X-GitHub-Api-Version: 2022-11-28" \
 # /orgs/org-mushroom-kingdom/teams/team-peach/members
 
+#TODO: Idea--spin off this script and a corresponding action that does the following and put it into Marketplace:
+# Searches through all organization teams for a member/PR creator
+# For each hit, add corresponding team label to string or array
+# Use string/array to add labels to the PR
+# 
+
+TEAMS=$(gh api orgs/YOUR_ORG_NAME/teams)
+echo "TEAMS = $TEAMS"
+
 # gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
 gh api --method GET -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/team-peach/members
 
