@@ -140,7 +140,7 @@ jobs:
           echo "get-label.sh: Give username as arg, get the teams they are on, assign the team."
           echo "OR loop thru all teams for user. Have some sort of in-this-team flag. When loop done, add labels based on flags"
           # echo "Note: This does NOT account for the user being a part of multiple teams!"
-          echo "add-label.sh TBD"
+          echo -e "add-label.sh TBD \n"
           # echo "if the branch is 'env/dev', add a 'dev' label."
           # echo "if the branch is 'env/qa1', add a 'qa' label."
           # echo "Otherwise do nothing"
