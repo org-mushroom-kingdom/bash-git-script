@@ -17,7 +17,7 @@
 # Use string/array to add labels to the PR
 # 
 
-TEAMS=$(gh api -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/org-mushroom-kingdom/teams)
+TEAMS=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/org-mushroom-kingdom/teams)
 echo "TEAMS = $TEAMS"
 
 # gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
