@@ -18,7 +18,12 @@
 # 
 
 # This gives a JSON array of teams, which we want the value that corresponds to the 'name' key
-TEAMS=$(gh api --json name -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/org-mushroom-kingdom/teams)
+TEAMS=$(gh api \
+-H "Accept: application/vnd.github+json" \
+-H "X-GitHub-Api-Version: 2022-11-28" \
+-H "Authorization: Bearer $TEAMS_READ_TOKEN" \
+orgs/org-mushroom-kingdom/teams)
+
 echo "TEAMS = $TEAMS"
 
 
