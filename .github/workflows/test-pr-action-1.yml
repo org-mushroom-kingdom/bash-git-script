@@ -91,7 +91,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
-      PR_CREATOR: ${{ $GITHUB_ACTOR }}
+      PR_CREATOR: ${{ github.actor }}
       TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
     steps:
       - uses: actions/checkout@v4
