@@ -17,7 +17,7 @@ gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Ve
 # Add labels to PR based on target branch
 
 # We can reference $PR_NUMBER from test-pr-action 
-echo "pr-labels.sh says: pr_number = ${PR_NUMBER}"
+echo "\n pr-labels.sh says: pr_number = ${PR_NUMBER}"
 # Given the PR and target branch  
 
 echo "Target branch = ${TARGET_BRANCH} ."
