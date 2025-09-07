@@ -53,7 +53,7 @@ do
   echo -e "\nMembers of team ${team}:\n" 
   # printf is basically an enhanced version of echo. Still writes to stdout. 
   # %s=take arg as string, \\n = newline. So print the string, then a newline. 
-  # [@] expands the array so each element is a separate word Each element/word is considered a separate argument for printf
+  # [@] expands the array so each element is a separate word. Each element/word is considered a separate argument for printf
   printf "%s\\n" "${TEAM_MEMBERS[@]}"
 
 # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]

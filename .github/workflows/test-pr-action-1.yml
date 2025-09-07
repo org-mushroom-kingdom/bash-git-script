@@ -89,6 +89,8 @@ jobs:
       pull-requests: write
       
     # Trying to use $GITHUB_ACTOR will not work here (just stays as literal string "$GITHUB_ACTOR"), so use github.actor context instead
+    # TODO: EXPLAIN HOW YOU SET UP FINE GRAINED TEAMS_READ_TOKEN VIA YOUR GITHUB ACCOUNT, MADE ORG THE OWNER, GAVE PERMISSIONS, AND PASTED VALUE INTO REPO SECRET
+    # NOT ONLY HERE, BUT IN DOCS!!
     env:
       GH_TOKEN: ${{ github.token }}
       TEAMS_READ_TOKEN: ${{ secrets.TEAMS_READ_ACCESS }}
