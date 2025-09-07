@@ -18,11 +18,12 @@
 # 
 
 # This gives a JSON array of teams, which we want the value that corresponds to the 'name' key
+# Use \ to split the command into multiline
 TEAMS=$(gh api \
 -H "Accept: application/vnd.github+json" \
 -H "X-GitHub-Api-Version: 2022-11-28" \
 -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-orgs/org-mushroom-kingdom/teams)
+orgs/org-mushroom-kingdom/teams | jq '.name')
 
 echo "TEAMS = $TEAMS"
 
