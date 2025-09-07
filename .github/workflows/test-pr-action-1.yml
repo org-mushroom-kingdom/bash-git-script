@@ -91,6 +91,7 @@ jobs:
     # Trying to use $GITHUB_ACTOR will not work here (just stays as literal string "$GITHUB_ACTOR"), so use github.actor context instead
     env:
       GH_TOKEN: ${{ github.token }}
+      TEAMS_READ_TOKEN: ${{ secrets.TEAMS_READ_ACCESS }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
       PR_CREATOR: ${{ github.actor }}
       TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
@@ -131,6 +132,9 @@ jobs:
           echo "Exit code from previous step ${{steps.add_assignee.name}} is non-zero value. ${{env.EXIT_CODE}}"
           exit "${{env.EXIT_CODE}}"
       
+      # Add team-* label based on assignee
+      # ^This cannot be done with GH_TOKEN as its permissions only scoped to the current repo that contains this workflow.
+      # ^Instead, must create a fine grained personal access token with organization:Members:read permission
       - name: Add team label(s) b/o assignee; env label b/o target branch
         run: |
           echo "get-label.sh: Give username as arg, get the teams they are on, assign the team."

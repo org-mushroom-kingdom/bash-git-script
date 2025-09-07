@@ -12,7 +12,7 @@
 # /orgs/org-mushroom-kingdom/teams/team-peach/members
 
 # gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
-gh api /orgs/org-mushroom-kingdom/teams/team-peach/members
+gh api --method GET -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/team-peach/members
 
 
 # Add labels to PR based on target branch
