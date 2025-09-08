@@ -34,7 +34,7 @@ TEAM_NAMES=$(gh api \
 -H "Accept: application/vnd.github+json" \
 -H "X-GitHub-Api-Version: 2022-11-28" \
 -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-orgs/org-mushroom-kingdom/teams | jq 'map(.name)')
+orgs/$ORG/teams | jq 'map(.name)')
 
 echo "TEAMS = $TEAM_NAMES"
 echo "repo owner = $ORG"
@@ -44,11 +44,12 @@ echo "repo owner = $ORG"
 for team in "${TEAM_NAMES[@]}"
 do
 #   Use jq to get array of usernames in that team
-  TEAM_MEMBERS=$(gh api \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  -H "Authorization: Bearer $TEAMS_READ_TOKEN"  \
-  /orgs/org-mushroom-kingdom/teams/$team/members | jq 'map(.login)')
+    echo "team = $team"
+    TEAM_MEMBERS=$(gh api \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    -H "Authorization: Bearer $TEAMS_READ_TOKEN"  \
+    /orgs/org-mushroom-kingdom/teams/$team/members | jq 'map(.login)')
 
   echo -e "\nMembers of team ${team}:\n" 
   # printf is basically an enhanced version of echo. Still writes to stdout. 
