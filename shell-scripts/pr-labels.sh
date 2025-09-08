@@ -126,8 +126,8 @@ environment_branches=("env/dev" "env/qa1" "env/qa2")
 # Look thru environment branches. If target branch is one of those branches, apply corresponding label
 # Another example of Bash piping: printf prints separate outputs, each output used as input for grep
 # grep -q only returns the status code of the grep (generally 0=true,1=false) so we can use that in a conditional
-if [[ printf "%s\\n" "${environment_branches[@]}" | grep -q "$TARGET_BRANCH" ]]
 # if [[ "${TARGET_BRANCH}" == "env/dev" || "${TARGET_BRANCH}" == "env/qa1" ]]
+if printf "%s\\n" "${environment_branches[@]}" | grep -q "$TARGET_BRANCH"
 then
     gh pr edit "$PR_NUMBER" --add-label "$env_label"
 fi
