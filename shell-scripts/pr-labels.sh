@@ -36,12 +36,17 @@ declare -a TEAM_LABEL_LIST=()
 # -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
 # orgs/$ORG/teams)
 # orgs/$ORG/teams | jq 'map(.name)')
+
 # Use gh api command orgs/$ORG/teams to get a JSON array of teams, which has various team info. We only want the name, so...
-# Pipe with jq .[].slug which breaks down to: . = current JSON (result of gh api), [] = iterate thru each element of JSON array, .slug = 
+# Pipe with 'jq .[].slug' which breaks down to: 
+# . = filter for current JSON (result of gh api). If we just did jq . 
+# [] = iterate thru each element of JSON array, 
+# .slug = get the 'slug' value
 # Use mapfile to read lines and assign each line an index of an array (TEAM_NAMES). -t removes trailing newline chars
 # Mapfile reads input--we need to feed the output of jq as input. Use process substituion
 # mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
-TEAM_NAMES=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
+mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.')
+
 
 echo "TEAMS = ${TEAM_NAMES[@]}"
 echo "repo owner = $ORG"
