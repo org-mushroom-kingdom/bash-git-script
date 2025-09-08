@@ -63,12 +63,12 @@ mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-
 # For each team, look to see if $PR_CREATOR is a part of that team
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
 
-team="team-peach"
-gh api --method GET \
-    -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-     orgs/$ORG/teams/${team}/members
+# team="team-peach"
+# gh api --method GET \
+#     -H "Accept: application/vnd.github+json" \
+#     -H "X-GitHub-Api-Version: 2022-11-28" \
+#     -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
+#      orgs/$ORG/teams/${team}/members
      
 # Temp exit. DELETE THIS WHEN TESTING COMPLETE!
 echo "Temporarily Early exit."
@@ -85,7 +85,7 @@ do
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-     orgs/$ORG/teams/${team}/members | jq '.[].login')
+     orgs/$ORG/teams/${team}/members | jq -r '.[].login')
     
     echo -e "\nMembers of team ${team}:\n" 
     # printf is basically an enhanced version of echo. Still writes to stdout. 
