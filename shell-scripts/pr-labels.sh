@@ -37,16 +37,23 @@ declare -a TEAM_LABEL_LIST=()
 # orgs/$ORG/teams)
 # orgs/$ORG/teams | jq 'map(.name)')
 
-# Use gh api command orgs/$ORG/teams to get a JSON array of teams, which has various team info. We only want the name, so...
+# Had to use AI to help me come up with a solution but you can bet damn well I'm not going to use something without figuring out how it works. Cue long explanation
+# Use gh api command orgs/$ORG/teams to get a JSON array of teams (as output--this is important for later), which has various team info. We only want the name, so...
 # Use jq command line tool to process JSON: Bash jq is like sed for JSON.
 # Pipe with 'jq .[].slug' which breaks down to: 
 # . = filter for current JSON (result of gh api). If we just did jq . it would give the output of the JSON array (though it looks a little different when testing with the Actions page vs gh api with no jq present)
 # [] = iterate thru each element of JSON array and give a separate output for each
-# .slug = get the 'slug' value
-# Use mapfile to read lines and assign each line an index of an array (TEAM_NAMES). -t removes trailing newline chars
-# Mapfile reads input--we need to feed the output of jq as input. Use process substituion
-# mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
-gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[]'
+# .slug = filter for just the 'slug' value (return just the team slug instead of the whole team JSON)
+# At this point let's say you have 3 separate outputs which doesn't translate well for usability (ex. "team-mario" "team-luigi" "team-peach")
+# mapfile command to read lines from stdinput or a file and assign each line an index of an array (TEAM_NAMES)
+# Specifically mapfile syntax is 'mapfile [options (ex. -t to rmv trailing newlines)] [array_variable] < [some input with lines (ex. a file)]' 
+# Mapfile reads input, but we have OUTPUT from the jq command (really 3 separate outputs)
+# To translate our output into input we need to feed the output of jq as input. To do this use process substituion
+# Process substitution allows commands that normally accept input to consume the output of other commands by treating the output as a file
+# Specifically <(gh api...) takes the output of gh api and treats it as a multiline file (more or less)
+# mapfile then "thinks" <(gh api...) is a file/input and takes each line (formerly separate outputs) and puts each line as element in indexed array
+mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
+# gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[]'
 
 # echo "TEAMS = ${TEAM_NAMES[@]}"
 # echo "repo owner = $ORG"
