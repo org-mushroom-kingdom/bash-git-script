@@ -58,17 +58,18 @@ do
 
 # Loop thru the members of a team. If the PR_CREATOR == username in team, add the corresponding team label
 # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
-for username in "${TEAM_MEMBERS[@]}"
-do
-  if [[ "${username}" == "{$PR_CREATOR}" ]]
-  then
-      # Assuming team name is same as label name, add to array (+=)
-      TEAM_LABEL_LIST+=($team)
-    #   Let's say it wasn't though. Like team-luigi has a corresponding 'luigi' label
-    #   Or there's a 'bowser' team with no 'team-' prefix
-    #   Probably have some sort of JSON or csv file where headers are team, labels
-    #   So if username=$PR_CREATOR, then look at $team in JSON/csv and get corresponding value 
-  done
+    for username in "${TEAM_MEMBERS[@]}"
+    do
+        if [[ "${username}" == "{$PR_CREATOR}" ]]
+        then
+            # Assuming team name is same as label name, add to array (+=)
+            TEAM_LABEL_LIST+=($team)
+            #   Let's say it wasn't though. Like team-luigi has a corresponding 'luigi' label
+            #   Or there's a 'bowser' team with no 'team-' prefix
+            #   Probably have some sort of JSON or csv file where headers are team, labels
+            #   So if username=$PR_CREATOR, then look at $team in JSON/csv and get corresponding value 
+        fi
+    done
 done
 
 # gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
