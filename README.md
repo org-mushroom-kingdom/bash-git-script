@@ -2,9 +2,9 @@
 
 A repo for testing various Bash and Github related things, often tied together. This repo also tests Github Actions.
 
-# Background Info
+# Background Info: Organization and Teams
 
-This repo is for testing CODEOWNERS, among other things. A sample organization had to be made due to this. Thus, this repo is owned by the organization **org-mushroom-kingdom**, which is split into four sample teams:
+This repo is for testing CODEOWNERS and other logic related to Github teams. A sample organization and sample teams had to be made due to this. This repo is owned by the organization **org-mushroom-kingdom**, which is split into four sample teams:
 
 - team-mario
 - team-luigi
@@ -13,7 +13,7 @@ This repo is for testing CODEOWNERS, among other things. A sample organization h
 
 A sample CODEOWNERS file has been made, with teams being assigned to various items within. Some items will purposefully NOT be in CODEOWNERS for testing purposes. 
 
-TODO: Dummy users -- incorporate and explain!!!
+This repo is currently a solo project, and I didn't have any colleagues personal Github account info, so only my user is a member of most teams. There is an exception with team-peach, which has an additional member that I had to manually create and manage. If you are forking this repo, hopefully you can goad some likeminded friends into joining your spoof organization and teams!
 
 # Github Actions
 
