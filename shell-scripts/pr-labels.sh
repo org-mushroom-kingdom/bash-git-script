@@ -81,6 +81,8 @@ do
     # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
     for username in "${TEAM_MEMBERS[@]}"
     do
+        echo "username = ${username}"
+        echo "PR_CREATOR = ${PR_CREATOR}"
         if [[ "${username}" == "{$PR_CREATOR}" ]]
         then
             # In this repo, team name is same as label name (i.e. the team with slug "team-mario" has a label "team-mario")
