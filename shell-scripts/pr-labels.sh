@@ -84,7 +84,7 @@ do
         echo "username = ${username}"
         echo "PR_CREATOR = ${PR_CREATOR}"
         echo -e "\n"
-        if [[ "${username}" == "{$PR_CREATOR}" ]]
+        if [[ "${username}" == "${PR_CREATOR}" ]]
         then
             echo "ADDING TO TEAM_LABEL_LIST"
             # In this repo, team name is same as label name (i.e. the team with slug "team-mario" has a label "team-mario")
