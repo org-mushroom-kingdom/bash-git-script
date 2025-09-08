@@ -46,7 +46,7 @@ TEAM_NAMES=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Ve
 echo "TEAMS = ${TEAM_NAMES[@]}"
 echo "repo owner = $ORG"
 
-# echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
+echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
 #Temp exit. DELETE THIS WHEN TESTING COMPLETE!
 echo "Temporarily Early exit."
 exit
