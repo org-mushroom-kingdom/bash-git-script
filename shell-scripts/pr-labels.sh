@@ -21,6 +21,7 @@
 # 
 
 declare -a team_label_list=()
+declare -a team_names=()
 
 # Had to use AI to help me come up with a solution but you can bet damn well I'm not going to use something without figuring out how it works. Cue long explanation
 
@@ -116,10 +117,17 @@ echo "Target branch = ${TARGET_BRANCH} ."
 #TODO: fxn? Name like add_branch_labels
 # Assume all environment branches begin with env. Use cut and -d for delimiter, with / being the delimiter. Get the 2nd piece of that cut (stuff after /)
 # Also assume that env labels are just the name of the environment branch after the / (ex. env/dev has corresponding 'dev' label)
+# This is an example of Bash piping which takes the output of one command and uses it as input for another (output = $TARGET_BRANCH, which is used as input for cut) 
 env_label=$(echo "$TARGET_BRANCH" | cut -d'/' -f2)
 echo "env_label = $env_label"
 
-if [[ "${TARGET_BRANCH}" == "env/dev" || "${TARGET_BRANCH}" == "env/qa1" ]]
+environment_branches=("env/dev" "env/qa1" "env/qa2")
+
+# Look thru environment branches. If target branch is one of those branches, apply corresponding label
+# Another example of Bash piping: printf prints separate outputs, each output used as input for grep
+# grep -q only returns the status code of the grep (generally 0=true,1=false) so we can use that in a conditional
+if [[ printf "%s\\n" "${environment_branchess[@]}" | grep -q "$TARGET_BRANCH" ]]
+# if [[ "${TARGET_BRANCH}" == "env/dev" || "${TARGET_BRANCH}" == "env/qa1" ]]
 then
     gh pr edit "$PR_NUMBER" --add-label "$env_label"
 fi
