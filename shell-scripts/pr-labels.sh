@@ -4,10 +4,8 @@
 # - The target branch of the PR (the branch being merged into)
 # - The teams the user is a part of
 
-# It depends on being passed the following variables
-# TODO: PUT THE VARIABLES
-
-# gh auth login
+# This is called from the test-pr-action. It depends the following variables being defined in the action
+# TEAMS_READ_TOKEN, PR_CREATOR, TARGET_BRANCH, PR_NUMBER, ORG
 
 # Get the members of a team
 # gh api \
@@ -22,7 +20,7 @@
 # Use string/array to add labels to the PR
 # 
 
-declare -a TEAM_LABEL_LIST=()
+declare -a team_label_list=()
 
 # Had to use AI to help me come up with a solution but you can bet damn well I'm not going to use something without figuring out how it works. Cue long explanation
 
@@ -35,28 +33,28 @@ declare -a TEAM_LABEL_LIST=()
 # .slug = filter for just the 'slug' value (return just the team slug instead of the whole team JSON)
 
 # At this point let's say you have 3 separate outputs which doesn't translate well for usability (ex. "team-mario" "team-luigi" "team-peach")
-# mapfile command to read lines from stdinput or a file and assign each line an index of an array (TEAM_NAMES)
+# mapfile command to read lines from stdinput or a file and assign each line an index of an array (team_names)
 # Specifically mapfile syntax is 'mapfile [options (ex. -t to rmv trailing newlines)] [array_variable] < [some input with lines (ex. a file)]' 
 
 # Mapfile reads input, but we have OUTPUT from the jq command (really 3 separate outputs)
-# To translate our output into input we need to feed the output of jq as input. To do this use process substituion
+# To translate our output into input we need to feed the output of jq as input. To do this use process substituion <()
 # Process substitution allows commands that normally accept input to consume the output of other commands by treating the output as a file
 # Specifically <(gh api...) takes the output of gh api and treats it as a multiline file (more or less)
 # mapfile then "thinks" <(gh api...) is a file/input and takes each line (formerly separate outputs) and puts each line as element in indexed array
-mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq -r '.[].slug')
+mapfile -t team_names < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq -r '.[].slug')
 
 # Try commenting out the mapfile line above and commenting in this line and messing with the jq '' part (ex. '.', '.[]', .[].slug) to see how outputs differ
 # gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[]'
 
-# echo "TEAMS = ${TEAM_NAMES[@]}"
-# echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
+# echo "TEAMS = ${team_names[@]}"
+# echo "team_names[0] = ${team_names[0]}"
 # echo "repo owner = $ORG"
 
 # TODO: fxn? Name something like add_team_labels
 # For each team, look to see if $PR_CREATOR is a part of that team
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
 
-for team in "${TEAM_NAMES[@]}"
+for team in "${team_names[@]}"
 do
     # There is no Github API endpoint that does logic like 'get all teams a user is in', so we must come up with our own way.
     # Use jq to get array of usernames in that team
@@ -65,7 +63,7 @@ do
     
     # echo "URL TO USE: orgs/$ORG/teams/${team}/members"
     # Use the same mapfile/process substitution approach as above to get array of usernames in team
-    mapfile -t TEAM_MEMBERS < <(gh api --method GET \
+    mapfile -t team_members < <(gh api --method GET \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
@@ -75,43 +73,38 @@ do
     # printf is basically an enhanced version of echo. Still writes to stdout. 
     # %s=take arg as string, \\n = newline. So print the string, then a newline. 
     # [@] expands the array so each element is a separate word. Each element/word is considered a separate argument for printf
-    printf "%s\\n" "${TEAM_MEMBERS[@]}"
+    printf "%s\\n" "${team_members[@]}"
     echo -e "\n"
     # Loop thru the members of a team. If the PR_CREATOR == username in team, add the corresponding team label
     # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
-    for username in "${TEAM_MEMBERS[@]}"
+    for username in "${team_members[@]}"
     do
-        echo "username = ${username}"
-        echo "PR_CREATOR = ${PR_CREATOR}"
         echo -e "\n"
         if [[ "${username}" == "${PR_CREATOR}" ]]
         then
-            echo "ADDING TO TEAM_LABEL_LIST"
+            echo "ADDING TO team_label_list"
             # In this repo, team name is same as label name (i.e. the team with slug "team-mario" has a label "team-mario")
             # add to array (+=)
-            TEAM_LABEL_LIST+=($team)
+            team_label_list+=($team)
             # TODO: Enhance functionality
             #   Let's say it wasn't though. Like team-luigi has a corresponding 'luigi' label
             #   Or there's a 'bowser' team with no 'team-' prefix
             #   Probably have some sort of JSON or csv file where headers are team, labels
             #   So if username=$PR_CREATOR, then look at $team in JSON/csv and get corresponding value 
-        else 
-            echo "Not equal"
         fi
     done
 done
 
-echo -e "\n"
-# Loop thru TEAM_LABEL_LIST and add all the labels
-for team_label in "${TEAM_LABEL_LIST[@]}"
+echo -e "\nAdding the following labels to the PR:\n"
+printf "%s\\n" "${team_label_list[@]}"
+# Loop thru team_label_list and add all the labels
+
+for team_label in "${team_label_list[@]}"
 do
-    echo "team_label = ${team_label}"
-    # gh pr edit "$PR_NUMBER" --add-label "$team_label"
+    # echo "team_label = ${team_label}"
+    gh pr edit "$PR_NUMBER" --add-label "$team_label"
 done
 
-# Temp exit. DELETE THIS WHEN TESTING COMPLETE!
-# echo "Temporarily Early exit."
-# exit
 # Add labels to PR based on target branch
 
 # We can reference $PR_NUMBER from test-pr-action 
