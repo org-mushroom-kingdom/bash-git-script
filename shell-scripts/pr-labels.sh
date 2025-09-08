@@ -30,16 +30,12 @@ declare -a TEAM_LABEL_LIST=()
 # This is an example of using Github CLI (with jq) to call the Github API
 
 #TODO: don't hard code org name, use an ORG var in test-pr-action/other actions and pass it in that way. Make sure to Ctrl+F for org-mushroom-kingdom and update all refs
-TEAM_NAMES=$(gh api \
--H "Accept: application/vnd.github+json" \
--H "X-GitHub-Api-Version: 2022-11-28" \
--H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-orgs/$ORG/teams | jq 'map(.name)')
+# TEAM_NAMES=$(gh api \
+mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
 
 echo "TEAMS = $TEAM_NAMES"
 echo "repo owner = $ORG"
-A_TEAM="${TEAM_NAMES[0]}"
-echo "A_TEAM: ${A_TEAM}"
+
 echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
 #Temp exit. DELETE THIS WHEN TESTING COMPLETE!
 echo "Temporarily Early exit."
