@@ -83,8 +83,10 @@ do
     do
         if [[ "${username}" == "{$PR_CREATOR}" ]]
         then
-            # Assuming team name is same as label name, add to array (+=)
+            # In this repo, team name is same as label name (i.e. the team with slug "team-mario" has a label "team-mario")
+            # add to array (+=)
             TEAM_LABEL_LIST+=($team)
+            # TODO: Enhance functionality
             #   Let's say it wasn't though. Like team-luigi has a corresponding 'luigi' label
             #   Or there's a 'bowser' team with no 'team-' prefix
             #   Probably have some sort of JSON or csv file where headers are team, labels
@@ -93,11 +95,7 @@ do
     done
 done
 
-
-# gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
-# echo -e "team-peach members below: \n"
-# gh api --method GET -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/team-peach/members
-
+echo ""
 # Loop thru TEAM_LABEL_LIST and add all the labels
 for team_label in "${TEAM_LABEL_LIST[@]}"
 do
@@ -106,8 +104,8 @@ do
 done
 
 # Temp exit. DELETE THIS WHEN TESTING COMPLETE!
-echo "Temporarily Early exit."
-exit
+# echo "Temporarily Early exit."
+# exit
 # Add labels to PR based on target branch
 
 # We can reference $PR_NUMBER from test-pr-action 
