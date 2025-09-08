@@ -38,8 +38,12 @@ orgs/$ORG/teams | jq 'map(.name)')
 
 echo "TEAMS = $TEAM_NAMES"
 echo "repo owner = $ORG"
+A_TEAM="${TEAM_NAMES[0]}"
+echo "A_TEAM: ${A_TEAM}"
 echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
-
+#Temp exit. DELETE THIS WHEN TESTING COMPLETE!
+echo "Temporarily Early exit."
+exit
 # TODO: fxn? Name something like add_team_labels
 # For each team, look to see if $PR_CREATOR is a part of that team
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
