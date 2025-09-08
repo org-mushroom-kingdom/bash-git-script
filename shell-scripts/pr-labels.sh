@@ -31,9 +31,13 @@ declare -a TEAM_LABEL_LIST=()
 
 #TODO: don't hard code org name, use an ORG var in test-pr-action/other actions and pass it in that way. Make sure to Ctrl+F for org-mushroom-kingdom and update all refs
 # TEAM_NAMES=$(gh api \
-mapfile -t TEAM_NAMES < (gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
+# -H "Accept: application/vnd.github+json" \
+# -H "X-GitHub-Api-Version: 2022-11-28" \
+# -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
+# orgs/$ORG/teams | jq 'map(.name)')
+mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
 
-echo "TEAMS = $TEAM_NAMES"
+echo "TEAMS = ${TEAM_NAMES[@]}"
 echo "repo owner = $ORG"
 
 echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
