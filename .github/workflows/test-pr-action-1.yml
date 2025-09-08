@@ -125,7 +125,7 @@ jobs:
         if: ${{ github.event.inputs.pr_creator_manual != null }}
         run: |
           echo "Job manually started: Setting PR_CREATOR to value of github.event.inputs.pr_creator_manual (${{ github.event.inputs.pr_number_manual }})"
-          trim=$(cat my_string.${{ inputs.pr_creator_manual }} | sed 's/[[:space:]]*$//')
+          trim=$(cat ${{ inputs.pr_creator_manual }} | sed 's/[[:space:]]*$//')
           echo "$trim" | od -c
           # echo "PR_CREATOR=${{ github.event.inputs.pr_creator_manual }}" >> $GITHUB_ENV
           echo "PR_CREATOR=$trim" >> $GITHUB_ENV
