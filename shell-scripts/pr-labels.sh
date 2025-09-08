@@ -81,17 +81,34 @@ do
     echo "team = $team"
     
     # Use the same mapfile/process substitution approach as above to get array of usernames in team
-    mapfile -t TEAM_MEMBERS < <(gh api --method GET \
+    # mapfile -t TEAM_MEMBERS < <(gh api --method GET \
+    # -H "Accept: application/vnd.github+json" \
+    # -H "X-GitHub-Api-Version: 2022-11-28" \
+    # -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
+    #  orgs/$ORG/teams/${team}/members | jq -r '.[].login')
+    response=$(gh api --silent \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-     orgs/$ORG/teams/${team}/members | jq -r '.[].login')
-    
-    echo -e "\nMembers of team ${team}:\n" 
+    "orgs/$ORG/teams/${team}/members" 2>&1)
+
+    status=$?
+
+    if [[ $status -ne 0 ]]; then
+        echo "❌ Failed to get members for team '$team'"
+        echo "📎 Error output:"
+        echo "$response"
+    else
+        echo "✅ Team '$team' members:"
+        echo "$response" | jq -r '.[].login'
+    fi
+
+  echo "fifhifhsifhif"
+    # echo -e "\nMembers of team ${team}:\n" 
     # printf is basically an enhanced version of echo. Still writes to stdout. 
     # %s=take arg as string, \\n = newline. So print the string, then a newline. 
     # [@] expands the array so each element is a separate word. Each element/word is considered a separate argument for printf
-    printf "%s\\n" "${TEAM_MEMBERS[@]}"
+    # printf "%s\\n" "${TEAM_MEMBERS[@]}"
 
     # Loop thru the members of a team. If the PR_CREATOR == username in team, add the corresponding team label
     # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
