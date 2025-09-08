@@ -52,7 +52,7 @@ declare -a TEAM_LABEL_LIST=()
 # Process substitution allows commands that normally accept input to consume the output of other commands by treating the output as a file
 # Specifically <(gh api...) takes the output of gh api and treats it as a multiline file (more or less)
 # mapfile then "thinks" <(gh api...) is a file/input and takes each line (formerly separate outputs) and puts each line as element in indexed array
-mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
+mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq -r '.[].slug')
 # gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[]'
 
 # echo "TEAMS = ${TEAM_NAMES[@]}"
