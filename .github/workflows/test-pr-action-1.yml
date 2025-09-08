@@ -103,7 +103,8 @@ jobs:
       
       - name: Get assignable users
         run: |
-          gh api graphql -f query='query($endCursor:String){repository(owner:"org-mushroom-kingdom",name:"bash-git-script"){assignableUsers(first:100,after:$endCursor){nodes{login}pageInfo{endCursor,hasNextPage}}}}' --paginate --jq '.data.repository.assignableUsers.nodes[].login' | tee assignable-azure.txt
+          # gh api graphql -f query='query($endCursor:String){repository(owner:"org-mushroom-kingdom",name:"bash-git-script"){assignableUsers(first:100,after:$endCursor){nodes{login}pageInfo{endCursor,hasNextPage}}}}' --paginate --jq '.data.repository.assignableUsers.nodes[].login' | tee assignable-azure.txt
+          gh api users/${{ inputs.pr_creator_manual }}
           echo "Exiting early with bad exit code"
           exit 1
 
