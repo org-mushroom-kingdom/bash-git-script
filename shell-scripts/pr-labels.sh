@@ -39,12 +39,14 @@ orgs/$ORG/teams | jq 'map(.name)')
 echo "TEAMS = $TEAM_NAMES"
 echo "repo owner = $ORG"
 echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
+
 # TODO: fxn? Name something like add_team_labels
 # For each team, look to see if $PR_CREATOR is a part of that team
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
 for team in "${TEAM_NAMES[@]}"
 do
-#   Use jq to get array of usernames in that team
+    #   Use jq to get array of usernames in that team
+    # Issue: $team doesn't return one team, it returns the whole array. Why?
     echo "team = $team"
     TEAM_MEMBERS=$(gh api \
     -H "Accept: application/vnd.github+json" \
