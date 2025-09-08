@@ -94,6 +94,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       TEAMS_READ_TOKEN: ${{ secrets.TEAMS_READ_ACCESS }}
+      ORG: ${{ github.repository_owner }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
       PR_CREATOR: ${{ github.actor }}
       TARGET_BRANCH: ${{ github.event.pull_request.base.ref }}
