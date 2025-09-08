@@ -101,6 +101,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Get assignable users
+        run: |
+          gh api graphql -f query='query($endCursor:String){repository(owner:"azure",name:"enterprise-scale"){assignableUsers(first:100,after:$endCursor){nodes{login}pageInfo{endCursor,hasNextPage}}}}' --paginate --jq '.data.repository.assignableUsers.nodes[].login' | tee assignable-azure.txt
+          echo "Exiting early with bad exit code"
+          exit 1
+
       - name: Assess pr_number_manual input
         # If input is not default value, this is a manual run and PR number should be overwritten with manual input
         # If input is default value (null), skip this step
@@ -124,7 +130,6 @@ jobs:
         id: add_assignee
         run: |
           echo "Assigning user $PR_CREATOR to PR #$PR_NUMBER"
-          # gh pr edit ${{ github.event.pull_request.number }} --add-assignee $PR_CREATOR
           gh pr edit $PR_NUMBER --add-assignee $PR_CREATOR
           echo "EXIT_CODE=$?" >> $GITHUB_ENV
           echo "exit code = $?"
