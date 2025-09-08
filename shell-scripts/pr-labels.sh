@@ -60,8 +60,8 @@ mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-
 
 # echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
 #Temp exit. DELETE THIS WHEN TESTING COMPLETE!
-echo "Temporarily Early exit."
-exit
+# echo "Temporarily Early exit."
+# exit
 # TODO: fxn? Name something like add_team_labels
 # For each team, look to see if $PR_CREATOR is a part of that team
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
@@ -70,17 +70,19 @@ do
     #   Use jq to get array of usernames in that team
     # Issue: $team doesn't return one team, it returns the whole array. Why?
     echo "team = $team"
-    TEAM_MEMBERS=$(gh api \
+    
+    # Use the same mapfile/process substitution approach as above to get array of usernames in team
+    mapfile -t TEAM_MEMBERS < <(gh api \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    -H "Authorization: Bearer $TEAMS_READ_TOKEN"  \
-    /orgs/org-mushroom-kingdom/teams/$team/members | jq 'map(.login)')
-
-  echo -e "\nMembers of team ${team}:\n" 
-  # printf is basically an enhanced version of echo. Still writes to stdout. 
-  # %s=take arg as string, \\n = newline. So print the string, then a newline. 
-  # [@] expands the array so each element is a separate word. Each element/word is considered a separate argument for printf
-  printf "%s\\n" "${TEAM_MEMBERS[@]}"
+    -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
+     orgs/$ORG/teams/$team/members | jq '.[].login')
+    
+    echo -e "\nMembers of team ${team}:\n" 
+    # printf is basically an enhanced version of echo. Still writes to stdout. 
+    # %s=take arg as string, \\n = newline. So print the string, then a newline. 
+    # [@] expands the array so each element is a separate word. Each element/word is considered a separate argument for printf
+    printf "%s\\n" "${TEAM_MEMBERS[@]}"
 
 # Loop thru the members of a team. If the PR_CREATOR == username in team, add the corresponding team label
 # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
@@ -97,6 +99,10 @@ do
         fi
     done
 done
+
+Temp exit. DELETE THIS WHEN TESTING COMPLETE!
+echo "Temporarily Early exit."
+exit
 
 # gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
 # echo -e "team-peach members below: \n"
