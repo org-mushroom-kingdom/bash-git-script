@@ -26,9 +26,9 @@ declare -a TEAM_LABEL_LIST=()
 
 # This gives a JSON array of teams, which we want the value that corresponds to the 'name' key
 # Use \ to split the command into multiline
-# Use jq command line tool to process JSON: Bash jq is like sed for JSON. map(.name) takes the value of each JSON's 'name' key and throws it into array
 # This is an example of using Github CLI (with jq) to call the Github API
 
+# Use jq command line tool to process JSON: Bash jq is like sed for JSON. map(.name) takes the value of each JSON's 'name' key and throws it into array
 #TODO: don't hard code org name, use an ORG var in test-pr-action/other actions and pass it in that way. Make sure to Ctrl+F for org-mushroom-kingdom and update all refs
 # TEAM_NAMES=$(gh api \
 # -H "Accept: application/vnd.github+json" \
@@ -38,20 +38,20 @@ declare -a TEAM_LABEL_LIST=()
 # orgs/$ORG/teams | jq 'map(.name)')
 
 # Use gh api command orgs/$ORG/teams to get a JSON array of teams, which has various team info. We only want the name, so...
+# Use jq command line tool to process JSON: Bash jq is like sed for JSON.
 # Pipe with 'jq .[].slug' which breaks down to: 
 # . = filter for current JSON (result of gh api). If we just did jq . it would give the output of the JSON array (though it looks a little different when testing with the Actions page vs gh api with no jq present)
-# [] = iterate thru each element of JSON array, 
+# [] = iterate thru each element of JSON array 
 # .slug = get the 'slug' value
 # Use mapfile to read lines and assign each line an index of an array (TEAM_NAMES). -t removes trailing newline chars
 # Mapfile reads input--we need to feed the output of jq as input. Use process substituion
 # mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug')
-mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[]')
+gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[].slug'
 
+# echo "TEAMS = ${TEAM_NAMES[@]}"
+# echo "repo owner = $ORG"
 
-echo "TEAMS = ${TEAM_NAMES[@]}"
-echo "repo owner = $ORG"
-
-echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
+# echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
 #Temp exit. DELETE THIS WHEN TESTING COMPLETE!
 echo "Temporarily Early exit."
 exit
