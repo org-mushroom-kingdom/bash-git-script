@@ -76,7 +76,7 @@ do
     # %s=take arg as string, \\n = newline. So print the string, then a newline. 
     # [@] expands the array so each element is a separate word. Each element/word is considered a separate argument for printf
     printf "%s\\n" "${TEAM_MEMBERS[@]}"
-
+    echo -e "\n"
     # Loop thru the members of a team. If the PR_CREATOR == username in team, add the corresponding team label
     # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
     for username in "${TEAM_MEMBERS[@]}"
@@ -85,6 +85,7 @@ do
         echo "PR_CREATOR = ${PR_CREATOR}"
         if [[ "${username}" == "{$PR_CREATOR}" ]]
         then
+            echo "ADDING TO TEAM_LABEL_LIST"
             # In this repo, team name is same as label name (i.e. the team with slug "team-mario" has a label "team-mario")
             # add to array (+=)
             TEAM_LABEL_LIST+=($team)
@@ -97,7 +98,7 @@ do
     done
 done
 
-echo ""
+echo -e "\n"
 # Loop thru TEAM_LABEL_LIST and add all the labels
 for team_label in "${TEAM_LABEL_LIST[@]}"
 do
