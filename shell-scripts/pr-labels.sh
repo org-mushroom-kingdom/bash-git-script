@@ -24,19 +24,6 @@
 
 declare -a TEAM_LABEL_LIST=()
 
-# This gives a JSON array of teams, which we want the value that corresponds to the 'name' key
-# Use \ to split the command into multiline
-# This is an example of using Github CLI (with jq) to call the Github API
-
-# Use jq command line tool to process JSON: Bash jq is like sed for JSON. map(.name) takes the value of each JSON's 'name' key and throws it into array
-#TODO: don't hard code org name, use an ORG var in test-pr-action/other actions and pass it in that way. Make sure to Ctrl+F for org-mushroom-kingdom and update all refs
-# TEAM_NAMES=$(gh api \
-# -H "Accept: application/vnd.github+json" \
-# -H "X-GitHub-Api-Version: 2022-11-28" \
-# -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-# orgs/$ORG/teams)
-# orgs/$ORG/teams | jq 'map(.name)')
-
 # Had to use AI to help me come up with a solution but you can bet damn well I'm not going to use something without figuring out how it works. Cue long explanation
 
 # Use gh api command orgs/$ORG/teams to get a JSON array of teams (as output--this is important for later), which has various team info. We only want the name, so...
@@ -57,26 +44,18 @@ declare -a TEAM_LABEL_LIST=()
 # Specifically <(gh api...) takes the output of gh api and treats it as a multiline file (more or less)
 # mapfile then "thinks" <(gh api...) is a file/input and takes each line (formerly separate outputs) and puts each line as element in indexed array
 mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq -r '.[].slug')
+
+# Try commenting out the mapfile line above and commenting in this line and messing with the jq '' part (ex. '.', '.[]', .[].slug) to see how outputs differ
 # gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[]'
 
 # echo "TEAMS = ${TEAM_NAMES[@]}"
+# echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
 # echo "repo owner = $ORG"
 
-# echo "TEAM_NAMES[0] = ${TEAM_NAMES[0]}"
 # TODO: fxn? Name something like add_team_labels
 # For each team, look to see if $PR_CREATOR is a part of that team
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
 
-# team="team-peach"
-# gh api --method GET \
-#     -H "Accept: application/vnd.github+json" \
-#     -H "X-GitHub-Api-Version: 2022-11-28" \
-#     -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-#      orgs/$ORG/teams/${team}/members
-     
-# Temp exit. DELETE THIS WHEN TESTING COMPLETE!
-# echo "Temporarily Early exit."
-# exit
 for team in "${TEAM_NAMES[@]}"
 do
     # There is no Github API endpoint that does logic like 'get all teams a user is in', so we must come up with our own way.
