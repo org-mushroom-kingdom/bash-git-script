@@ -67,7 +67,8 @@ mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
 for team in "${TEAM_NAMES[@]}"
 do
-    #   Use jq to get array of usernames in that team
+    # There is no Github API endpoint that does logic like 'get all teams a user is in', so we must come up with our own way.
+    # Use jq to get array of usernames in that team
     # Issue: $team doesn't return one team, it returns the whole array. Why?
     echo "team = $team"
     
@@ -84,8 +85,8 @@ do
     # [@] expands the array so each element is a separate word. Each element/word is considered a separate argument for printf
     printf "%s\\n" "${TEAM_MEMBERS[@]}"
 
-# Loop thru the members of a team. If the PR_CREATOR == username in team, add the corresponding team label
-# ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
+    # Loop thru the members of a team. If the PR_CREATOR == username in team, add the corresponding team label
+    # ex. [team-mario would be ["mcummings128"], team-peach would be ["mcummings128","mcummings129"]
     for username in "${TEAM_MEMBERS[@]}"
     do
         if [[ "${username}" == "{$PR_CREATOR}" ]]
@@ -100,9 +101,6 @@ do
     done
 done
 
-Temp exit. DELETE THIS WHEN TESTING COMPLETE!
-echo "Temporarily Early exit."
-exit
 
 # gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /orgs/org-mushroom-kingdom/teams/team-peach/members
 # echo -e "team-peach members below: \n"
@@ -111,9 +109,13 @@ exit
 # Loop thru TEAM_LABEL_LIST and add all the labels
 for team_label in "${TEAM_LABEL_LIST[@]}"
 do
-    gh pr edit "$PR_NUMBER" --add-label "$team_label"
+    echo "team_label = ${team_label}"
+    # gh pr edit "$PR_NUMBER" --add-label "$team_label"
 done
 
+# Temp exit. DELETE THIS WHEN TESTING COMPLETE!
+echo "Temporarily Early exit."
+exit
 # Add labels to PR based on target branch
 
 # We can reference $PR_NUMBER from test-pr-action 
