@@ -61,9 +61,9 @@ do
     # There is no Github API endpoint that does logic like 'get all teams a user is in', so we must come up with our own way.
     # Use jq to get array of usernames in that team
     # Issue: $team doesn't return one team, it returns the whole array. Why?
-    echo "team = $team"
+    # echo "team = $team"
     
-    echo "URL TO USE: orgs/$ORG/teams/${team}/members"
+    # echo "URL TO USE: orgs/$ORG/teams/${team}/members"
     # Use the same mapfile/process substitution approach as above to get array of usernames in team
     mapfile -t TEAM_MEMBERS < <(gh api --method GET \
     -H "Accept: application/vnd.github+json" \
@@ -83,6 +83,7 @@ do
     do
         echo "username = ${username}"
         echo "PR_CREATOR = ${PR_CREATOR}"
+        echo -e "\n"
         if [[ "${username}" == "{$PR_CREATOR}" ]]
         then
             echo "ADDING TO TEAM_LABEL_LIST"
@@ -94,6 +95,8 @@ do
             #   Or there's a 'bowser' team with no 'team-' prefix
             #   Probably have some sort of JSON or csv file where headers are team, labels
             #   So if username=$PR_CREATOR, then look at $team in JSON/csv and get corresponding value 
+        else 
+            echo "Not equal"
         fi
     done
 done
