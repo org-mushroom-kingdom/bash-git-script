@@ -38,15 +38,19 @@ declare -a TEAM_LABEL_LIST=()
 # orgs/$ORG/teams | jq 'map(.name)')
 
 # Had to use AI to help me come up with a solution but you can bet damn well I'm not going to use something without figuring out how it works. Cue long explanation
+
 # Use gh api command orgs/$ORG/teams to get a JSON array of teams (as output--this is important for later), which has various team info. We only want the name, so...
 # Use jq command line tool to process JSON: Bash jq is like sed for JSON.
 # Pipe with 'jq .[].slug' which breaks down to: 
+# -r = use raw output (uses raw output instead of JSON strings which are wrapped in double quotes. ex. without -r --> "team-luigi" would be an output. WITH -r it would be team-luigi (no quotes) )
 # . = filter for current JSON (result of gh api). If we just did jq . it would give the output of the JSON array (though it looks a little different when testing with the Actions page vs gh api with no jq present)
 # [] = iterate thru each element of JSON array and give a separate output for each
 # .slug = filter for just the 'slug' value (return just the team slug instead of the whole team JSON)
+
 # At this point let's say you have 3 separate outputs which doesn't translate well for usability (ex. "team-mario" "team-luigi" "team-peach")
 # mapfile command to read lines from stdinput or a file and assign each line an index of an array (TEAM_NAMES)
 # Specifically mapfile syntax is 'mapfile [options (ex. -t to rmv trailing newlines)] [array_variable] < [some input with lines (ex. a file)]' 
+
 # Mapfile reads input, but we have OUTPUT from the jq command (really 3 separate outputs)
 # To translate our output into input we need to feed the output of jq as input. To do this use process substituion
 # Process substitution allows commands that normally accept input to consume the output of other commands by treating the output as a file
