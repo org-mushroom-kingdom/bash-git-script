@@ -73,11 +73,7 @@ do
     echo "team = $team"
     
     # Use the same mapfile/process substitution approach as above to get array of usernames in team
-    mapfile -t TEAM_MEMBERS < <(gh api --method GET \
-    -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-     orgs/$ORG/teams/$team/members | jq '.[].login')
+    mapfile -t TEAM_MEMBERS < <(gh api --method GET -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams/$team/members | jq '.[].login')
     
     echo -e "\nMembers of team ${team}:\n" 
     # printf is basically an enhanced version of echo. Still writes to stdout. 
