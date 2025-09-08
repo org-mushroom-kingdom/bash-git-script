@@ -56,7 +56,7 @@ TODO: Finish this table
 | -------- | -------- |
 | divide.sh | Examples of division and modulo in Bash |
 | main-script.sh | TODO: DESCRIPTION, but maybe its own section too |
-| pr-labels.sh | In progress. TODO: DESCRIPTION |
+| pr-labels.sh | In progress. TODO: Adds labels to PR based on: <br> 1. The teams the PR creator is a part of <br> 2. The target branch of the PR |
 
 
 # To-Do List
