@@ -71,8 +71,8 @@ mapfile -t TEAM_NAMES < <(gh api -H "Accept: application/vnd.github+json" -H "X-
 #      orgs/$ORG/teams/${team}/members
      
 # Temp exit. DELETE THIS WHEN TESTING COMPLETE!
-echo "Temporarily Early exit."
-exit
+# echo "Temporarily Early exit."
+# exit
 for team in "${TEAM_NAMES[@]}"
 do
     # There is no Github API endpoint that does logic like 'get all teams a user is in', so we must come up with our own way.
