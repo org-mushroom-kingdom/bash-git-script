@@ -101,8 +101,8 @@ jobs:
 
           # Look for that file's path in CODEOWNERS in a granular way
           # Assume this is a script that returns a not_in_codeowners ,-delmitied string
-          codeowners_thing=$(bash ./shell-scripts/read-thru-codeowners.sh)
-          echo "codeowners_thing $codeowners_thing"
+          # codeowners_thing=$(bash ./shell-scripts/read-thru-codeowners.sh)
+          # echo "codeowners_thing $codeowners_thing"
           
       - name: Test Get CODEOWNERS
         run: |
