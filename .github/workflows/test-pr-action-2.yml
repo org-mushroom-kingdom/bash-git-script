@@ -66,5 +66,6 @@ jobs:
       - name: Print CHANGED_FILES
         run: |
           echo "Attempt to print env.CHANGED_FILES..."
-          printf "%s\\n" "${{env.CHANGED_FILES[@]}}"
+          changed_files=${{env.CHANGED_FILES}}
+          printf "%s\\n" "${changed_files[@]}"
           # echo "${{ steps.changed_files.outputs.CHANGED_FILES }}"
