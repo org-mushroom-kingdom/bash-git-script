@@ -69,3 +69,5 @@ jobs:
           # changed_files=${{env.CHANGED_FILES}}
           changed_files=${{ steps.changed_files.outputs.CHANGED_FILES }}
           printf "%s\\n" "${changed_files[@]}"
+          echo "changed_files[0] = ${changed_files[0]}"
+          echo "changed_files[1] = ${changed_files[1]}"
