@@ -69,8 +69,8 @@ jobs:
         run: |
           # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename | join(", ")'
           
-          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files"
-          # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" > test-json-outpt.txt
+          # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files"
+          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" > test-json-outpt.txt
           # git add test-json-output.txt
           # git commit -m "Capture output from Github 'get changed files' call"
           # git push origin main
