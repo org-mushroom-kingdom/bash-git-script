@@ -68,8 +68,8 @@ jobs:
       - name: Get List of Changed Files
         id: changed_files
         run: |
-          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename | join(", ")'
-          
+          # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename | join(", ")'
+          mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename) | join(", ")')
           # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files"
           # changed_files_output=$(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files")
           # echo "$changed_files_output" > test-json-output.txt 
