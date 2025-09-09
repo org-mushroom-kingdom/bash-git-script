@@ -153,22 +153,14 @@ jobs:
           echo "Exit code from previous step ${{steps.add_assignee.name}} is non-zero value. ${{env.EXIT_CODE}}"
           exit "${{env.EXIT_CODE}}"
       
-      # Add team-* label based on assignee
+      # Add team-* label based on assignee via calling a script
       # ^This cannot be done with GH_TOKEN as its permissions only scoped to the current repo that contains this workflow.
       # ^Instead, must create a fine grained personal access token with organization:Members:read permission
+      # This script also assigns an environment label based on the target branch (ex. if merging into env/dev applies correspoding 'dev' label)
       - name: Add team label(s) b/o assignee; env label b/o target branch
         run: |
           # echo "get-label.sh: Give username as arg, get the teams they are on, assign the team."
-          # echo "OR loop thru all teams for user. Have some sort of in-this-team flag. When loop done, add labels based on flags"
-          # echo "Note: This does NOT account for the user being a part of multiple teams!"
-          # echo -e "add-label.sh TBD \n"
-          # echo "if the branch is 'env/dev', add a 'dev' label."
-          # echo "if the branch is 'env/qa1', add a 'qa' label."
-          # echo "Otherwise do nothing"
           ./shell-scripts/pr-labels.sh
-
-
-
 
       #TODO: MOVE THIS somewhere else, like a separate CODEOWNERS related action
       # - name: Get most recent hash of this workflow
