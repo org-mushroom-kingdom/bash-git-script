@@ -80,7 +80,7 @@ jobs:
           echo "Printing changed file list:"
           printf "%s\\n" "${changed_files[@]}"
 
-          echo "CHANGED_FILES=${changed_files}" >> $GITHUB_ENV
+          echo "CHANGED_FILES=${changed_files_output}" >> $GITHUB_ENV
           # echo "CHANGED_FILES=${changed_files}" >> $GITHUB_OUTPUT
       
       - name: Print CHANGED_FILES
