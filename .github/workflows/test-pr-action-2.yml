@@ -48,4 +48,4 @@ jobs:
 
       - name: Get List of Changed Files
         run: |
-          gh api /repos/{{ $github.repository }}/pulls/$PR_NUMBER/files
+          gh api --method GET /repos/{{ $github.repository }}/pulls/$PR_NUMBER/files
