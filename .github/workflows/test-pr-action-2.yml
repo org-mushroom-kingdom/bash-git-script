@@ -57,4 +57,8 @@ jobs:
       
       - name: Get List of Changed Files
         run: |
-          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r .[].filename
+          mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r .[].filename)
+          echo "CHANGED_FILES=${changed_files}" >> $GITHUB_ENV
+      
+      - name: Print changed_files
+        run: echo "${{env.CHANGED_FILES}}"
