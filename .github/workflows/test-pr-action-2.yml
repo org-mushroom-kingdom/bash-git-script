@@ -92,7 +92,7 @@ jobs:
         run: |
           echo "Attempt to print env.CHANGED_FILES..."
           changed_files=${{env.CHANGED_FILES_STR}}
-          echo"${{env.CHANGED_FILES_STR}}
+          echo "${{env.CHANGED_FILES_STR}}
           # changed_files=${{ steps.changed_files.outputs.CHANGED_FILES }}
           # printf "%s\\n" "${changed_files[@]}"
           # echo "changed_files[0] = ${changed_files[0]}"
