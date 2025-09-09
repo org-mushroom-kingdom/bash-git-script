@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Echo things
-        run: "Will echo stuff here as needed"
+        run: echo "Will echo stuff here as needed"
 
       - name: Get List of Changed Files
         run: |
