@@ -1,20 +1,22 @@
 # Business: This action is used to test various PR-related things.
 # TODO: It's less about commenting, and SHOULD have some more flexible step-running stuff when it's more established.
+# TODO: THere's probably a way to inherit/borrow elements from test-pr-action-1, but have to look into it
 
 name: Test PR Action 2
 
 # Controls when the workflow will run
 on:
-  pull_request:
+  # TODO: Eventually comment this back in?
+  # pull_request:
 
-    # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       pr_number_manual:
         description: "Optional PR number to use"
         required: false
         type: string
-        default: 
+        default: '61' # PR #61 has two changed files README.md and shell-scripts/info.txt 
       pr_creator_manual:
         description: "Optional user/PR creator to specify"
         required: false
@@ -24,23 +26,26 @@ on:
         required: false
         type: string
 
-  jobs:
-    # TODO: Change job-name and name: if the purpose changes
-    get-list-of-changed-files:
-      name: Get List of Changed Files
-      
+jobs:
+  # TODO: Change job-name and name: if the purpose changes
+  get-list-of-changed-files:
+    name: Get List of Changed Files
+  
     runs-on: ubuntu-latest
-    
+
     permissions:
       issues: write
       pull-requests: write
 
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+
     steps:
-      
       - uses: actions/checkout@v4
 
       - name: Echo things
         run: "Will echo stuff here as needed"
 
       - name: Get List of Changed Files
-        run: "Will echo stuff here as needed"
+        run: |
+          gh api /repos/{{ $github.repository }}/pulls/$PR_NUMBER/files
