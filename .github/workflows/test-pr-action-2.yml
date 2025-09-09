@@ -16,7 +16,7 @@ on:
         description: "Optional PR number to use"
         required: false
         type: string
-        default: '61' # PR #61 has two changed files README.md and shell-scripts/info.txt 
+        default: '61' # PR #61 has four changed files README.md and shell-scripts/info.txt 
       pr_creator_manual:
         description: "Optional user/PR creator to specify"
         required: false
@@ -80,7 +80,8 @@ jobs:
           
           echo "Printing changed file list:"
           printf "%s\\n" "${changed_files[@]}"
-          # Env vars can only be strings, so convert the array into strings
+          echo "Env vars can only be strings, so convert the array into a string then pass to GITHUB_ENV"
+          echo "This allows it to be used in the next step"
           #TODO: LOOKUP AND EXPLAIN IFS, [*]
           IFS=', '
           changed_files_str="${changed_files[*]}"
@@ -98,5 +99,3 @@ jobs:
           changed_files_array=($changed_files_str)
           echo "changed_files_array[1] = ${changed_files_array[1]}"
           # printf "%s\\n" "${changed_files[@]}"
-          # echo "changed_files[0] = ${changed_files[0]}"
-          # echo "changed_files[1] = ${changed_files[1]}"
