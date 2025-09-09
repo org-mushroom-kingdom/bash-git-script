@@ -1,0 +1,60 @@
+# Business: This action is used to test various PR-related things.
+# TODO: It's less about commenting, and SHOULD have some more flexible step-running stuff when it's more established.
+# TODO: THere's probably a way to inherit/borrow elements from test-pr-action-1, but have to look into it
+
+name: Test PR Action 2
+
+# Controls when the workflow will run
+on:
+  # TODO: Eventually comment this back in?
+  # pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      pr_number_manual:
+        description: "Optional PR number to use"
+        required: false
+        type: string
+        default: '61' # PR #61 has two changed files README.md and shell-scripts/info.txt 
+      pr_creator_manual:
+        description: "Optional user/PR creator to specify"
+        required: false
+        type: string
+      target_branch_manual:
+        description: "Optional target branch to specify"
+        required: false
+        type: string
+
+jobs:
+  # TODO: Change job-name and name: if the purpose changes
+  pr-related-things:
+    name: Perform logic related to PR
+  
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      pull-requests: write
+
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Echo things
+        run: echo "Will echo stuff here as needed"
+
+      - name: Assess pr_number_manual input
+        # If input is not default value, this is a manual run and PR number should be overwritten with manual input
+        # If input is default value (null), skip this step
+        if: ${{ github.event.inputs.pr_number_manual != null }}
+        run: |
+          echo "Job manually started: Setting PR_NUMBER to value of github.event.inputs.pr_number_manual (${{ github.event.inputs.pr_number_manual }})"
+          echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
+      
+      - name: Get List of Changed Files
+        run: |
+          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r .[].filename
