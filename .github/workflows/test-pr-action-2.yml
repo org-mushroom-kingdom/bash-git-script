@@ -92,9 +92,10 @@ jobs:
         run: |
           echo "Attempt to print env.CHANGED_FILES_STR..."
           echo "${{env.CHANGED_FILES_STR}}"
+          changed_files_str="${{env.CHANGED_FILES_STR}}"
           # Join it back to an array
           IFS=", "
-          changed_files_array=(${{env.CHANGED_FILES_STR}})
+          changed_files_array=($changed_files_str)
           echo "changed_files_array[1] = ${changed_files_array[1]}"
           # printf "%s\\n" "${changed_files[@]}"
           # echo "changed_files[0] = ${changed_files[0]}"
