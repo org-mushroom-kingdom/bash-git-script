@@ -106,7 +106,8 @@ jobs:
           
       - name: Test Get CODEOWNERS
         run: |
-          gh api repos/$ORG/contents/.gitignore/CODEOWNERS
+          url = "repos/${ORG}/contents/.gitignore/CODEOWNERS"
+          gh api repos/${ORG}/contents/.gitignore/CODEOWNERS
           # Pass that string to next step which will... 
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
           echo "changed_files_array[1] = ${changed_files_array[1]}"
