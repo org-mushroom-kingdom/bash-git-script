@@ -61,7 +61,7 @@ jobs:
         id: changed_files
         run: |
           # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename | join(", ")'
-          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" > test-json-outpt.txt
+          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" > repos/org-mushroom-kingdom/bash-git-script/test-json-outpt.txt
           # mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r 'map(.filename) | join(", ")')
           echo "Printing changed file list:"
           echo "${changed_files}"
