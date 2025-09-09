@@ -85,14 +85,14 @@ jobs:
           IFS=', '
           changed_files_str="${changed_files[*]}"
           echo "changed_files_str = ${changed_files_str}"
-          echo "CHANGED_FILES=${changed_files}" >> $GITHUB_ENV
+          echo "CHANGED_FILES_STR=${changed_files_str}" >> $GITHUB_ENV
           # echo "CHANGED_FILES=${changed_files}" >> $GITHUB_OUTPUT
       
       - name: Print CHANGED_FILES
         run: |
           echo "Attempt to print env.CHANGED_FILES..."
-          changed_files=${{env.CHANGED_FILES}}
+          changed_files=${{env.CHANGED_FILES_STR}}
           # changed_files=${{ steps.changed_files.outputs.CHANGED_FILES }}
-          printf "%s\\n" "${changed_files[@]}"
-          echo "changed_files[0] = ${changed_files[0]}"
-          echo "changed_files[1] = ${changed_files[1]}"
+          # printf "%s\\n" "${changed_files[@]}"
+          # echo "changed_files[0] = ${changed_files[0]}"
+          # echo "changed_files[1] = ${changed_files[1]}"
