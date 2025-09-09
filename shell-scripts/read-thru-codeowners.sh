@@ -14,4 +14,5 @@ echo "read_thru_codeowners.sh was hit!"
 
 #Open/Get CODEOWNERS via Github CLI/Github API
 # Get filepath (in PR), see if path is in 
-gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS
+gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq '.content' | base64 --decode 
+
