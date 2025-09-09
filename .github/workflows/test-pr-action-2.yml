@@ -56,6 +56,7 @@ jobs:
           echo "Job manually started: Setting PR_NUMBER to value of github.event.inputs.pr_number_manual (${{ github.event.inputs.pr_number_manual }})"
           echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
       
+      #TODO: LOOKUP AND EXPLAIN
       - name: Configure Git User
         run: |
           git config user.name "github-actions[bot]"
@@ -67,10 +68,13 @@ jobs:
         id: changed_files
         run: |
           # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename | join(", ")'
-          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" > test-json-outpt.txt
-          git add test-json-output.txt
-          git commit -m "Capture output from Github 'get changed files' call"
-          git push origin main
+          
+          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files"
+          # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" > test-json-outpt.txt
+          # git add test-json-output.txt
+          # git commit -m "Capture output from Github 'get changed files' call"
+          # git push origin main
+          
           # mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r 'map(.filename) | join(", ")')
           echo "Printing changed file list:"
           echo "${changed_files}"
