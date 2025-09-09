@@ -28,8 +28,8 @@ on:
 
 jobs:
   # TODO: Change job-name and name: if the purpose changes
-  get-list-of-changed-files:
-    name: Get List of Changed Files
+  pr-related-things:
+    name: Perform logic related to PR
   
     runs-on: ubuntu-latest
 
