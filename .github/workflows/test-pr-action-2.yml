@@ -101,7 +101,7 @@ jobs:
           # Look for that file's path in CODEOWNERS in a granular way
           # Assume this is a script that returns a not_in_codeowners ,-delmitied string
           codeowners_thing=(bash ./shell-scripts/read-thru-codeowners.sh)
-          echo "$codeowners_thing"
+          echo "codeowners_thing $codeowners_thing"
           # Pass that string to next step which will... 
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
           echo "changed_files_array[1] = ${changed_files_array[1]}"
