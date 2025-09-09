@@ -56,11 +56,12 @@ jobs:
           echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
       
       # TODO: LOOK UP AND EXPLAIN JQ MAP
+      # jq map will filter out 
       - name: Get List of Changed Files
         id: changed_files
         run: |
-          # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r .[].filename
-          mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r 'map(.filename) | join(", ")')
+          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename | join(", ")')
+          # mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r 'map(.filename) | join(", ")')
           echo "Printing changed file list:"
           echo "${changed_files}"
           # printf "%s\\n" "${changed_files[@]}"
