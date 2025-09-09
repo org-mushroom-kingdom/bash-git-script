@@ -56,6 +56,11 @@ jobs:
           echo "Job manually started: Setting PR_NUMBER to value of github.event.inputs.pr_number_manual (${{ github.event.inputs.pr_number_manual }})"
           echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
       
+      - name: Configure Git User
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
       # TODO: LOOK UP AND EXPLAIN JQ MAP
       # jq map will filter out 
       - name: Get List of Changed Files
