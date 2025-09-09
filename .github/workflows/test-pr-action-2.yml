@@ -70,10 +70,11 @@ jobs:
           # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename | join(", ")'
           
           # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files"
-          gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" > test-json-outpt.txt
-          # git add test-json-output.txt
-          # git commit -m "Capture output from Github 'get changed files' call"
-          # git push origin main
+          changed_files_output=$(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files")
+          echo "$changed_files" > test-json-output.txt 
+          git add test-json-output.txt
+          git commit -m "Capture output from Github 'get changed files' call"
+          git push origin main
           
           # mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r 'map(.filename) | join(", ")')
           echo "Printing changed file list:"
