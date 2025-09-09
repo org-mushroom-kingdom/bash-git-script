@@ -42,6 +42,7 @@ jobs:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       ORG: ${{ github.repository_owner }}
+      REPO_PATH: ${{ github.repository }}
 
     steps:
       - uses: actions/checkout@v4
@@ -106,9 +107,9 @@ jobs:
           
       - name: Test Get CODEOWNERS
         run: |
-          url="repos/${ORG}/contents/.gitignore/CODEOWNERS"
+          url="repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS"
           echo "url= ${url}"
-          gh api repos/${ORG}/contents/.gitignore/CODEOWNERS
+          gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS
           # Pass that string to next step which will... 
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
           echo "changed_files_array[1] = ${changed_files_array[1]}"
