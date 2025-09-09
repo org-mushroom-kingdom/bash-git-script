@@ -60,12 +60,11 @@ jobs:
         run: |
           # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r .[].filename
           mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r .[].filename)
-          printf "%s\\n" "${changed_files[@]}"
-          # echo "CHANGED_FILES=${changed_files}" >> $GITHUB_ENV
-          echo "CHANGED_FILES=${changed_files}" >> $GITHUB_OUTPUT
+          echo "CHANGED_FILES=${changed_files}" >> $GITHUB_ENV
+          # echo "CHANGED_FILES=${changed_files}" >> $GITHUB_OUTPUT
       
       - name: Print CHANGED_FILES
         run: |
           echo "Attempt to print env.CHANGED_FILES..."
-          # echo "${{env.CHANGED_FILES}}"
-          echo "${{ steps.changed_files.outputs.CHANGED_FILES }}"
+          printf "%s\\n" "${{env.CHANGED_FILES}}"
+          # echo "${{ steps.changed_files.outputs.CHANGED_FILES }}"
