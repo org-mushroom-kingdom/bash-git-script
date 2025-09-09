@@ -55,6 +55,7 @@ jobs:
           echo "Job manually started: Setting PR_NUMBER to value of github.event.inputs.pr_number_manual (${{ github.event.inputs.pr_number_manual }})"
           echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
       
+      # TODO: LOOK UP AND EXPLAIN JQ MAP
       - name: Get List of Changed Files
         id: changed_files
         run: |
