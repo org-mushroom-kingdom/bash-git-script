@@ -41,6 +41,7 @@ jobs:
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ORG: ${{ github.repository_owner }}
 
     steps:
       - uses: actions/checkout@v4
@@ -102,6 +103,10 @@ jobs:
           # Assume this is a script that returns a not_in_codeowners ,-delmitied string
           codeowners_thing=$(bash ./shell-scripts/read-thru-codeowners.sh)
           echo "codeowners_thing $codeowners_thing"
+          
+      - name: Test Get CODEOWNERS
+        run: |
+          gh api repos/{$ORG}/contents/.gitignore/CODEOWNERS
           # Pass that string to next step which will... 
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
           echo "changed_files_array[1] = ${changed_files_array[1]}"
