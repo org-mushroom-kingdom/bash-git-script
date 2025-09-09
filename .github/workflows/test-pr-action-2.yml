@@ -64,7 +64,7 @@ jobs:
           printf "%s\\n" "${changed_files[@]}"
           # echo "CHANGED_FILES=${changed_files}" >> $GITHUB_ENV
           # echo "CHANGED_FILES=${changed_files}" >> $GITHUB_OUTPUT
-          echo "CHANGED_FILES=${{toJSON(changed_files)}}" >> $GITHUB_OUTPUT
+          echo "CHANGED_FILES=${{toJSON($changed_files)}}" >> $GITHUB_OUTPUT
       
       - name: Print CHANGED_FILES
         run: |
