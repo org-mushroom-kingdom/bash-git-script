@@ -124,7 +124,7 @@ jobs:
           # echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
           # Filter out the comments in the array (essentially this is array mapping)
-          for line in "${codeowners_lines[@]}"
+          for line in "${codeowners_raw_lines[@]}"
           do
               if [[ "${line}" != "#"* ]]
               then
