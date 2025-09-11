@@ -13,3 +13,5 @@ README.md @org-mushroom-kingdom/team-peach
 
 # This purposefully has tabs in it to better test string splitting logic in read-thru-codeowners.sh
 /org/*      @org-mushroom-kingdom/team-luigi
+
+images/ @org-mushroom-kingdom/team-toad

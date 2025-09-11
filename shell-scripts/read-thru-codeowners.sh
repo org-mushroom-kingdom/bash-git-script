@@ -53,9 +53,24 @@ done
 IFS=","
 changed_file_list=($CHANGED_FILES_STR)
 echo "changed_file_list[0] = ${changed_file_list[0]}"
-exit
+
+# Early exit DELETE THIS WHEN DONE TESTING
+# exit
+
+#Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt
+# Using .github/workflows/test-pr-action-2.yml as an example...
+# Split the path into strings via / ?
+# First see if '.github' or '.github/' or '.github/*' is in CODEOWNERS
+# A. If it is can mark in_codeowners as true (exit early?)
+# B. If not, do nothing
+# If B Then see if '.github/workflows' or '.github/workflows/*' is in CODEOWNERS
+# A/B (see above)
+# If B then do the whole filepath
+
 for changed_file_path in changed_file_list
+  # Bash doesn't have native boolean datatypes, so we use strings
   in_codeowners="false"
+    #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} 
     for line in "${codeowners_lines[@]}"
     do
         # echo "line = $line"
@@ -63,8 +78,8 @@ for changed_file_path in changed_file_list
         owner=$(echo "$line" | cut -d ' ' -f2)
         # echo "filepath = $filepath"
         # echo "owner = $owner"
-    
-        #Examples of changed_filename .github/workflows/test-pr-action-2.yml,README.md,dummy-txt-.txt,shell-scripts/info.txt
+        #
+        # if [[  ]]
 
     done
 done

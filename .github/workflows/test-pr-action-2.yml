@@ -114,7 +114,7 @@ jobs:
           # Pass that string to next step which will... 
           
           line=$(bash ./shell-scripts/read-thru-codeowners.sh)
-          echo "line = ${line}"
+          echo "line from read-thru-codeowners = ${line}"
           
           # DELETE THIS WHEN TESTING COMPLETE
           # echo "Purpose fail"
