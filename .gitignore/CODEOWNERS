@@ -2,10 +2,10 @@
 
 # Format: /path/to/file @username @org/team
 
-#Anything in shell-scripts/ that is a *.sh file is owned by Mario's team
+# Anything in shell-scripts/ that is a *.sh file is owned by Mario's team
 /shell-scripts/*.sh @org-mushroom-kingdom/team-mario
 
-#However, Peach's team should own the documentation for it
+# However, Peach's team should own the documentation for it
 /shell-scripts/info.txt @org-mushroom-kingdom/team-peach
 
 # README is also owned by Peach's team
