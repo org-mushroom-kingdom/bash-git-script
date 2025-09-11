@@ -129,7 +129,7 @@ jobs:
           do
               if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
               then
-                  trimemed_line=$(echo "${line}" | tr -d '\t')
+                  trimmed_line=$(echo "${line}" | tr -d '\t')
                   echo "LINE! ${trimmed_line}"
                   codeowners_lines+=($trimmed_line)
               fi
