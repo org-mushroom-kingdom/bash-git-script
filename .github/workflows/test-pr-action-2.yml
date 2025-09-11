@@ -131,7 +131,7 @@ jobs:
               then
                   trimmed_line=$(echo "$raw_line" | tr -s ' ')
                   echo -e "LINE! ${trimmed_line}"
-                  codeowners_lines+=($trimmed_line)
+                  codeowners_lines+=("$trimmed_line")
               fi
           done
 
