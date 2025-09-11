@@ -2,16 +2,16 @@
 
 # Format: /path/to/file @username @org/team
 
-# Anything in shell-scripts/ that is a *.sh file is owned by Mario's team
+# Anything in shell-scripts/ (NOT subdirectories) that is a *.sh file is owned by Mario's team (example of owning certain exts in a directory, nonrecursively)
 /shell-scripts/*.sh @org-mushroom-kingdom/team-mario
 
-# However, Peach's team should own the documentation for it
+# However, Peach's team should own the documentation for it (example of owning specific file)
 /shell-scripts/info.txt @org-mushroom-kingdom/team-peach
 
-# README is also owned by Peach's team
+# README is also owned by Peach's team (example of owning specific file at top-level)
 README.md @org-mushroom-kingdom/team-peach
 
-# This purposefully has tabs in it to better test string splitting logic in read-thru-codeowners.sh
-/org/*      @org-mushroom-kingdom/team-luigi
+# This purposefully has tabs in it to better test string splitting logic in read-thru-codeowners.sh (example of recursively owning all files/folders in a directory)
+/org/      @org-mushroom-kingdom/team-luigi
 
-images/ @org-mushroom-kingdom/team-toad
+/images/ @org-mushroom-kingdom/team-toad
