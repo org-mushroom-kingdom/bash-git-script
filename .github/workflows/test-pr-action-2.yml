@@ -108,10 +108,14 @@ jobs:
       - name: Test Get CODEOWNERS
         run: |
           url="repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS"
-          echo "url= ${url}"
+          # echo "url= ${url}"
           # gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS
           # gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode 
           # Pass that string to next step which will... 
+          
+          line=$(bash bash ./shell-scripts/read-thru-codeowners.sh)
+          echo "line = ${line}"
+          
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
           echo "changed_files_array[1] = ${changed_files_array[1]}"
           # printf "%s\\n" "${changed_files[@]}"

@@ -25,10 +25,18 @@ mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignor
 echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
 echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
+# Filter out the comments in the array (essentially this is array mapping)
+for line in "${codeowners_lines[@]}"
+do
+    if [[ "${line}" != "#"* ]]
+    then
+        codeowners_lines+=($line)
+    fi
+done
+
+echo "${codeowners_lines[1]}"
 # for line in "${codeowners_lines[@]}"
 # do
-#     if [[ "${line}" != "#"* ]]
-#     then
-#         codeowners_lines+=($line)
-#     fi
+#     filepath=
 # done
+
