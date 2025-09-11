@@ -129,9 +129,9 @@ jobs:
           do
               if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
               then
-                  line=$(echo "${line}" | tr -d '\t')
-                  echo "LINE! ${line}"
-                  codeowners_lines+=($line)
+                  trimemed_line=$(echo "${line}" | tr -d '\t')
+                  echo "LINE! ${trimmed_line}"
+                  codeowners_lines+=($trimmed_line)
               fi
           done
 
