@@ -137,6 +137,13 @@ jobs:
 
           echo "codeowners_lines:"
           printf "\\n" "${codeowners_lines[@]}"
+          
+          for line in "${codeowners_lines[@]}"
+          do
+              filepath=$(echo "$line" cut -d' ' -f1)
+              echo "filepath = $filepath"
+          done
+
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
           # echo "changed_files_array[1] = ${changed_files_array[1]}"
           # printf "%s\\n" "${changed_files[@]}"
