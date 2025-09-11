@@ -9,7 +9,7 @@
 # This is called from the test-pr-action. It depends the following variables being defined in the action
 # TARGET_BRANCH, PR_NUMBER, ORG
 
-echo "read_thru_codeowners.sh was hit!"
+# echo "read_thru_codeowners.sh was hit!"
 
 declare -a codeowners_lines
 
@@ -22,8 +22,8 @@ mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignor
 
 # Get filepath (in PR), see if path is in 
 
-echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
-echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
+# echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
+# echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
 # Filter out the comments in the array (essentially this is array mapping)
 for line in "${codeowners_lines[@]}"
