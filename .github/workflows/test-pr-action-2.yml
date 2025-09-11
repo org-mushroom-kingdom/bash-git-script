@@ -130,7 +130,7 @@ jobs:
               if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
               then
                   echo "LINE! ${line}"
-                  # line=$(echo "${line}" | tr -d "/t")
+                  line=$(echo "${line}" | tr -d "/t")
                   codeowners_lines+=($line)
               fi
           done
