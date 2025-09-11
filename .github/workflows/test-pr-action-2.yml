@@ -124,9 +124,10 @@ jobs:
           # echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
           # Filter out the comments in the array (essentially this is array mapping)
+          # Filter out lines that begin with # or are empty (use ${#line} to assess string length)
           for line in "${codeowners_raw_lines[@]}"
           do
-              if [[ "${line}" != "#"* && "${line}" -gt 0 ]]
+              if [[ "${line}" != "#"* || ${#line} -gt 0 ]]
               then
                   echo "LINE! ${line}"
                   codeowners_lines+=($line)
