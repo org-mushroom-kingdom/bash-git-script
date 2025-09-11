@@ -141,8 +141,8 @@ jobs:
           for line in "${codeowners_lines[@]}"
           do
               # echo "line = $line"
-              filepath=$(echo "$line" | cut -d'@' -f1)
-              owner=$(echo "$line" | cut -d'@' -f2)
+              filepath=$(echo "$line" | cut -d' ' -f1)
+              owner=$(echo "$line" | cut -d ' ' -f2)
               
               echo "filepath = $filepath"
               echo "owner = $owner"
