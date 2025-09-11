@@ -142,7 +142,11 @@ jobs:
           do
               # echo "line = $line"
               filepath=$(echo "$line" | cut -d'@' -f1)
+              owner=$(echo "$line" | cut -d'@' -f2)
+              
               echo "filepath = $filepath"
+              echo "owner = $owner"
+
           done
 
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
