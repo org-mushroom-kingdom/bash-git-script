@@ -64,9 +64,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-      # TODO: LOOK UP AND EXPLAIN JQ MAP
       # TODO: EXPLAIN HOW YOU WERE ABLE TO WRITE TO JSONOUTPUT FILE, MOVE IT TO OTHER ACTION OR MAKE CONDITIONAL STEP
-      # jq map will filter out TBD
       - name: Get List of Changed Files, set as str
         id: changed_files
         run: |
@@ -105,7 +103,7 @@ jobs:
           # codeowners_thing=$(bash ./shell-scripts/read-thru-codeowners.sh)
           # echo "codeowners_thing $codeowners_thing"
           
-      - name: Test Get CODEOWNERS
+      - name: Validate Changed Files Are In CODEOWNERS
         run: |
           url="repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS"
           # echo "url= ${url}"
