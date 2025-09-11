@@ -140,7 +140,7 @@ jobs:
           
           for line in "${codeowners_lines[@]}"
           do
-              filepath=$(echo "$line" cut -d' ' -f1)
+              filepath=$(echo "$line" | cut -d' ' -f1)
               echo "filepath = $filepath"
           done
 
