@@ -1,6 +1,6 @@
 # Business: This action is used to interact with open PRs.
 # It will always add a comment to the PR, and add an additional comment if the feature branch name contains 'readme'
-# It will also add the creator of the PR to the 'Assignees' section (this is in progress)
+# It will also add the creator of the PR to the 'Assignees' section
 
 name: Test PR Action 1
 

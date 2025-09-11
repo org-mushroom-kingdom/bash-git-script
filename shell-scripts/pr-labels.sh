@@ -25,6 +25,7 @@ declare -a team_names=()
 
 # Had to use AI to help me come up with a solution but you can bet damn well I'm not going to use something without figuring out how it works. Cue long explanation
 
+# Instead of curl, can use Github CLI because Github CLI is pre-installed on all Github-hosted runners. Easy to call Github API via 'gh api' command
 # Use gh api command orgs/$ORG/teams to get a JSON array of teams (as output--this is important for later), which has various team info. We only want the name, so...
 # Use jq command line tool to process JSON: Bash jq is like sed for JSON.
 # Pipe with 'jq .[].slug' which breaks down to: 
@@ -47,10 +48,6 @@ mapfile -t team_names < <(gh api -H "Accept: application/vnd.github+json" -H "X-
 # Try commenting out the mapfile line above and commenting in this line and messing with the jq '' part (ex. '.', '.[]', .[].slug) to see how outputs differ
 # gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq '.[]'
 
-# echo "TEAMS = ${team_names[@]}"
-# echo "team_names[0] = ${team_names[0]}"
-# echo "repo owner = $ORG"
-
 # TODO: fxn? Name something like add_team_labels
 # For each team, look to see if $PR_CREATOR is a part of that team
 # By getting the members of that team (array), then seeing if $PR_CREATOR is in that array
@@ -59,7 +56,6 @@ for team in "${team_names[@]}"
 do
     # There is no Github API endpoint that does logic like 'get all teams a user is in', so we must come up with our own way.
     # Use jq to get array of usernames in that team
-    # Issue: $team doesn't return one team, it returns the whole array. Why?
     # echo "team = $team"
     
     # echo "URL TO USE: orgs/$ORG/teams/${team}/members"
