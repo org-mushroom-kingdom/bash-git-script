@@ -135,8 +135,8 @@ jobs:
               fi
           done
 
-          echo "codeowners_lines:"
-          printf "\\n" "${codeowners_lines[@]}"
+          # echo "codeowners_lines:"
+          # printf "\\n" "${codeowners_lines[@]}"
           
           for line in "${codeowners_lines[@]}"
           do
