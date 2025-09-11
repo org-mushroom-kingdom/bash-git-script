@@ -140,9 +140,9 @@ jobs:
           echo "codeowners_lines[1] = ${codeowners_lines[1]}"
           for line in "${codeowners_lines[@]}"
           do
-              echo "line = $line"
-              # filepath=$(echo "$line" | cut -d'@' -f1)
-              # echo "filepath = $filepath"
+              # echo "line = $line"
+              filepath=$(echo "$line" | cut -d'@' -f1)
+              echo "filepath = $filepath"
           done
 
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
