@@ -133,6 +133,8 @@ jobs:
               fi
           done
 
+          echo "codeowners_lines:"
+          printf "%s\\n" "${codeowners_lines[@]}"
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
-          echo "changed_files_array[1] = ${changed_files_array[1]}"
+          # echo "changed_files_array[1] = ${changed_files_array[1]}"
           # printf "%s\\n" "${changed_files[@]}"
