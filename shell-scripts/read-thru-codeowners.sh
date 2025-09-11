@@ -50,16 +50,23 @@ done
 #     # echo "owner = $owner"
 # done
 
-# for changed_filename in changed_file_list
-#   in_codeowners=false
-#     for line in "${codeowners_lines[@]}"
-#     do
-#         # echo "line = $line"
-#         filepath=$(echo "$line" | cut -d' ' -f1)
-#         owner=$(echo "$line" | cut -d ' ' -f2)
-#         # echo "filepath = $filepath"
-#         # echo "owner = $owner"
-#     done
-# done
+IFS=","
+changed_file_list=($CHANGED_FILES_STR)
+echo "changed_file_list[0] = ${changed_file_list[0]}"
 
-echo "read-thru-codeowners says var = $CHANGED_FILES_STR"
+for changed_file_path in changed_file_list
+  in_codeowners=false
+    for line in "${codeowners_lines[@]}"
+    do
+        # echo "line = $line"
+        filepath=$(echo "$line" | cut -d' ' -f1)
+        owner=$(echo "$line" | cut -d ' ' -f2)
+        # echo "filepath = $filepath"
+        # echo "owner = $owner"
+    
+        #Examples of changed_filename .github/workflows/test-pr-action-2.yml,README.md,dummy-txt-.txt,shell-scripts/info.txt
+
+    done
+done
+
+# echo "read-thru-codeowners says var = $CHANGED_FILES_STR"

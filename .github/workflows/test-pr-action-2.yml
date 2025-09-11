@@ -117,8 +117,8 @@ jobs:
           echo "line = ${line}"
           
           # DELETE THIS WHEN TESTING COMPLETE
-          echo "Purpose fail"
-          exit 1
+          # echo "Purpose fail"
+          # exit 1
           mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode )
 
           # Get filepath (in PR), see if path is in 
