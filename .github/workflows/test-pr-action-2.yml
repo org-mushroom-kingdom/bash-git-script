@@ -129,14 +129,14 @@ jobs:
           do
               if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
               then
+                  line=$(echo "${line}" | tr -d "\t")
                   echo "LINE! ${line}"
-                  line=$(echo "${line}" | tr -d "/t")
                   codeowners_lines+=($line)
               fi
           done
 
           echo "codeowners_lines:"
-          printf "%s\\n" "${codeowners_lines[@]}"
+          printf "\\n" "${codeowners_lines[@]}"
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
           # echo "changed_files_array[1] = ${changed_files_array[1]}"
           # printf "%s\\n" "${changed_files[@]}"
