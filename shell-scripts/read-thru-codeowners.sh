@@ -53,9 +53,9 @@ done
 IFS=","
 changed_file_list=($CHANGED_FILES_STR)
 echo "changed_file_list[0] = ${changed_file_list[0]}"
-
+exit
 for changed_file_path in changed_file_list
-  in_codeowners=false
+  in_codeowners="false"
     for line in "${codeowners_lines[@]}"
     do
         # echo "line = $line"
