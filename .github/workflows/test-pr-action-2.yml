@@ -125,11 +125,11 @@ jobs:
 
           # Filter out the comments in the array (essentially this is array mapping)
           # Filter out lines that begin with # or are empty (use ${#line} to assess string length)
-          for line in "${codeowners_raw_lines[@]}"
+          for raw_line in "${codeowners_raw_lines[@]}"
           do
-              if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
+              if [[ ${#raw_line} -gt 0 && "${raw_line}" != "#"* ]]
               then
-                  trimmed_line=$(echo "$line" | tr -s ' ')
+                  trimmed_line=$(echo "$raw_line" | tr -s ' ')
                   echo -e "LINE! ${trimmed_line}"
                   codeowners_lines+=($trimmed_line)
               fi
@@ -140,8 +140,9 @@ jobs:
           
           for line in "${codeowners_lines[@]}"
           do
-              filepath=$(echo "$line" | cut -d'@' -f1)
-              echo "filepath = $filepath"
+              echo "line = $line"
+              # filepath=$(echo "$line" | cut -d'@' -f1)
+              # echo "filepath = $filepath"
           done
 
           # If not_in_codeowners != "" then loop thru the string and make a multiline coment
