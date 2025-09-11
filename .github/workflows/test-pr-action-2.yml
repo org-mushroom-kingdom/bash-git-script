@@ -137,7 +137,7 @@ jobs:
 
           # echo "codeowners_lines:"
           # printf "\\n" "${codeowners_lines[@]}"
-          
+          echo "codeowners_lines[1] = ${codeowners_lines[1]}"
           for line in "${codeowners_lines[@]}"
           do
               echo "line = $line"
