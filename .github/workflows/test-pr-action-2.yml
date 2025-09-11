@@ -127,7 +127,7 @@ jobs:
           # Filter out lines that begin with # or are empty (use ${#line} to assess string length)
           for line in "${codeowners_raw_lines[@]}"
           do
-              if [[ "${line}" != "#"* || ${#line} -gt 0 ]]
+              if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
               then
                   echo "LINE! ${line}"
                   codeowners_lines+=($line)
