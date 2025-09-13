@@ -83,6 +83,8 @@ jobs:
           echo "Env vars can only be strings, so convert the array into a string then pass to GITHUB_ENV"
           echo "This allows it to be used in the next step"
           #TODO: LOOKUP AND EXPLAIN IFS, [*]
+          # IFS = Internal Field Separator, used for word splitting. Uses \space, \tab, and \n by default
+          # When in double quotes array[*] expands to a single word. 
           IFS=', '
           changed_files_str="${changed_files[*]}"
           echo "changed_files_str = ${changed_files_str}"
