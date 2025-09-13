@@ -41,6 +41,9 @@ done
 
 # echo "${codeowners_lines[1]}"
 
+# Use cut to split a string based upon a delimiter. -d specifies the delimiter (here an empty space)
+# A CODEOWNERS line is generally in the format of "/some/file/path/* @owner"
+# So splitting on ' ' works 
 # for line in "${codeowners_lines[@]}"
 # do
 #     # echo "line = $line"
@@ -50,8 +53,9 @@ done
 #     # echo "owner = $owner"
 # done
 
-IFS=","
-changed_file_list=($CHANGED_FILES_STR)
+#TODO: TEST THIS WITH A RUN HERE
+# Make an array out of the comma-delimited string (ex. "/shell-scripts/*.sh,/images" becomes ["/shell-scripts/*.sh","/images"])
+IFS="," changed_file_list=($CHANGED_FILES_STR)
 echo "changed_file_list[0] = ${changed_file_list[0]}"
 
 # Early exit DELETE THIS WHEN DONE TESTING
@@ -67,7 +71,13 @@ echo "changed_file_list[0] = ${changed_file_list[0]}"
 # A/B (see above)
 # If B then do the whole filepath   
 
+# Look at each changed file and do the following:
+# Split the path into an array of strings (file_path_segs) (ex. "docs/other" becomes ['docs','other']) --> IFS probably
+# For each file_path_seg:
+# 1. see IF the line in codeowners_lines is an exact match (rare is the occassion)
+# 2. ELIF not an exact match, see if partial match TODO: FIGURE THIS OUT
 for changed_file_path in changed_file_list
+  #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt
   # Bash doesn't have native boolean datatypes, so we use strings
   in_codeowners="false"
     #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} 

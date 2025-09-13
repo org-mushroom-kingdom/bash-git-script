@@ -85,7 +85,8 @@ jobs:
           #TODO: LOOKUP AND EXPLAIN IFS, [*]
           # IFS = Internal Field Separator, used for word splitting. Uses \space, \tab, and \n by default
           # When in double quotes array[*] expands to a single word. 
-          IFS=', '
+          # Combine both to turn the arr to a comma delimited str (ex. file1.txt,file2.cls)
+          IFS=','
           changed_files_str="${changed_files[*]}"
           echo "changed_files_str = ${changed_files_str}"
           echo "CHANGED_FILES_STR=${changed_files_str}" >> $GITHUB_ENV
