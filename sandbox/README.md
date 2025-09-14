@@ -1,6 +1,6 @@
-9-13-25: Not to be confused with the top-level README. This README is in the 'sandbox' folder. Its full path is 'sandbox/README.md'  
+9-13-25: Not to be confused with the top-level README. This README is in the ```sandbox``` folder. Its full path is ```sandbox/README.md```  
 
-9-13-25: The 'sandbox' folder is more for example and testing read-thru-codeowners.sh purposes at this point.  
+9-13-25: The ```sandbox``` folder is more for example and testing read-thru-codeowners.sh purposes at this point.  
 
   
 I just needed something with a somewhat larger directory tree, with files that don't really matter in it. There should be a smattering of files in the subfolders, with various extensions. Some files may be extensionless (to mimic things like a Jenkinsfile, Dockerfile, etc)  

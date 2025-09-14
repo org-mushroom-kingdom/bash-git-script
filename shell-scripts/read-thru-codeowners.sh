@@ -72,10 +72,18 @@ echo "changed_file_list[0] = ${changed_file_list[0]}"
 # If B then do the whole filepath   
 
 # Look at each changed file and do the following:
-# Split the path into an array of strings (file_path_segs) (ex. "docs/other" becomes ['docs','other']) --> IFS probably
-# For each file_path_seg:
-# 1. see IF the line in codeowners_lines is an exact match (rare is the occassion)
-# 2. ELIF not an exact match, see if partial match TODO: FIGURE THIS OUT
+# 1. See IF the line in codeowners_lines is an exact match (rare is the occassion)
+# 2?. See IF almost a match? (See if CODEOWNERS path is everything but the file/extension? ex. docs/other/sub1/) 
+# ELIF not an exact match Split the path into an array of strings (file_path_segs) (ex. "docs/other" becomes ['docs','other']) --> IFS probably
+#
+# For each file_path_seg: (Or WHILE )
+# 2. See if partial match TODO: FIGURE THIS OUT
+#   FOR example if a changed file is docs/other/sub1/dummy-txt1.txt
+    # See if the CODEOWNERS filepath == "docs/"
+    # If it is don't add to is_in_codeowners, exit early
+    # If it isn't go to next iteration and check again (ex. is CODEOWERNS filepath == "docs/other/")
+    # Repeat this until end of loop is reached. If still no matches, add to is_not_in_codeowners string
+# 
 for changed_file_path in changed_file_list
   #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt
   # Bash doesn't have native boolean datatypes, so we use strings
@@ -89,7 +97,12 @@ for changed_file_path in changed_file_list
         # echo "filepath = $filepath"
         # echo "owner = $owner"
         #
-        # if [[  ]]
+        # if [[ "$filepath" == "$changed_file_path" ]]
+        # then
+        #   in_codeowners=true
+        # else
+        # # Use rev to reverse the c_filepath, do a cut f1 to get the filename(and exetension, if present), do another rev to unreverse cut piece 
+        # changed_file_path_extensionless=$(echo "$changed_file_path" | rev | cut -d '/' -f1 | rev)
 
     done
 done
