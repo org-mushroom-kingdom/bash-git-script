@@ -1,0 +1,2 @@
+This is a dummy file. Its full path is docs/sub1/dummy-txt.txt
+This file may eventually get deleted. 
