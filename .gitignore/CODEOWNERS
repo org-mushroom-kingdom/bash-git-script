@@ -1,17 +1,34 @@
-#Bblablabalba
+#Bblablabalba TODO: Explain more about CODEOWNERS
 
 # Format: /path/to/file @username @org/team
 
+# The order of the lines in this file is mostly in 'natural sort' order, where any path that begins with a character is earlier
+# than alphabetical characters (ex. .github is the first thing because it begins with a . then .gitignore is next because it also
+# begins with a period, but is alphabetically "later" than .github)
+
+
+# ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
+# ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
+**/README.md @org-mushroom-kingdom/team-peach
+
+/images/ @org-mushroom-kingdom/team-toad
+
+# This purposefully has tabs in it to better test string splitting logic in read-thru-codeowners.sh (example of recursively owning all files/folders in a directory)
+/org/      @org-mushroom-kingdom/team-luigi
 # Anything in shell-scripts/ (NOT subdirectories) that is a *.sh file is owned by Mario's team (example of owning certain exts in a directory, nonrecursively)
+
 /shell-scripts/*.sh @org-mushroom-kingdom/team-mario
 
 # However, Peach's team should own the documentation for it (example of owning specific file)
 /shell-scripts/info.txt @org-mushroom-kingdom/team-peach
 
-# README is also owned by Peach's team (example of owning specific file at top-level)
-README.md @org-mushroom-kingdom/team-peach
+# Toad's team owns this specific file
+/sandbox/other/sub1/dummy-txt1.txt @org-mushroom-kingdom/team-toad
 
-# This purposefully has tabs in it to better test string splitting logic in read-thru-codeowners.sh (example of recursively owning all files/folders in a directory)
-/org/      @org-mushroom-kingdom/team-luigi
+/sandbox/other/sub1/sub2/ @org-mushroom-kingdom/team-luigi
 
-/images/ @org-mushroom-kingdom/team-toad
+#TODO: Make the "sub_a" dir for this and line below, elaborate on extensionless vs example/ 
+/sandbox/other/sub_a/example @org-mushroom-kingdom/team-luigi
+
+#TODO: Elaborate
+/sandbox/other/sub_a/Jenkinsfile @org-mushroom-kingdom/team-luigi
