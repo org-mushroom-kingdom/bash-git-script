@@ -88,6 +88,7 @@ for changed_file_path in changed_file_list
   #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt, sandbox/other/sub_a/Jenkinsfile
   # Bash doesn't have native boolean datatypes, so we use strings
   in_codeowners="false"
+  files_not_in_codeowners=""
     #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} 
     for line in "${codeowners_lines[@]}"
     do
@@ -97,7 +98,7 @@ for changed_file_path in changed_file_list
         # echo "filepath = $filepath"
         # echo "owner = $owner"
         #
-        # if [[ "$filepath" == "$changed_file_path" ]]
+        # if [[ "$codeowners_filepath" == "$changed_file_path" ]]
         # then
         #   in_codeowners=true
         #   break
@@ -144,6 +145,16 @@ for changed_file_path in changed_file_list
         # fi
 
     done
+    # If not in CODEOWNERS, add to 
+    if [[ "$in_codeowners" == "false" ]]
+    then 
+        files_not_in_codeowners+="${changed_file_path},"
+    fi
 done
 
+# Remove the last comma
+# files_not_in_codeowners="${files_not_in_codeowners%,}"
+# echo $files_not_in_codeowners
+
+# Use this stuff below to test other vars
 # echo "read-thru-codeowners says var = $CHANGED_FILES_STR"
