@@ -15,6 +15,8 @@ A sample CODEOWNERS file has been made, with teams being assigned to various ite
 
 This repo is currently a solo project, and I didn't have any colleagues personal Github account info, so only my user is a member of most teams. There is an exception with team-peach, which has an additional member that I had to manually create and manage. If you are forking this repo, hopefully you can goad some likeminded friends into joining your spoof organization and teams!
 
+<!-- TODO: Repo specific info in regards to sandbox/dummy directories and files, which are more there for being able to test different paths than actually containing any specific business logic -->
+
 # Github Actions
 
 This repo also holds several Github Actions, which help automate various processes in the CI/CD workflow. 

@@ -85,24 +85,63 @@ echo "changed_file_list[0] = ${changed_file_list[0]}"
     # Repeat this until end of loop is reached. If still no matches, add to is_not_in_codeowners string
 # 
 for changed_file_path in changed_file_list
-  #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt
+  #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt, sandbox/other/sub_a/Jenkinsfile
   # Bash doesn't have native boolean datatypes, so we use strings
   in_codeowners="false"
     #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} 
     for line in "${codeowners_lines[@]}"
     do
         # echo "line = $line"
-        filepath=$(echo "$line" | cut -d' ' -f1)
-        owner=$(echo "$line" | cut -d ' ' -f2)
+        codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
+        owner=$(echo "$line" | cut -d' ' -f2)
         # echo "filepath = $filepath"
         # echo "owner = $owner"
         #
         # if [[ "$filepath" == "$changed_file_path" ]]
         # then
         #   in_codeowners=true
+        #   break
         # else
-        # # Use rev to reverse the c_filepath, do a cut f1 to get the filename(and exetension, if present), do another rev to unreverse cut piece 
-        # changed_file_path_extensionless=$(echo "$changed_file_path" | rev | cut -d '/' -f1 | rev)
+            # TODO: Any line below that begins with !-- is experimental. Try messing with it after you can do the initial granular search
+            # !-- # Use rev to reverse the c_filepath, do a cut f2 to get the "super" directory, do another rev to unreverse cut piece 
+            # !-- # Ex. If the path is sandbox/other/sub1/dummy-txt1.txt, then look to see if "sandbox/other/sub_a/" is a path 
+            # !-- changed_file_path_lastDir=$(echo "$changed_file_path" | rev | cut -d '/' -f2 | rev)
+            # !-- If [[ "$codeowners_filepath" == "$changed_file_path_lastDir" ]]
+            
+            # TODO: This logic at the moment doesn't account for extensionless files really, or if it does it does it crappily
+            
+            # If the path is a top-level file don't do anything else? (ex. test-json-output.txt)
+            # is_top_level_file="false"
+            # If cutting the path using / results in only two pieces...
+            # if 
+            
+            # Perform the granular search
+            # changed_file_path_segs = the changed_file_path (string) broken into an array of strings using / as delim
+            # ex. sandbox/other/sub2/dummy-txt2.txt becomes ["sandbox","other","sub1","dummy-txt1.txt"]
+            # There may not be a specific owner for the file, but there may be an owner for sandbox/other/sub2 (Hint: there is)
+            # So we should look to see if there is an owner for the directory above us, but really anything above that too (ex. If someone owned sandbox/other they own all subdirectories in it)
+            
+            #TODO: Need a better name for this...
+            # IFS='/' changed_file_path_segs=($changed_file_path) 
+            
+            # Making a str arr with IFS will omit the delim, so let's add it back in
+            # TODO: We don't want to do this for the last element, because it may already have a slash or a slash isn't applicable (i.e. a file)
+            # TODO: Figure out a better way to map
+            # for ((i=0; i<="${#changed_file_path_segs[a]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
+            # changed_file_path_collective=""
+            # changed_file_path_collective="${#changed_file_path_segs[0]}" # (ex. "sandbox/")
+
+            # Add seg to changed_file_path_collective, then see if that path is in CODEOWNERS (ex. "sandbox/" --> "sandbox/other/" --> "sandbox/other/sub2/" ...) 
+            # for seg in changed_file_path_segs
+            # do
+            #   changed_file_path_collective+="$seg"
+            #   if [[ "$filepath" == "$changed_file_path" ]]
+            #   then
+            #       in_codeowners=true
+            #       break
+            #   fi
+            # done
+        # fi
 
     done
 done

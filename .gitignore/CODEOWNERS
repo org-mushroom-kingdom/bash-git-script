@@ -6,6 +6,8 @@
 # than alphabetical characters (ex. .github is the first thing because it begins with a . then .gitignore is next because it also
 # begins with a period, but is alphabetically "later" than .github)
 
+#TODO: Mention that some paths/files are specifically NOT in here to test CODEOWNERS action(s) that should alert user via PR comment??? that this is the case
+
 
 # ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
 # ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
