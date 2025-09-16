@@ -16,6 +16,7 @@
 
 **/README.md @org-mushroom-kingdom/team-peach
 
+
 # Toad's team owns the file in ANY folder named 'images' throughout the repo (example of non-root based ownership)
 images/ @org-mushroom-kingdom/team-toad
 
@@ -56,3 +57,5 @@ images/ @org-mushroom-kingdom/team-toad
 
 # Luigi's team owns the Jenkinsfile (example of owning an extensionless file)
 /sandbox/other/sub_a/sub_b/Jenkinsfile @org-mushroom-kingdom/team-luigi
+
+/test-json-output.txt @org-mushroom-kingdom/team-peach
