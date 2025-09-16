@@ -1,0 +1,14 @@
+// This is NOT a real Jenkinsfile. It serves as an example of an extensionless file in a repo. 
+//...But might as well have some basic Groovy/Jenkins stuff in here
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Not a real stage'){
+            steps{
+                echo 'This isn't a real step.'
+            }
+        }
+    }
+}
