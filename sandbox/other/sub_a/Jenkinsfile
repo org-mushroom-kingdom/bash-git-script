@@ -5,7 +5,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Not a real stage'){
+        stage('Not a real stage') {
             steps{
                 echo 'This isn't a real step.'
             }

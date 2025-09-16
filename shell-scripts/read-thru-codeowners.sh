@@ -100,7 +100,7 @@ for changed_file_path in changed_file_list
         #
         # if [[ "$codeowners_filepath" == "$changed_file_path" ]]
         # then
-        #   in_codeowners=true
+        #   in_codeowners="true"
         #   break
         # else
             # TODO: Any line below that begins with !-- is experimental. Try messing with it after you can do the initial granular search
@@ -139,9 +139,16 @@ for changed_file_path in changed_file_list
             #   if [[ "$filepath" == "$changed_file_path" ]]
             #   then
             #       in_codeowners=true
+            #       # This break stops the 'for seg' loop
             #       break
             #   fi
             # done
+
+            
+            # if [[ "$in_codeowners" == "true" ]]
+            # then
+            #   break
+            # fi
         # fi
 
     done

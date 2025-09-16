@@ -10,4 +10,6 @@ The hint is in the name: They're dummy files, whose text will more or less state
   
 Some files won't begin with 'dummy' but may serve the same purpos; their name should reflect their purpose/representation. For example, this repo doesn't interact with Jenkins at all, but there is a Jenkinsfile in ```sandbox/other/sub2/```. If you checked its contents, you'll see the same sort of message you would in a dummy file. 
   
+All filepaths here EXCEPT the ```not-in-codeowners``` folder should be covered in CODEOWNERS in some way, whether it be mentioning paths or specific files.
+
 P.S. This README file also serves as an example of a repo having multiple README files but in different directories--the Github webpage will still detect a README file and display it as it would as seen in the top-level of a repo. This sort of README organizing can be useful to TBD

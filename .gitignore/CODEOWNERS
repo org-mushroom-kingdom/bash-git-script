@@ -1,8 +1,9 @@
 #Bblablabalba TODO: Explain more about CODEOWNERS
 
-# CODEOWNERS inspects files from its 
+# CODEOWNERS inspects files from its TODO: Finishthis
 # Format: /path/to/file @username @org/team
 
+#TODO: Probs re-sort this to match teams
 # The order of the lines in this file is mostly in 'natural sort' order, where any path that begins with a character is earlier
 # than alphabetical characters (ex. .github is the first thing because it begins with a . then .gitignore is next because it also
 # begins with a period, but is alphabetically "later" than .github)
@@ -12,9 +13,11 @@
 
 # ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
 # ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
+
 **/README.md @org-mushroom-kingdom/team-peach
 
-/images/ @org-mushroom-kingdom/team-toad
+# Toad's team owns the file in ANY folder named 'images' throughout the repo (example of non-root based ownership)
+images/ @org-mushroom-kingdom/team-toad
 
 #Note: This purposefully has tabs in it to better test string splitting logic in read-thru-codeowners.sh 
 # Luigi's team owns everything in org/ and its subdirectories (example of recursively owning all files/folders in a directory)
@@ -32,8 +35,18 @@
 # Luigi's team owns everything in sub2 and its subdirectories
 /sandbox/other/sub1/sub2/ @org-mushroom-kingdom/team-luigi
 
-#TODO: Make the "sub_a" dir for this and line below, elaborate on extensionless vs example/ 
-/sandbox/other/sub_a/example @org-mushroom-kingdom/team-luigi
 
-#TODO: Elaborate
-/sandbox/other/sub_a/Jenkinsfile @org-mushroom-kingdom/team-luigi
+# Mario's team owns everything in sub_a, but NOT any of its subdirectories (e.g. sub_b) (example of NOT recursively owning all files/folders in a director )
+/sandbox/other/sub_a/* @org-mushroom-kingdom/team-mario
+
+#TODO: Elaborate on extensionless vs example/ 
+# /sandbox/other/sub_a/sub_b/sub_c @org-mushroom-kingdom/team-mario
+
+# Peach's team owns any csv file whose name begins with 'peachList' (example of prefix matching)
+/sandbox/other/sub_a/sub_b/peachList*.csv @org-mushroom-kingdom/team-peach
+
+# Mario's team owns any csv file whose name ends with 'marioOnly' (example of suffix matching)
+/sandbox/other/sub_a/sub_b/*marioOnly.csv @org-mushroom-kingdom/team-luigi
+
+# Luigi's team owns the Jenkinsfile (an extensionless file)
+/sandbox/other/sub_a/sub_b/Jenkinsfile @org-mushroom-kingdom/team-luigi
