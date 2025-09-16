@@ -116,18 +116,20 @@ for changed_file_path in changed_file_list
             # !-- If [[ "$codeowners_filepath" == "$changed_file_path_lastDir" ]]
             
             # TODO: This logic at the moment doesn't account for extensionless files really, or if it does it does it crappily
-            
+            # TODO: Nor does it account for **/ logic
             # !-- If the path is a top-level file don't do anything else? (ex. test-json-output.txt)
             # !-- is_top_level_file="false"
             # !-- If cutting the path using / results in only 0?,1? pieces... 
+            
             # ex test-json-output has no / in it, so results in 0
-            # !-- num_fields_delimited=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
-            # if [ $num_fields_delimited == 1 ]  
-            # then
-            #   # Don't bother searching
-            #   in_codeowners="false"
-            #   break
-            # fi
+            # TODO: EXPLAIN grep -o and wc -l
+            num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
+            if [ $num_of_slashes == 0 ]  
+            then
+              # Don't bother searching because we already tested for the full file path, and lack of / means this file is top-level (but not in CODEOWNERS)
+              in_codeowners="false"
+              break
+            fi
             # Perform the granular search
             # changed_file_path_segs = the changed_file_path (string) broken into an array of strings using / as delim
             # ex. sandbox/other/sub2/dummy-txt2.txt becomes ["//sandbox","other","sub1","dummy-txt1.txt"]
