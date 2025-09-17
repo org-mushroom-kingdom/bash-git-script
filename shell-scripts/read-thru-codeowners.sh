@@ -155,6 +155,11 @@ for changed_file_path in changed_file_list
 
             # Missy Elliot this and reverse it
             # ex. if path is sandbox/other/sub1/sub2/dummy-txt2.txt first search for sandbox/other/sub1/sub2/ --> sandbox/other/sub1/ --> sandbox/other
+            # Pop last element part off segs (first iteration would be filename)
+            # Join the rest together (with no delim to preserve /'s)
+            # See if joined_line == codeowners_filepath
+            # If not repeat the process: Pop last element off, join, see if joined_line == codeowners_filepath
+            # Do this until i=0 
             # Add seg to changed_file_path_collective, then see if that path is in CODEOWNERS (ex. "sandbox/" --> "sandbox/other/" --> "sandbox/other/sub1/" "sandbox/other/sub1/sub2" ...) 
             # for seg in changed_file_path_segs
             # do
