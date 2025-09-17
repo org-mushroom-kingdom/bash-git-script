@@ -98,7 +98,7 @@ verbose_echo()
 
 string_delimiter_test()
 {
-    # Ask user for values on test_string, test_delimiter
+    # Ask user to provide values for test_string, test_delimiter
     test_string="Folder/Sub1/Sub2/Filename.ext"
     test_delimiter="/"
     echo "Give a string to delimit. If one is not provided then the string '${test_string}' will be used."
@@ -108,7 +108,7 @@ string_delimiter_test()
         test_string="Folder/Sub1/Sub2/Filename.ext"
     fi
     
-    echo "Choose your delimiter. Please use one character. If more than one character is used, only the first character of that string will be used."
+    echo -e "\n Choose your delimiter. Please use one character. If more than one character is used, only the first character of that string will be used."
     echo "If one is not provided then the string '${test_delimiter}' will be used."
     read test_delimiter
     if [[ -z "$test_delimiter" ]]
@@ -119,8 +119,16 @@ string_delimiter_test()
         test_delimiter=$(echo "${test_delimiter}" | cut -c 1)
         echo "More than one char entered. Using first character '${test_delimiter}' as delimiter."
     fi
-
+    
     echo -e "test_string = $test_string \n test_delimiter = $test_delimiter"
+
+    # Get the amount of delimiters
+    num_delimiters=$(echo "${test_string}" | grep -o "$test_delimiter" | wc -l)
+    echo "The string '$test_string' has $num_delimiter '$test_delimiter' in it"
+    
+    IFS="${test_delimiter}" delimited_arr=$(test_string)
+    echo "Splitting the test string using '$test_delimiter' results in ${#delimited_arr[@]} pieces"
+
 
 }
 
