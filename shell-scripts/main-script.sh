@@ -124,9 +124,9 @@ string_delimiter_test()
 
     # Get the amount of delimiters
     num_delimiters=$(echo "${test_string}" | grep -o "$test_delimiter" | wc -l)
-    echo "The string '$test_string' has $num_delimiter '$test_delimiter' in it"
+    echo "The string '$test_string' has $num_delimiters '$test_delimiter' in it"
     
-    IFS="${test_delimiter}" delimited_arr=$(test_string)
+    IFS="${test_delimiter}" delimited_arr=($test_string)
     echo "Splitting the test string using '$test_delimiter' results in ${#delimited_arr[@]} pieces"
 
 
