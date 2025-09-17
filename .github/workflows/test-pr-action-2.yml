@@ -58,7 +58,8 @@ jobs:
           echo "Job manually started: Setting PR_NUMBER to value of github.event.inputs.pr_number_manual (${{ github.event.inputs.pr_number_manual }})"
           echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
       
-      #TODO: LOOKUP AND EXPLAIN
+      # The 'git config' command is used in various ways to customize Git
+      
       - name: Configure Git User
         run: |
           git config user.name "github-actions[bot]"
@@ -82,7 +83,7 @@ jobs:
           printf "%s\\n" "${changed_files[@]}"
           echo "Env vars can only be strings, so convert the array into a string then pass to GITHUB_ENV"
           echo "This allows it to be used in the next step"
-          #TODO: LOOKUP AND EXPLAIN IFS, [*]
+
           # IFS = Internal Field Separator, used for word splitting. Uses \space, \tab, and \n by default
           # When in double quotes array[*] expands to a single word. 
           # Combine both to turn the arr to a comma delimited str (ex. file1.txt,file2.cls)

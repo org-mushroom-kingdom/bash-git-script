@@ -124,7 +124,7 @@ for changed_file_path in changed_file_list
             # ex test-json-output has no / in it, so results in 0
             # TODO: EXPLAIN grep -o and wc -l
             num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
-            if [ $num_of_slashes == 0 ]  
+            if [ $num_of_slashes == 0 ]
             then
               # Don't bother searching because we already tested for the full file path, and lack of / means this file is top-level (but not in CODEOWNERS)
               in_codeowners="false"
@@ -138,16 +138,24 @@ for changed_file_path in changed_file_list
             
             IFS='/' changed_file_path_segs=($changed_file_path) 
             # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
-            changed_file_path_segs[0]="/${changed_file_path_segs[0]}"
+            # Also add terminating / to account for subfolders
+            changed_file_path_segs[0]="/${changed_file_path_segs[0]}/"
+            if [[ ${#changed_file_path_segs[@]} -ge 3 ]]
+            then
+                for ((i=1; i<="${#changed_file_path_segs[@]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
+            fi
             
+            
+
             # Making a str arr with IFS will omit the delim, so let's add it back in
-            # TODO: We don't want to do this for the last element, because it may already have a slash or a slash isn't applicable (i.e. a file)
+            # TODO: We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
             # TODO: Figure out a better way to map
-            # for ((i=1; i<="${#changed_file_path_segs[a]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
             # changed_file_path_collective=""
             # changed_file_path_collective="${#changed_file_path_segs[0]}" # (ex. "sandbox/")
 
-            # Add seg to changed_file_path_collective, then see if that path is in CODEOWNERS (ex. "sandbox/" --> "sandbox/other/" --> "sandbox/other/sub2/" ...) 
+            # Missy Elliot this and reverse it
+            # ex. if path is sandbox/other/sub1/sub2/dummy-txt2.txt first search for sandbox/other/sub1/sub2/ --> sandbox/other/sub1/ --> sandbox/other
+            # Add seg to changed_file_path_collective, then see if that path is in CODEOWNERS (ex. "sandbox/" --> "sandbox/other/" --> "sandbox/other/sub1/" "sandbox/other/sub1/sub2" ...) 
             # for seg in changed_file_path_segs
             # do
             #   changed_file_path_collective+="$seg"
