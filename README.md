@@ -60,6 +60,10 @@ TODO: Finish this table
 | main-script.sh | TODO: DESCRIPTION, but maybe its own section too |
 | pr-labels.sh | In progress. TODO: Adds labels to PR based on: <br> 1. The teams the PR creator is a part of <br> 2. The target branch of the PR |
 
+# Why Bash?
+
+Honestly, why not? I never really got to work with shell or Linux-y stuff that much before, and recently there was somewhat of I need to familiarize myself with the language. You can definitely argue that there are better options than Bash for a lot of what this repo does, but this repo is as much of a learning exercise for me as it is a way to demonstrate how Bash works to others. Plus, you can use vanilla Bash in Github Actions so that works out too.
+
 
 # To-Do List
 
