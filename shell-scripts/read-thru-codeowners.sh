@@ -80,7 +80,7 @@ IFS="," changed_file_list=($CHANGED_FILES_STR)
 # 2. See if partial match TODO: FIGURE THIS OUT
 #   FOR example if a changed file is docs/other/sub1/dummy-txt1.txt
     # See if the CODEOWNERS filepath == "docs/"
-    # If it is don't add to is_in_codeowners, exit early
+    # If it is don't add to in_codeowners, exit early
     # If it isn't go to next iteration and check again (ex. is CODEOWERNS filepath == "docs/other/")
     # Repeat this until end of loop is reached. If still no matches, add to is_not_in_codeowners string
 # 
@@ -140,6 +140,9 @@ for changed_file_path in changed_file_list
             # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
             # Also add terminating / to account for subfolders
             changed_file_path_segs[0]="/${changed_file_path_segs[0]}/"
+            
+            # Making a str arr with IFS will omit the delim, so let's add it back in
+            # TODO: We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
             if [[ ${#changed_file_path_segs[@]} -ge 3 ]]
             then
                 for ((i=1; i<="${#changed_file_path_segs[@]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
@@ -147,19 +150,38 @@ for changed_file_path in changed_file_list
             
             
 
-            # Making a str arr with IFS will omit the delim, so let's add it back in
-            # TODO: We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
             # TODO: Figure out a better way to map
             # changed_file_path_collective=""
-            # changed_file_path_collective="${#changed_file_path_segs[0]}" # (ex. "sandbox/")
+            
+            # Clone to be safe for now
+            # You can't simply do '=$changed_file_path_segs'. To clone an array, you need to use [@] which treats every element as a single word/string
+            # Use double quotes to ensure every word stays intact (ex. without "" ["hello world", "goodbye"] becomes ["hello" "world" "goodbye"])
+            # Then you have to wrap in () so each string is made its own array element
+            changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
+            for (( i="${#changed_file_path_segs[@]}"-1;i<0;i--))
+            do
+                # unset is used to unset variables and array elements. 
+                # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
+                unset 'changed_file_path_segs_clone[${changed_file_path_segs_clone[@]}-1]'
+                # Use IFS to join the arr to a string
+                changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
+                if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
+                then
+                    in_codeowners=true
+                    break
+                fi
+            done
 
             # Missy Elliot this and reverse it
             # ex. if path is sandbox/other/sub1/sub2/dummy-txt2.txt first search for sandbox/other/sub1/sub2/ --> sandbox/other/sub1/ --> sandbox/other
-            # Pop last element part off segs (first iteration would be filename)
+            # Pop last element part off segs (ex. first iteration would be popping off filename)
             # Join the rest together (with no delim to preserve /'s)
             # See if joined_line == codeowners_filepath
             # If not repeat the process: Pop last element off, join, see if joined_line == codeowners_filepath
             # Do this until i=0 
+
+
+            # changed_file_path_collective="${#changed_file_path_segs[0]}" # (ex. "sandbox/")
             # Add seg to changed_file_path_collective, then see if that path is in CODEOWNERS (ex. "sandbox/" --> "sandbox/other/" --> "sandbox/other/sub1/" "sandbox/other/sub1/sub2" ...) 
             # for seg in changed_file_path_segs
             # do
