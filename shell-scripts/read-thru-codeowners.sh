@@ -25,7 +25,7 @@ CHANGED_FILE_STR=$1 #or $CHANGED_FILES_STR
 # DELETE THIS! For Git Bash testing
 # Get the CODEOWNERS file
 FILE_PATH="./.gitignore/CODEOWNERS"
-exec 7< $FILE_PATH
+exec 7< ./.gitignore/CODEOWNERS
 mapfile -u 7 codeowners_raw_lines
 echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
 exec 7&-
