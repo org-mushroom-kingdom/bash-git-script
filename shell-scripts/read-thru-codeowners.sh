@@ -128,7 +128,8 @@ for changed_file_path in changed_file_list
             
             # ex test-json-output has no / in it, so results in 0
             # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for ANY instance of 'text-json-output.txt' at ANY level
-            # TODO: EXPLAIN grep -o and wc -l
+            # grep -o means "only matching" which prints only matching instances of the term, on separate output lines (so only print /) 
+            # wc is word count which is used to count bytes/words/lines. The -l option prints only the newline counts (each output line = newline)
             num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
             if [ $num_of_slashes == 0 ]
             then
