@@ -28,6 +28,7 @@ FILE_PATH="./gitignore/CODEOWNERS"
 exec 7< $FILE_PATH
 mapfile -u 7 codeowners_raw_lines
 echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
+exec 7&-
 exit
 # END DELETE THIS!!
 # Comment out the above mapfile line, and comment in the line below to see the output
