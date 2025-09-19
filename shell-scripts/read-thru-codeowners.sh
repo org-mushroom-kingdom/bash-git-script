@@ -90,9 +90,13 @@ for changed_file_path in changed_file_list
     #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt, sandbox/other/sub_a/sub_b/Jenkinsfile
     # Bash doesn't have native boolean datatypes, so we use strings
     in_codeowners="false"
+    
+    #Use this to capture all output
     total_output+=$(echo -e "changed_file_path = $changed_file_path \n")
     
     #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} ??
+    
+    # For each line in CODEOWNERS, search for the changed_file_path or other lines that would indicate ownership
     for line in "${codeowners_lines[@]}"
     do
         # echo "line = $line"
@@ -107,6 +111,7 @@ for changed_file_path in changed_file_list
         if [[ "/${changed_file_path}" == "$codeowners_filepath" ]]
         then
           in_codeowners="true"
+          # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
           break
         else
             # TODO: Any line below that begins with !-- is experimental. Try messing with it after you can do the initial granular search
@@ -122,12 +127,13 @@ for changed_file_path in changed_file_list
             # !-- If cutting the path using / results in only 0?,1? pieces... 
             
             # ex test-json-output has no / in it, so results in 0
+            # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for ANY instance of 'text-json-output.txt' at ANY level
             # TODO: EXPLAIN grep -o and wc -l
             num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
             if [ $num_of_slashes == 0 ]
             then
-              # Don't bother searching because we already tested for the full file path, and lack of / means this file is top-level (but not in CODEOWNERS)
               in_codeowners="false"
+              # Don't bother searching because we already tested for the full file path, and lack of / means this file is top-level (but not in CODEOWNERS)
               break
             fi
             # Perform the granular search
@@ -155,7 +161,7 @@ for changed_file_path in changed_file_list
             
             # Clone to be safe for now
             # You can't simply do '=$changed_file_path_segs'. To clone an array, you need to use [@] which treats every element as a single word/string
-            # Use double quotes to ensure every word stays intact (ex. without "" ["hello world", "goodbye"] becomes ["hello" "world" "goodbye"])
+            # Use double quotes to ensure every string stays intact (ex. without "" ["hello world", "goodbye"] becomes ["hello" "world" "goodbye"])
             # Then you have to wrap in () so each string is made its own array element
             changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
             for (( i="${#changed_file_path_segs[@]}"-1;i<0;i--))
@@ -163,14 +169,15 @@ for changed_file_path in changed_file_list
                 # unset is used to unset variables and array elements. 
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
                 unset 'changed_file_path_segs_clone[${changed_file_path_segs_clone[@]}-1]'
-                # Use IFS to join the arr to a string
+                # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true
+                    # Break out of inner-inner loop early because we got a match
                     break
                 fi
-            done
+            done # End seg-matching AKA inner-inner loop
 
             # Missy Elliot this and reverse it
             # ex. if path is sandbox/other/sub1/sub2/dummy-txt2.txt first search for sandbox/other/sub1/sub2/ --> sandbox/other/sub1/ --> sandbox/other
@@ -194,21 +201,22 @@ for changed_file_path in changed_file_list
             #   fi
             # done
 
-
-            # if [[ "$in_codeowners" == "true" ]]
-            # then
-            #   break
-            # fi
+            if [[ "$in_codeowners" == "true" ]]
+            then
+                # if in_codeowners is true (due to seg-matching loop above), exit inner loop early b/c we found a match
+                break
+            fi
         fi
-
-    done
-    # If not in CODEOWNERS, add to 
+    done # End for line in CODEOWNERS loop (AKA inner loop)
+    
+    # If not in CODEOWNERS, add to files_not_in_codeowners
     if [[ "$in_codeowners" == "false" ]]
     then 
         files_not_in_codeowners+="${changed_file_path},"
     fi
-done
+done #End for changed_file_path in changed_file_list
 
+echo "$total_output"
 # Remove the last comma TODO: % syntax elaborate
 # files_not_in_codeowners="${files_not_in_codeowners%,}"
 # echo $files_not_in_codeowners
