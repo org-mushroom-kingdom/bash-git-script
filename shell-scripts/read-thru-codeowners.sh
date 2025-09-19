@@ -20,8 +20,16 @@ CHANGED_FILE_STR=$1 #or $CHANGED_FILES_STR
 
 # gh api cmd here gives a million outputs, so use mapfile to put them in arr
 # Github API contents endpoint has a 'content' key whose value is in base 64, so use base64 --decode on it
-mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode )
+# mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode )
 
+# DELETE THIS! For Git Bash testing
+# Get the CODEOWNERS file
+FILE_PATH="./gitignore/CODEOWNERS"
+exec 7< $FILE_PATH
+mapfile -u 7 codeowners_raw_lines
+echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
+exit
+# END DELETE THIS!!
 # Comment out the above mapfile line, and comment in the line below to see the output
 # gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode 
 
@@ -30,14 +38,16 @@ mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignor
 # echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
 # Filter out the comments in the array or are empty (essentially this is array mapping) (use ${#line} to assess string length)
-for line in "${codeowners_raw_lines[@]}"
-do
-    if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
-    then
-        # echo "LINE! ${line}"
-        codeowners_lines+=($line)
-    fi
-done
+
+# COMMENT ME BACK IN 
+# for line in "${codeowners_raw_lines[@]}"
+# do
+#     if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
+#     then
+#         # echo "LINE! ${line}"
+#         codeowners_lines+=($line)
+#     fi
+# done
 
 # echo "${codeowners_lines[1]}"
 
@@ -55,8 +65,11 @@ done
 
 #TODO: TEST THIS WITH A RUN HERE
 # Make an array out of the comma-delimited string (ex. "/shell-scripts/*.sh,/images" becomes ["/shell-scripts/*.sh","/images"])
-IFS="," changed_file_list=($CHANGED_FILES_STR)
+# IFS="," changed_file_list=($CHANGED_FILES_STR)
 # echo "changed_file_list[0] = ${changed_file_list[0]}"
+
+# DELETE THIS! Use For testing from Bash
+changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "shell-scripts/say-hello.sh")
 
 # Early exit DELETE THIS WHEN DONE TESTING
 # exit
@@ -99,18 +112,20 @@ for changed_file_path in changed_file_list
     # For each line in CODEOWNERS, search for the changed_file_path or other lines that would indicate ownership
     for line in "${codeowners_lines[@]}"
     do
-        # echo "line = $line"
+        echo "line = $line"
         codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
         owner=$(echo "$line" | cut -d' ' -f2)
-        # echo "filepath = $filepath"
+        echo "codeowners_filepath = $codeowners_filepath"
         # echo "owner = $owner"
-        total_output+=$(echo -e "filepath = $codeowners_filepath \n")
-        total_output+=$(echo -e "owner = $owner \n")
-        # Use / here to account for root
+        # total_output+=$(echo -e "filepath = $codeowners_filepath \n")
+        # total_output+=$(echo -e "owner = $owner \n")
+        
         # Look for the whole path first to see if the file is specifically listed
+        # Use / here to account for root
         if [[ "/${changed_file_path}" == "$codeowners_filepath" ]]
         then
           in_codeowners="true"
+          echo "FOUND!"
           # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
           break
         else
@@ -149,7 +164,8 @@ for changed_file_path in changed_file_list
             changed_file_path_segs[0]="/${changed_file_path_segs[0]}/"
             
             # Making a str arr with IFS will omit the delim, so let's add it back in
-            # TODO: We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
+            # Initialize at i=1 because we just took care of first element
+            # Use -2 as loop terminal condition b/c We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
             if [[ ${#changed_file_path_segs[@]} -ge 3 ]]
             then
                 for ((i=1; i<="${#changed_file_path_segs[@]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
@@ -167,7 +183,7 @@ for changed_file_path in changed_file_list
             changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
             for (( i="${#changed_file_path_segs[@]}"-1;i<0;i--))
             do
-                # unset is used to unset variables and array elements. 
+                # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). 
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
                 unset 'changed_file_path_segs_clone[${changed_file_path_segs_clone[@]}-1]'
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
@@ -175,6 +191,7 @@ for changed_file_path in changed_file_list
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true
+                    echo "FOUND via segs!"
                     # Break out of inner-inner loop early because we got a match
                     break
                 fi
