@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# This is its own separate script for a couple of reasons:
-# 1. As an example of how a script can be called from another script (main-script.sh calls this one)
-# 2. As an example of how to call a script from Github Actions (test-pr-action-2.yml calls this)
-# 3. Some third reason TODO: Elaborate
+# This is almost identical to read-thru-codeowners but makes it work locally via Git Bash (easier to test like this. 
+# There's probs some workarounds one could do but Github Actions outputs isn't great when it comes to running a script and doing echo's)
+# You won't see TODO
 
 
 # This is called from the test-pr-action. It depends the following variables being defined in the action
@@ -15,30 +14,22 @@
 declare -a codeowners_raw_lines # String arr with ALL lines from CODEOWNERS
 declare -a codeowners_lines # String arr mapped from above, only lines that aren't comments (or empty)
 total_output="" #Experimental. Build on this so the Action can spit out everything?
-CHANGED_FILE_STR=$1 #or $CHANGED_FILES_STR
+changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "shell-scripts/say-hello.sh")
 
+echo -e "\n Going to search for the following files: \n"
+for file in "${changed_file_list[@]}"
+do
+    echo "- $file"
+done
 
-# gh api cmd here gives a million outputs, so use mapfile to put them in arr
-# Github API contents endpoint has a 'content' key whose value is in base 64, so use base64 --decode on it
-# mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode )
-
-# DELETE THIS! For Git Bash testing
 # Get the CODEOWNERS file
-FILE_PATH="./.github/CODEOWNERS"
-# echo $PWD
-# exec cat .gitignore
-# exec 3< .github/CODEOWNERS
 # mapfile -t -u 3 codeowners_raw_lines
 # mapfile draws from standard input and makes an array from it
 # We use < to redirect our file as standard input, and the -t option to remove trailing \n 
 mapfile -t codeowners_raw_lines < .github/CODEOWNERS
-# exec 3>&-
-echo "codeowners_raw_lines[0] = ${codeowners_raw_lines[0]}"
-echo "codeowners_raw_lines length = ${#codeowners_raw_lines[@]}"
-exit
-# END DELETE THIS!!
-# Comment out the above mapfile line, and comment in the line below to see the output
-# gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode 
+
+# echo "codeowners_raw_lines[0] = ${codeowners_raw_lines[0]}"
+# echo "codeowners_raw_lines length = ${#codeowners_raw_lines[@]}"
 
 # Comment in these lines to see specific values of the array created by mapfile 
 # echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
@@ -46,39 +37,25 @@ exit
 
 # Filter out the comments in the array or are empty (essentially this is array mapping) (use ${#line} to assess string length)
 
-# COMMENT ME BACK IN 
-# for line in "${codeowners_raw_lines[@]}"
-# do
-#     if [[ ${#line} -gt 0 && "${line}" != "#"* ]]
-#     then
-#         # echo "LINE! ${line}"
-#         codeowners_lines+=($line)
-#     fi
-# done
+echo -e "\nFiltering out comments and empty lines in CODEOWNERS..."
+for line in "${codeowners_raw_lines[@]}"
+do
+    # if [[ ${#line} -gt 1 && "${line}" != "#"* ]]
+    # xargs is a command line utility tool that takes from standard input (we use | to redirect echo output to stdin)
+    # It's really meant more for filenames, but we can use it here to trim whitespace from line.  
+    line=$(echo "$line" | xargs -0)
+    if [[ ! -z "$line" && ! "${line}" == "#"* ]]
+    then
+        # echo "LINE! ${line}"
+        # echo "line length = ${#line}"
+        codeowners_lines+=($line)
+    fi
+done
 
-# echo "${codeowners_lines[1]}"
+# echo "codeowners_lines length = ${#codeowners_lines}"
 
-# Use cut to split a string based upon a delimiter. -d specifies the delimiter (here an empty space)
-# A CODEOWNERS line is generally in the format of "/some/file/path/* @owner"
-# So splitting on ' ' works 
-# for line in "${codeowners_lines[@]}"
-# do
-#     # echo "line = $line"
-#     filepath=$(echo "$line" | cut -d' ' -f1)
-#     owner=$(echo "$line" | cut -d ' ' -f2)
-#     # echo "filepath = $filepath"
-#     # echo "owner = $owner"
-# done
-
-#TODO: TEST THIS WITH A RUN HERE
-# Make an array out of the comma-delimited string (ex. "/shell-scripts/*.sh,/images" becomes ["/shell-scripts/*.sh","/images"])
-# IFS="," changed_file_list=($CHANGED_FILES_STR)
-# echo "changed_file_list[0] = ${changed_file_list[0]}"
-
-# DELETE THIS! Use For testing from Bash
-changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "shell-scripts/say-hello.sh")
-
-# Early exit DELETE THIS WHEN DONE TESTING
+#DELETE THIS WHEN TESTING COMPLETE
+# echo "!!!!Early exit!!!"
 # exit
 
 #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt
@@ -105,21 +82,30 @@ changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile
     # Repeat this until end of loop is reached. If still no matches, add to is_not_in_codeowners string
 # 
 files_not_in_codeowners=""
-
-for changed_file_path in changed_file_list
+echo -e "\n \e[36mBEGIN SEARCH!!\e[0m \n"
+c_f_p_iterator=0
+for changed_file_path in "${changed_file_list[@]}"
+do
     #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt, sandbox/other/sub_a/sub_b/Jenkinsfile
     # Bash doesn't have native boolean datatypes, so we use strings
     in_codeowners="false"
-    
+    echo "c_f_p_iterator=$c_f_p_iterator"
+    #TODO: Why is this syntax needed
+    c_f_p_iterator=$((c_f_p_iterator+1))
+    if [[ $c_f_p_iterator -eq 2 ]]
+    then
+        echo "EXITING"
+        exit
+    fi
     #Use this to capture all output
-    total_output+=$(echo -e "changed_file_path = $changed_file_path \n")
-    
+    # total_output+=$(echo -e "changed_file_path = $changed_file_path \n")
+    echo -e "\nSearching for ownership for changed_file_path = /${changed_file_path}...\n"
     #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} ??
     
     # For each line in CODEOWNERS, search for the changed_file_path or other lines that would indicate ownership
     for line in "${codeowners_lines[@]}"
     do
-        echo "line = $line"
+        echo "codeowners line = $line"
         codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
         owner=$(echo "$line" | cut -d' ' -f2)
         echo "codeowners_filepath = $codeowners_filepath"
@@ -132,7 +118,7 @@ for changed_file_path in changed_file_list
         if [[ "/${changed_file_path}" == "$codeowners_filepath" ]]
         then
           in_codeowners="true"
-          echo "FOUND!"
+          echo -e "\e[32mFOUND!\e[0m"
           # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
           break
         else
@@ -152,12 +138,14 @@ for changed_file_path in changed_file_list
             # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for ANY instance of 'text-json-output.txt' at ANY level
             # grep -o means "only matching" which prints only matching instances of the term, on separate output lines (so only print /) 
             # wc is word count which is used to count bytes/words/lines. The -l option prints only the newline counts (each output line = newline)
+            # Putting it all together each / is on a new line so by counting new lines we effectively count /'s
             num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
             if [ $num_of_slashes == 0 ]
             then
               in_codeowners="false"
               # Don't bother searching because we already tested for the full file path, and lack of / means this file is top-level (but not in CODEOWNERS)
-              break
+            #   echo "File $changed_file_path has no /'s in it and must be a top-level file. Was not found"
+            #   break
             fi
             # Perform the granular search
             # changed_file_path_segs = the changed_file_path (string) broken into an array of strings using / as delim
@@ -238,14 +226,12 @@ for changed_file_path in changed_file_list
     # If not in CODEOWNERS, add to files_not_in_codeowners
     if [[ "$in_codeowners" == "false" ]]
     then 
+        echo "$changed_file_path and associated paths not found in CODEOWNERS. Adding to files_not_in_codeowners"
         files_not_in_codeowners+="${changed_file_path},"
     fi
 done #End for changed_file_path in changed_file_list
 
-echo "$total_output"
+# echo "$total_output"
 # Remove the last comma TODO: % syntax elaborate
-# files_not_in_codeowners="${files_not_in_codeowners%,}"
-# echo $files_not_in_codeowners
-
-# Use this stuff below to test other vars
-# echo "read-thru-codeowners says var = $CHANGED_FILES_STR"
+files_not_in_codeowners="${files_not_in_codeowners%,}"
+echo "Files not in CODEOWNERS = $files_not_in_codeowners"
