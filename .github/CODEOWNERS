@@ -37,7 +37,7 @@ images/ @org-mushroom-kingdom/team-toad
 /sandbox/other/sub1/sub2/ @org-mushroom-kingdom/team-luigi
 
 
-#TODO: Add some file to sub_a
+#TODO: Add some file to sub_a!
 # Mario's team owns everything in sub_a, but NOT any of its subdirectories (e.g. sub_b) (example of owning all files/folders in a directory0, NOT recursively )
 /sandbox/other/sub_a/* @org-mushroom-kingdom/team-mario
 
