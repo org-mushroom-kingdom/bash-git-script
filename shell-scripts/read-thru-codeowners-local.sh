@@ -36,7 +36,7 @@ mapfile -t codeowners_raw_lines < .github/CODEOWNERS
 # echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
 # Filter out the comments in the array or are empty (essentially this is array mapping) (use ${#line} to assess string length)
-
+# TODO: This is slow for some reason. How to speed it up?
 echo -e "\nFiltering out comments and empty lines in CODEOWNERS..."
 for line in "${codeowners_raw_lines[@]}"
 do
@@ -92,11 +92,12 @@ do
     echo "c_f_p_iterator=$c_f_p_iterator"
     #TODO: Why is this syntax needed
     c_f_p_iterator=$((c_f_p_iterator+1))
-    if [[ $c_f_p_iterator -eq 2 ]]
-    then
-        echo "EXITING"
-        exit
-    fi
+    #TODO: DELETE THIS or modify it for testing purposes
+    # if [[ $c_f_p_iterator -eq 2 ]]
+    # then
+    #     echo "EXITING"
+    #     exit
+    # fi
     #Use this to capture all output
     # total_output+=$(echo -e "changed_file_path = $changed_file_path \n")
     echo -e "\nSearching for ownership for changed_file_path = /${changed_file_path}...\n"
@@ -115,6 +116,7 @@ do
         
         # Look for the whole path first to see if the file is specifically listed
         # Use / here to account for root
+        # TODO: Enhance this somehow to just kick off to next line so full-line checks can be done first? (see num_of_slashes stuff below)
         if [[ "/${changed_file_path}" == "$codeowners_filepath" ]]
         then
           in_codeowners="true"
@@ -172,7 +174,7 @@ do
             # TODO: Figure out a better way to map
             # changed_file_path_collective=""
             
-            # Clone to be safe for now
+            # Clone to be safe for now TODO: See if clone is really needed, or am I being paranoid?
             # You can't simply do '=$changed_file_path_segs'. To clone an array, you need to use [@] which treats every element as a single word/string
             # Use double quotes to ensure every string stays intact (ex. without "" ["hello world", "goodbye"] becomes ["hello" "world" "goodbye"])
             # Then you have to wrap in () so each string is made its own array element
@@ -226,7 +228,8 @@ do
     # If not in CODEOWNERS, add to files_not_in_codeowners
     if [[ "$in_codeowners" == "false" ]]
     then 
-        echo "$changed_file_path and associated paths not found in CODEOWNERS. Adding to files_not_in_codeowners"
+        echo -e "\n\e[31mFILE NOT FOUND\e[0m"
+        echo -e "$changed_file_path and associated paths not found in CODEOWNERS. Adding to files_not_in_codeowners"
         files_not_in_codeowners+="${changed_file_path},"
     fi
 done #End for changed_file_path in changed_file_list
@@ -234,4 +237,6 @@ done #End for changed_file_path in changed_file_list
 # echo "$total_output"
 # Remove the last comma TODO: % syntax elaborate
 files_not_in_codeowners="${files_not_in_codeowners%,}"
-echo "Files not in CODEOWNERS = $files_not_in_codeowners"
+IFS=',' files_not_in_codeowners_arr=($files_not_in_codeowners)
+echo -e "\n Files not in CODEOWNERS:"
+for  file in "${files_not_in_codeowners[@]}"; do echo -e "- $file\n"; done
