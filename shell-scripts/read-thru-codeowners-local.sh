@@ -151,7 +151,7 @@ do
             fi
             # Perform the granular search
             # changed_file_path_segs = the changed_file_path (string) broken into an array of strings using / as delim
-            # ex. sandbox/other/sub2/dummy-txt2.txt becomes ["//sandbox","other","sub1","dummy-txt1.txt"]
+            # ex. sandbox/other/sub1/sub2/dummy-txt2.txt becomes ["sandbox","other","sub1","sub2","dummy-txt1.txt"]
             # There may not be a specific owner for the file, but there may be an owner for sandbox/other/sub2 (Hint: there is)
             # So we should look to see if there is an owner for the directory above us, but really anything above that too (ex. If someone owned sandbox/other they own all subdirectories in it)
             
@@ -163,7 +163,7 @@ do
             # Making a str arr with IFS will omit the delim, so let's add it back in
             # Initialize at i=1 because we just took care of first element
             # Use -2 as loop terminal condition b/c We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
-            # Only do this if array length TODO SYNTAX is >= 3
+            # Only do this if array length TODO SYNTAX EXPLAIN is >= 3
             if [[ ${#changed_file_path_segs[@]} -ge 3 ]]
             then
                 for ((i=1; i<="${#changed_file_path_segs[@]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
