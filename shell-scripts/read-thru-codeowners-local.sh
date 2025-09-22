@@ -138,6 +138,7 @@ do
             
             # ex test-json-output has no / in it, so results in 0
             # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for ANY instance of 'text-json-output.txt' at ANY level
+            # TODO: (See above) Maybe handle this in first if
             # grep -o means "only matching" which prints only matching instances of the term, on separate output lines (so only print /) 
             # wc is word count which is used to count bytes/words/lines. The -l option prints only the newline counts (each output line = newline)
             # Putting it all together each / is on a new line so by counting new lines we effectively count /'s
@@ -151,9 +152,7 @@ do
             fi
             # Perform the granular search
             # changed_file_path_segs = the changed_file_path (string) broken into an array of strings using / as delim
-            # ex. sandbox/other/sub1/sub2/dummy-txt2.txt becomes ["sandbox","other","sub1","sub2",
-            
-            "dummy-txt1.txt"]
+            # ex. sandbox/other/sub1/sub2/dummy-txt2.txt becomes ["sandbox","other","sub1","sub2","dummy-txt1.txt"]
             # There may not be a specific owner for the file, but there may be an owner for sandbox/other/sub2 (Hint: there is)
             # So we should look to see if there is an owner for the directory above us, but really anything above that too (ex. If someone owned sandbox/other they own all subdirectories in it)
             
@@ -174,7 +173,6 @@ do
             
             
 
-            # TODO: Figure out a better way to map
             # changed_file_path_collective=""
             
             # Clone to be safe for now TODO: See if clone is really needed, or am I being paranoid?
@@ -189,6 +187,7 @@ do
                 unset 'changed_file_path_segs_clone[${changed_file_path_segs_clone[@]}-1]'
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
+                # This accounts for anything ending in / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true

@@ -37,8 +37,8 @@ images/ @org-mushroom-kingdom/team-toad
 /sandbox/other/sub1/sub2/ @org-mushroom-kingdom/team-luigi
 
 
-#TODO: Add some file to sub_a!
-# Mario's team owns everything in sub_a, but NOT any of its subdirectories (e.g. sub_b) (example of owning all files/folders in a directory0, NOT recursively )
+# Mario's team owns everything in sub_a, but NOT any of its subdirectories (e.g. sub_b) (example of owning all files/folders in a directory, NOT recursively)
+# This covers ...sub_a/enemyTypes1.csv
 /sandbox/other/sub_a/* @org-mushroom-kingdom/team-mario
 
 #TODO: Elaborate on extensionless vs example/ 
