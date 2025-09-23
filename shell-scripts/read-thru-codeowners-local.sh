@@ -104,6 +104,7 @@ do
     # fi
     #Use this to capture all output
     # total_output+=$(echo -e "changed_file_path = $changed_file_path \n")
+    echo -e "------------------------------------------------------------------------\n"
     echo -e "\nSearching for ownership for changed_file_path = /${changed_file_path}...\n"
     #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} ??
     
@@ -111,7 +112,7 @@ do
     for line in "${codeowners_lines[@]}"
     do
         echo "codeowners line = ${line}"
-        exit
+        # exit
         codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
         owner=$(echo "$line" | cut -d' ' -f2)
         echo "codeowners_filepath = $codeowners_filepath"
@@ -189,18 +190,20 @@ do
             changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
             # TODO: Explain $(())
             segs_last_ele_index=$((${#changed_file_path_segs[@]}-1))
+            # echo "segs_last_ele_index=${segs_last_ele_index}"
+            # exit
             # echo "segs_length = ${segs_length}"
             # TODO: Explain how this works, more about the sed stuff than anything else
             changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
             # echo "changed_file_extension = $changed_file_extension"
-            for (( i=$segs_last_ele_index;i<0;i--))
+            for (( i=$segs_last_ele_index;i>0;i-- ))
             do
                 # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). First unset removes file ext 
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
-                unset 'changed_file_path_segs_clone[${changed_file_path_segs_clone[@]}-1]'
+                unset 'changed_file_path_segs_clone[${#changed_file_path_segs_clone[@]}-1]'
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
-                
+                echo "changed_file_path_str = ${changed_file_path_str}"
                  # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
@@ -265,5 +268,5 @@ done #End for changed_file_path in changed_file_list
 # Remove the last comma TODO: % syntax elaborate
 files_not_in_codeowners="${files_not_in_codeowners%,}"
 IFS=',' files_not_in_codeowners_arr=($files_not_in_codeowners)
-echo -e "\n Files not in CODEOWNERS:"
-for  file in "${files_not_in_codeowners[@]}"; do echo -e "- $file\n"; done
+echo -e "\n Files not in CODEOWNERS:\n"
+for file in "${files_not_in_codeowners_arr[@]}"; do echo -e "- ${file}"; done
