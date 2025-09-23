@@ -33,6 +33,9 @@ images/ @org-mushroom-kingdom/team-toad
 # Toad's team owns this specific file
 /sandbox/other/sub1/dummy-txt1.txt @org-mushroom-kingdom/team-toad
 
+# Mario's team owns any *.sh files in sub1
+/sandbox/other/sub1/*.sh @org-mushroom-kingdom/team-mario
+
 # Luigi's team owns everything in sub2 and its subdirectories
 /sandbox/other/sub1/sub2/ @org-mushroom-kingdom/team-luigi
 
