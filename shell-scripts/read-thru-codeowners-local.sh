@@ -16,7 +16,7 @@ declare -a codeowners_raw_lines # String arr with ALL lines from CODEOWNERS
 declare -a codeowners_lines # String arr mapped from above, only lines that aren't comments (or empty)
 total_output="" #Experimental. Build on this so the Action can spit out everything?
 # Everything in here is accounted for in CODEOWNERS except sandbox/not-in-codeowners/README.md
-changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "/sandbox/other/sub1/dummy-script1.sh" "sandbox/other/sub_a/enemyTypes1.csv" "sandbox/not-in-codeowners/README.md")
+changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "sandbox/other/sub1/dummy-script1.sh" "sandbox/other/sub_a/enemyTypes1.csv" "sandbox/not-in-codeowners/README.md")
 
 echo -e "\n Going to search for the following files: \n"
 for file in "${changed_file_list[@]}"
