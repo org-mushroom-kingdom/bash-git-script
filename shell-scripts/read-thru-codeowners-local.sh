@@ -205,7 +205,7 @@ do
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
                 echo "changed_file_path_str = ${changed_file_path_str}"
-                
+                echo "changed_file_path_str w extension = ${changed_file_path_str}*${changed_file_extension}"
                 # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
@@ -221,7 +221,7 @@ do
                     in_codeowners=true
                     echo -e "\n${GREEN}FOUND via segs! (Ends in /*) (${codeowners_filepath} accounts for ${changed_file_path}) ${COLOR_DONE}"
                     break
-                elif [[ "${changed_file_path_str}/*${changed_file_extension}" == "$codeowners_filepath" ]]
+                elif [[ "${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
                 then
                     in_codeowners=true
                     echo -e "\n${GREEN}FOUND via segs! (Ends in /*.ext (${changed_file_extension})) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
