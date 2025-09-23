@@ -10,7 +10,8 @@
 
 # echo "read_thru_codeowners.sh was hit!"
 
-
+readonly GREEN="\e[32m"
+readonly COLOR_DONE="\e[0m"
 declare -a codeowners_raw_lines # String arr with ALL lines from CODEOWNERS
 declare -a codeowners_lines # String arr mapped from above, only lines that aren't comments (or empty)
 total_output="" #Experimental. Build on this so the Action can spit out everything?
@@ -93,6 +94,7 @@ do
     #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt, sandbox/other/sub_a/sub_b/Jenkinsfile
     # Bash doesn't have native boolean datatypes, so we use strings
     in_codeowners="false"
+    echo -e "\n------------------------------------------------------------------------\n"
     echo "c_f_p_iterator=$c_f_p_iterator"
     #TODO: Why is this syntax needed
     c_f_p_iterator=$((c_f_p_iterator+1))
@@ -104,7 +106,6 @@ do
     # fi
     #Use this to capture all output
     # total_output+=$(echo -e "changed_file_path = $changed_file_path \n")
-    echo -e "------------------------------------------------------------------------\n"
     echo -e "\nSearching for ownership for changed_file_path = /${changed_file_path}...\n"
     #TODO instead of how this currently is, establish an array of objects/hashes like {'filepath' : 'owner'} ??
     
@@ -126,7 +127,7 @@ do
         if [[ "/${changed_file_path}" == "$codeowners_filepath" ]]
         then
           in_codeowners="true"
-          echo -e "\e[32mFOUND!\e[0m"
+          echo -e "${GREEN}FOUND! (Exact file match) ${COLOR_DONE}"
           # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
           break
         else
@@ -204,23 +205,26 @@ do
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
                 echo "changed_file_path_str = ${changed_file_path_str}"
-                 # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
+                
+                # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true
-                    echo "FOUND via segs! (Ends in /)"
+                    echo -e "\n ${GREEN}FOUND via segs! (Ends in /) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
                     # Break out of inner-inner loop early because we got a match
                     break
                 # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
-                elif [[ "${changed_file_path_str}*" == "$codeowners_filepath" ]]
+                # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
+                # They both equal .../sub_a/*
+                elif [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
                 then
                     in_codeowners=true
-                    echo "FOUND via segs! (Ends in /*)"
+                    echo -e "\n${GREEN}FOUND via segs! (Ends in /*) (${codeowners_filepath} accounts for ${changed_file_path}) ${COLOR_DONE}"
                     break
                 elif [[ "${changed_file_path_str}/*${changed_file_extension}" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true
-                    echo "FOUND via segs! (Ends in /*.ext (${changed_file_extension}))"
+                    echo -e "\n${GREEN}FOUND via segs! (Ends in /*.ext (${changed_file_extension})) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
                     break
                 fi
             done # End seg-matching AKA inner-inner loop
