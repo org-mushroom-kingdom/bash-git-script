@@ -14,7 +14,8 @@
 declare -a codeowners_raw_lines # String arr with ALL lines from CODEOWNERS
 declare -a codeowners_lines # String arr mapped from above, only lines that aren't comments (or empty)
 total_output="" #Experimental. Build on this so the Action can spit out everything?
-changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "shell-scripts/say-hello.sh")
+# Everything in here is accounted for in CODEOWNERS except sandbox/not-in-codeowners/README.md
+changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "shell-scripts/say-hello.sh" "sandbox/other/sub_a/enemyTypes1.csv" "sandbox/not-in-codeowners/README.md")
 
 echo -e "\n Going to search for the following files: \n"
 for file in "${changed_file_list[@]}"
@@ -136,12 +137,14 @@ do
             # !-- is_top_level_file="false"
             # !-- If cutting the path using / results in only 0?,1? pieces... 
             
-            # ex test-json-output has no / in it, so results in 0
-            # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for ANY instance of 'text-json-output.txt' at ANY level
+            IFS='/' changed_file_path_segs=($changed_file_path) 
+            # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for 'text-json-output.txt' at CODEOWNERS level
             # TODO: (See above) Maybe handle this in first if
+            # Assess path is top-level by looking at slashes. Can count arr length (top-level = 1) or count the slashes in string like below (for Bash learning purposes)
             # grep -o means "only matching" which prints only matching instances of the term, on separate output lines (so only print /) 
             # wc is word count which is used to count bytes/words/lines. The -l option prints only the newline counts (each output line = newline)
             # Putting it all together each / is on a new line so by counting new lines we effectively count /'s
+            # ex test-json-output has no / in it, so results in 0. shell-scripts/whatever.sh would be 1
             num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
             if [ $num_of_slashes == 0 ]
             then
@@ -149,6 +152,8 @@ do
               # Don't bother searching because we already tested for the full file path, and lack of / means this file is top-level (but not in CODEOWNERS)
             #   echo "File $changed_file_path has no /'s in it and must be a top-level file. Was not found"
             #   break
+            else
+                changed_file_path_segs[0]="/${changed_file_path_segs[0]}/"
             fi
             # Perform the granular search
             # changed_file_path_segs = the changed_file_path (string) broken into an array of strings using / as delim
@@ -156,16 +161,14 @@ do
             # There may not be a specific owner for the file, but there may be an owner for sandbox/other/sub2 (Hint: there is)
             # So we should look to see if there is an owner for the directory above us, but really anything above that too (ex. If someone owned sandbox/other they own all subdirectories in it)
             
-            IFS='/' changed_file_path_segs=($changed_file_path) 
             # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
             # Also add terminating / to account for subfolders
-            changed_file_path_segs[0]="/${changed_file_path_segs[0]}/"
             
-            # Making a str arr with IFS will omit the delim, so let's add it back in
+            # Making a str arr with IFS will omit the delim, so let's add it back in as a suffix
             # Initialize at i=1 because we just took care of first element
             # Use -2 as loop terminal condition b/c We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
-            # Only do this if array length 
-            # To get arr length, use @ to expand array then ${#} to get count the elements. ge means >= 3
+            # Only do this if array length >= 3 b/c if length is 1 or 2 then suffixed /'s are not applicable
+            # To get arr length, use @ to expand array then ${#} to count the elements. ge means >= 3
             if [[ ${#changed_file_path_segs[@]} -ge 3 ]]
             then
                 for ((i=1; i<="${#changed_file_path_segs[@]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
@@ -176,24 +179,36 @@ do
             # changed_file_path_collective=""
             
             # Clone to be safe for now TODO: See if clone is really needed, or am I being paranoid?
-            # You can't simply do '=$changed_file_path_segs'. To clone an array, you need to use [@] which treats every element as a single word/string
+            # You can't simply do '=$changed_file_path_segs'. To clone an array, you need to use [@] whichach treats every element as a single word/string
             # Use double quotes to ensure every string stays intact (ex. without "" ["hello world", "goodbye"] becomes ["hello" "world" "goodbye"])
             # Then you have to wrap in () so each string is made its own array element
             changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
-            for (( i="${#changed_file_path_segs[@]}"-1;i<0;i--))
+            # TODO: Explain $(())
+            segs_last_ele_index=$((${#changed_file_path_segs[@]}-1))
+            echo "segs_length = ${segs_length}"
+            # TODO: Explain how this works, more about the sed stuff than anything else
+            changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
+            echo "changed_file_extension = $changed_file_extension"
+            exit
+            for (( i=$segs_last_ele_index;i<0;i--))
             do
-                # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). 
+                # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). First unset removes file ext 
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
                 unset 'changed_file_path_segs_clone[${changed_file_path_segs_clone[@]}-1]'
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
-                # This accounts for anything ending in / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
+                
+                 # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true
-                    echo "FOUND via segs!"
+                    echo "FOUND via segs! (Ends in /)"
                     # Break out of inner-inner loop early because we got a match
                     break
+                elif [[ "${changed_file_path_str}*" == "$codeowners_filepath" ]]
+                then
+                    in_codeowners=true
+                    echo "FOUND via segs! (Ends in /*)"
                 fi
             done # End seg-matching AKA inner-inner loop
 
