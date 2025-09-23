@@ -189,7 +189,6 @@ do
             # TODO: Explain how this works, more about the sed stuff than anything else
             changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
             echo "changed_file_extension = $changed_file_extension"
-            exit
             for (( i=$segs_last_ele_index;i<0;i--))
             do
                 # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). First unset removes file ext 
@@ -205,10 +204,17 @@ do
                     echo "FOUND via segs! (Ends in /)"
                     # Break out of inner-inner loop early because we got a match
                     break
+                # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
                 elif [[ "${changed_file_path_str}*" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true
                     echo "FOUND via segs! (Ends in /*)"
+                    break
+                elif [[ "${changed_file_path_str}/*.${changed_file_extension}" == "$codeowners_filepath" ]]
+                then
+                    in_codeowners=true
+                    echo "FOUND via segs! (Ends in /*.ext (.${changed_file_extension}))"
+                    break
                 fi
             done # End seg-matching AKA inner-inner loop
 
