@@ -41,19 +41,22 @@ mapfile -t codeowners_raw_lines < .github/CODEOWNERS
 echo -e "\nFiltering out comments and empty lines in CODEOWNERS..."
 for line in "${codeowners_raw_lines[@]}"
 do
-    # if [[ ${#line} -gt 1 && "${line}" != "#"* ]]
     # xargs is a command line utility tool that takes from standard input (we use | to redirect echo output to stdin)
     # It's really meant more for filenames, but we can use it here to trim whitespace from line.  
     line=$(echo "$line" | xargs -0)
+
+    # s = substitution ; /pattern/ is regex to look for (look >=1 (+) for whitespace chars ([[:space:]]); /replacement/ is replacement str (' ') ; g is global flag (replace all occurences not just the first) 
+    # line=$(echo "$line" | sed 's/[[:space:]]\+/ /g')
     if [[ ! -z "$line" && ! "${line}" == "#"* ]]
     then
         # echo "LINE! ${line}"
         # echo "line length = ${#line}"
-        codeowners_lines+=($line)
+        codeowners_lines+=("${line}")
     fi
 done
-
+# exit
 # echo "codeowners_lines length = ${#codeowners_lines}"
+echo "codeowners_lines[0]  = ${codeowners_lines[0]}"
 
 #DELETE THIS WHEN TESTING COMPLETE
 # echo "!!!!Early exit!!!"
@@ -107,7 +110,8 @@ do
     # For each line in CODEOWNERS, search for the changed_file_path or other lines that would indicate ownership
     for line in "${codeowners_lines[@]}"
     do
-        echo "codeowners line = $line"
+        echo "codeowners line = ${line}"
+        exit
         codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
         owner=$(echo "$line" | cut -d' ' -f2)
         echo "codeowners_filepath = $codeowners_filepath"
@@ -185,10 +189,10 @@ do
             changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
             # TODO: Explain $(())
             segs_last_ele_index=$((${#changed_file_path_segs[@]}-1))
-            echo "segs_length = ${segs_length}"
+            # echo "segs_length = ${segs_length}"
             # TODO: Explain how this works, more about the sed stuff than anything else
             changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
-            echo "changed_file_extension = $changed_file_extension"
+            # echo "changed_file_extension = $changed_file_extension"
             for (( i=$segs_last_ele_index;i<0;i--))
             do
                 # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). First unset removes file ext 
@@ -210,10 +214,10 @@ do
                     in_codeowners=true
                     echo "FOUND via segs! (Ends in /*)"
                     break
-                elif [[ "${changed_file_path_str}/*.${changed_file_extension}" == "$codeowners_filepath" ]]
+                elif [[ "${changed_file_path_str}/*${changed_file_extension}" == "$codeowners_filepath" ]]
                 then
                     in_codeowners=true
-                    echo "FOUND via segs! (Ends in /*.ext (.${changed_file_extension}))"
+                    echo "FOUND via segs! (Ends in /*.ext (${changed_file_extension}))"
                     break
                 fi
             done # End seg-matching AKA inner-inner loop
