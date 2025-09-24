@@ -26,9 +26,13 @@ done
 
 # Get the CODEOWNERS file
 # mapfile -t -u 3 codeowners_raw_lines
+
 # mapfile draws from standard input and makes an array from it
 # We use < to redirect our file as standard input, and the -t option to remove trailing \n 
-mapfile -t codeowners_raw_lines < .github/CODEOWNERS
+# We also use process substitution <() to treat the output of sed as a file/input. (sed syntax is 'sed whateverSedCommands fileName') (See sed command example below)
+# s = substitution ; /pattern/ is regex to look for (look >=1 (+) for whitespace chars ([[:space:]]); /replacement/ is replacement str (' ') ; g is global flag (replace all occurences not just the first) 
+# mapfile -t codeowners_raw_lines < .github/CODEOWNERS
+mapfile -t codeowners_raw_lines < <( sed 's/[[:space:]]\+/ /g' .github/CODEOWNERS)
 
 # echo "codeowners_raw_lines[0] = ${codeowners_raw_lines[0]}"
 # echo "codeowners_raw_lines length = ${#codeowners_raw_lines[@]}"
@@ -44,10 +48,8 @@ for line in "${codeowners_raw_lines[@]}"
 do
     # xargs is a command line utility tool that takes from standard input (we use | to redirect echo output to stdin)
     # It's really meant more for filenames, but we can use it here to trim whitespace from line.  
-    line=$(echo "$line" | xargs -0)
+    # line=$(echo "$line" | xargs -0)
 
-    # s = substitution ; /pattern/ is regex to look for (look >=1 (+) for whitespace chars ([[:space:]]); /replacement/ is replacement str (' ') ; g is global flag (replace all occurences not just the first) 
-    # line=$(echo "$line" | sed 's/[[:space:]]\+/ /g')
     if [[ ! -z "$line" && ! "${line}" == "#"* ]]
     then
         # echo "LINE! ${line}"
@@ -55,9 +57,10 @@ do
         codeowners_lines+=("${line}")
     fi
 done
-# exit
 # echo "codeowners_lines length = ${#codeowners_lines}"
-echo "codeowners_lines[0]  = ${codeowners_lines[0]}"
+# echo "codeowners_lines[0]  = ${codeowners_lines[0]}"
+# echo "codeowners_lines[2]  = ${codeowners_lines[2]}" # This index reflects a line with multiple spaces between filepath and owner
+exit
 
 #DELETE THIS WHEN TESTING COMPLETE
 # echo "!!!!Early exit!!!"
@@ -192,14 +195,9 @@ do
             # TODO: Explain $(())
             segs_last_ele_index=$((${#changed_file_path_segs[@]}-1))
             segs_last_ele="${changed_file_path_segs[$segs_last_ele_index]}"
-            echo "segs_last_ele = $segs_last_ele"
-            if [[ "$segs_last_ele" != "test-json-output.txt" ]]
-            then
-                exit
-            fi
             # echo "segs_last_ele_index=${segs_last_ele_index}"
-            # exit
             # echo "segs_length = ${segs_length}"
+            changed_file_extensionless=$( echo "${segs_last_ele}" | cut -d '.' -f1)
             # TODO: Explain how this works, more about the sed stuff than anything else
             changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
             # echo "changed_file_extension = $changed_file_extension"
@@ -235,22 +233,43 @@ do
                 # Account for **/...
                 elif [[ "$codeowners_filepath" =~ ^\*\* ]]
                 then
-                    # If it is **/sandbox/*.ext **/sandbox.
-                    if [[]]
-                        then in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/ match!) ${COLOR_DONE}"
+                    # All kinds of **/ scenarios. TODO: Could this be a giant OR statment? How to resolve echo's though...
+                    #TODO: grep or regex might help simplify this...
+                    # If it is **/filename (account for extensionless files)
+                    elif [[ "**/${changed_file_extensionless}" == "${codeowners_filepath}" ]]
+                    then
+                        in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/extensionlessFilename match!) ${COLOR_DONE}" 
+                    # If it is **/*.ext 
+                    elif [[ "**/${changed_file_extension}" == "${codeowners_filepath}" ]]
+                    then
+                        in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/*.ext match!) ${COLOR_DONE}" 
+                    # If it is **/folderName/
+                    elif [[ "**/${changed_file_path_str}" == "${codeowners_filepath}" ]]
+                    then 
+                        in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/folderName/ match!) ${COLOR_DONE}"
+                    # If it is **/folderName/*
+                    elif [[ "**/${changed_file_path_str}*" == "${codeowners_filepath}" ]]
+                    then 
+                        in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/folderName/* match!) ${COLOR_DONE}"
+                    #TODO: If it is **/folderName/extensionlessFilename
+                    #  If it is **/folderName/*.ext, **/folderName/sub1/*.ext, etc
+                    elif [[ "**/${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
+                    then
+                        in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/folderName/...*.ext match!) ${COLOR_DONE}" 
+                    # If it is **/folderName/filename.ext, **/folderName/sub1/filename.ext, 
+                    elif [[ "**/${changed_file_path_str}${segs_last_ele}" == "${codeowners_filepath}" ]]
+                    then
+                        in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/folderName/...filename.ext match!) ${COLOR_DONE}" 
+                    
                     fi
                 fi
             done # End seg-matching AKA inner-inner loop
-
-            # Missy Elliot this and reverse it
-            # ex. if path is sandbox/other/sub1/sub2/dummy-txt2.txt first search for sandbox/other/sub1/sub2/ --> sandbox/other/sub1/ --> sandbox/other
-            # Pop last element part off segs (ex. first iteration would be popping off filename)
-            # Join the rest together (with no delim to preserve /'s)
-            # See if joined_line == codeowners_filepath
-            # If not repeat the process: Pop last element off, join, see if joined_line == codeowners_filepath
-            # Do this until i=0 
-
 
             # changed_file_path_collective="${#changed_file_path_segs[0]}" # (ex. "sandbox/")
             # Add seg to changed_file_path_collective, then see if that path is in CODEOWNERS (ex. "sandbox/" --> "sandbox/other/" --> "sandbox/other/sub1/" "sandbox/other/sub1/sub2" ...) 
