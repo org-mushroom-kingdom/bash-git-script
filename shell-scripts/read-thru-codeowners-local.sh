@@ -121,7 +121,7 @@ do
         # total_output+=$(echo -e "filepath = $codeowners_filepath \n")
         # total_output+=$(echo -e "owner = $owner \n")
         
-        # Look for the whole path first to see if the file is specifically listed
+        # Look for the whole path first to see if the file is specifically listed (Exact match)
         # Use / here to account for root
         # TODO: Enhance this somehow to just kick off to next line so full-line checks can be done first? (see num_of_slashes stuff below)
         if [[ "/${changed_file_path}" == "$codeowners_filepath" ]]
@@ -191,6 +191,12 @@ do
             changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
             # TODO: Explain $(())
             segs_last_ele_index=$((${#changed_file_path_segs[@]}-1))
+            segs_last_ele="${changed_file_path_segs[$segs_last_ele_index]}"
+            echo "segs_last_ele = $segs_last_ele"
+            if [[ "$segs_last_ele" != "test-json-output.txt" ]]
+            then
+                exit
+            fi
             # echo "segs_last_ele_index=${segs_last_ele_index}"
             # exit
             # echo "segs_length = ${segs_length}"
@@ -226,6 +232,14 @@ do
                     in_codeowners=true
                     echo -e "\n${GREEN}FOUND via segs! (Ends in /*.ext (${changed_file_extension})) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
                     break
+                # Account for **/...
+                elif [[ "$codeowners_filepath" =~ ^\*\* ]]
+                then
+                    # If it is **/sandbox/*.ext **/sandbox.
+                    if [[]]
+                        then in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/ match!) ${COLOR_DONE}"
+                    fi
                 fi
             done # End seg-matching AKA inner-inner loop
 

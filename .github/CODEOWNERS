@@ -13,7 +13,6 @@
 
 # ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
 # ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
-
 **/README.md @org-mushroom-kingdom/team-peach
 
 
