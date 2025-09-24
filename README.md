@@ -11,7 +11,7 @@ This repo is for testing CODEOWNERS and other logic related to Github teams. A s
 - team-peach
 - team-toad
 
-A sample CODEOWNERS file has been made, with teams being assigned to various items within. Some items will purposefully NOT be in CODEOWNERS for testing purposes. 
+A sample CODEOWNERS file has been made, with teams being assigned to various items within. Some items will purposefully NOT be in CODEOWNERS for testing purposes. The CODEOWNERS file purposefully has pretty much any syntax you can think of for demonstrative and testing purposes.
 
 This repo is currently a solo project, and I didn't have any colleagues personal Github account info, so only my user is a member of most teams. There is an exception with team-peach, which has an additional member that I had to manually create and manage. If you are forking this repo, hopefully you can goad some likeminded friends into joining your spoof organization and teams!
 
@@ -59,11 +59,15 @@ TODO: Finish this table
 | divide.sh | Examples of division and modulo in Bash |
 | main-script.sh | TODO: DESCRIPTION, but maybe its own section too |
 | pr-labels.sh | In progress. TODO: Adds labels to PR based on: <br> 1. The teams the PR creator is a part of <br> 2. The target branch of the PR |
+| read-through-codeowners.sh | Jesus. What doesn't this do. |
 
 # Why Bash?
 
 Honestly, why not? I never really got to work with shell or Linux-y stuff that much before, and recently there was somewhat of I need to familiarize myself with the language. You can definitely argue that there are better options than Bash for a lot of what this repo does, but this repo is as much of a learning exercise for me as it is a way to demonstrate how Bash works to others. Plus, you can use vanilla Bash in Github Actions so that works out too.
 
+# But I want more information!
+
+Please, PLEASE look at any non-dummy file in this repo as they all have informative comments to some degree. Really anything Bash or Github Action related is inundated with comments, mostly for informative purposes. It's a lot but I think it's really helpful to precede whatever logic with how it works. You can also glean why I wrote something the way I did. I don't normally code with hundreds of comments but this repo is for my own learning purposes and really anyone else who comes across it
 
 # To-Do List
 
