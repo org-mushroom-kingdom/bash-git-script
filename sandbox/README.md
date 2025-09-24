@@ -5,11 +5,13 @@
   
 I just needed something with a somewhat larger directory tree, with files that don't really matter in it. There should be a smattering of files in the subfolders, with various extensions. Some files may be extensionless (to mimic things like a Jenkinsfile, Dockerfile, etc)  
   
-Many of the files in the sandbox/other directory and its subfolders begin with "dummy"  
+Many of the files in the sandbox/other directory and its subfolders begin with ```dummy```  
 The hint is in the name: They're dummy files, whose text will more or less state they are dummy files and where they are located. 
   
-Some files won't begin with 'dummy' but may serve the same purpos; their name should reflect their purpose/representation. For example, this repo doesn't interact with Jenkins at all, but there is a Jenkinsfile in ```sandbox/other/sub2/```. If you checked its contents, you'll see the same sort of message you would in a dummy file. 
+Some files won't begin with 'dummy' but may serve the same purpose; their name should reflect their purpose/representation. For example, this repo doesn't interact with Jenkins at all, but there is a Jenkinsfile in ```sandbox/other/sub2/```. If you checked its contents, you'll see the same sort of message you would in a dummy file. 
   
 All filepaths here EXCEPT the ```not-in-codeowners``` folder should be covered in CODEOWNERS in some way, whether it be mentioning paths or specific files.
 
-P.S. This README file also serves as an example of a repo having multiple README files but in different directories--the Github webpage will still detect a README file and display it as it would as seen in the top-level of a repo. This sort of README organizing can be useful to TBD
+P.S. This README file also serves as an example of a repo having multiple README files but in different directories--the Github webpage will still detect a README file and display it as it would as seen in the top-level of a repo. This sort of README organizing can be useful to give more insight in regards to that directory's contents
+
+P.P.S. Fun fact: team-peach owns all the README.md files in this repo via the ```**/README.md``` syntax in CODEOWNERS.
