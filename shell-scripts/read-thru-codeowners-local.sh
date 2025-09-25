@@ -5,10 +5,7 @@
 # You won't see TODO
 
 
-# This is called from the test-pr-action. It depends the following variables being defined in the action
-# TARGET_BRANCH, PR_NUMBER, ORG, CHANGED_FILES_STR, REPO_PATH
-
-# echo "read_thru_codeowners.sh was hit!"
+# This is the local version, so there's no reliance on variables defined by Github Actions.
 
 readonly GREEN="\e[32m"
 readonly COLOR_DONE="\e[0m"
@@ -31,7 +28,7 @@ done
 # We use < to redirect our file as standard input, and the -t option to remove trailing \n 
 # We also use process substitution <() to treat the output of sed as a file/input. (sed syntax is 'sed whateverSedCommands fileName') (See sed command example below)
 # s = substitution ; /pattern/ is regex to look for (look >=1 (+) for whitespace chars ([[:space:]]); /replacement/ is replacement str (' ') ; g is global flag (replace all occurences not just the first) 
-# mapfile -t codeowners_raw_lines < .github/CODEOWNERS
+# This is much faster than looping thru an array and using sed that way TODO: WHY 
 mapfile -t codeowners_raw_lines < <( sed 's/[[:space:]]\+/ /g' .github/CODEOWNERS)
 
 # echo "codeowners_raw_lines[0] = ${codeowners_raw_lines[0]}"
@@ -42,7 +39,7 @@ mapfile -t codeowners_raw_lines < <( sed 's/[[:space:]]\+/ /g' .github/CODEOWNER
 # echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
 # Filter out the comments in the array or are empty (essentially this is array mapping) (use ${#line} to assess string length)
-# TODO: This is slow for some reason. How to speed it up?
+
 echo -e "\nFiltering out comments and empty lines in CODEOWNERS..."
 for line in "${codeowners_raw_lines[@]}"
 do
@@ -183,10 +180,6 @@ do
                 for ((i=1; i<="${#changed_file_path_segs[@]}"-2; i++)); do changed_file_path_segs[i]+="/"; done
             fi
             
-            
-
-            # changed_file_path_collective=""
-            
             # Clone to be safe for now TODO: See if clone is really needed, or am I being paranoid?
             # You can't simply do '=$changed_file_path_segs'. To clone an array, you need to use [@] whichach treats every element as a single word/string
             # Use double quotes to ensure every string stays intact (ex. without "" ["hello world", "goodbye"] becomes ["hello" "world" "goodbye"])
@@ -270,19 +263,6 @@ do
                     fi
                 fi
             done # End seg-matching AKA inner-inner loop
-
-            # changed_file_path_collective="${#changed_file_path_segs[0]}" # (ex. "sandbox/")
-            # Add seg to changed_file_path_collective, then see if that path is in CODEOWNERS (ex. "sandbox/" --> "sandbox/other/" --> "sandbox/other/sub1/" "sandbox/other/sub1/sub2" ...) 
-            # for seg in changed_file_path_segs
-            # do
-            #   changed_file_path_collective+="$seg"
-            #   if [[ "$filepath" == "$changed_file_path" ]]
-            #   then
-            #       in_codeowners=true
-            #       # This break stops the 'for seg' loop
-            #       break
-            #   fi
-            # done
 
             if [[ "$in_codeowners" == "true" ]]
             then
