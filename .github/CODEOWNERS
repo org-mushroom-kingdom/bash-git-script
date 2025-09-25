@@ -46,15 +46,12 @@ images/ @org-mushroom-kingdom/team-toad
 #TODO: Elaborate on extensionless vs example/ 
 # /sandbox/other/sub_a/sub_b/sub_c @org-mushroom-kingdom/team-mario
 
-# TODO: Make peachList*.csv files
 # Peach's team owns any csv file whose name begins with 'peachList' (example of owning files/exts with prefix matching)
 /sandbox/other/sub_a/sub_b/peachList*.csv @org-mushroom-kingdom/team-peach
 
-# TODO: Make *marioOnly.csv files
 # Mario's team owns any csv file whose name ends with 'marioOnly' (example of owning files/exts with suffix matching)
 /sandbox/other/sub_a/sub_b/*marioOnly.csv @org-mushroom-kingdom/team-mario
 
-# TODO: Make toad csvs
 # Toad's team owns files that begin with 'onlyToad' and end with 'toadOnly', with whatever in the middle.
 /sandbox/other/sub_a/sub_b/onlyToad*toadOnly.csv @org-mushroom-kingdom/team-toad
 
@@ -66,6 +63,6 @@ images/ @org-mushroom-kingdom/team-toad
 # ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
 # ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
 # This is at the bottom because CODEOWNERS uses 'last-match' logic. 
-# ex. team-luigi owns everything directly in sandbox/other (/sandbox/other/*), which has a README.md file. 
+# ex. team-luigi owns everything directly in sandbox/other (/sandbox/other/*), IMagine this has a README.md file. 
 # If this line were above that line, Luigi's team would own README.md, which is undesirable.
 **/README.md @org-mushroom-kingdom/team-peach

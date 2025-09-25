@@ -211,7 +211,8 @@ do
                     break
                 # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
                 # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* mistakenly accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
-                # They both equal .../sub_a/*
+                # They both equal .../sub_a/* at some point
+                # 
                 elif [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
                 then
                     in_codeowners=true
@@ -229,7 +230,7 @@ do
                     #TODO: grep or regex might help simplify this...
 
                     # If it is **/filename (account for extensionless files)
-                    elif [[ "**/${changed_file_extensionless}" == "${codeowners_filepath}" ]]
+                    if [[ "**/${changed_file_extensionless}" == "${codeowners_filepath}" ]]
                     then
                         in_codeowners="true"
                         echo -e "${GREEN}FOUND! (**/extensionlessFilename match!) ${COLOR_DONE}" 
