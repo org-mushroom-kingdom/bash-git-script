@@ -226,19 +226,20 @@ do
                 # Account for **/...
                 elif [[ "$codeowners_filepath" =~ ^\*\* ]]
                 then
-                    # All kinds of **/ scenarios. TODO: Could this be a giant OR statment? How to resolve echo's though...
+                    # All kinds of **/ scenarios. TODO: Could this be a giant OR statment (see below)? How to resolve echo's though...
                     #TODO: grep or regex might help simplify this...
+
                     # If it is **/filename (account for extensionless files)
                     elif [[ "**/${changed_file_extensionless}" == "${codeowners_filepath}" ]]
                     then
                         in_codeowners="true"
                         echo -e "${GREEN}FOUND! (**/extensionlessFilename match!) ${COLOR_DONE}" 
-                    # If it is **/*.ext 
+                    # If it is **/*.ext (any file with certain extension)
                     elif [[ "**/${changed_file_extension}" == "${codeowners_filepath}" ]]
                     then
                         in_codeowners="true"
                         echo -e "${GREEN}FOUND! (**/*.ext match!) ${COLOR_DONE}" 
-                    # If it is **/folderName/
+                    # If it is **/folderName/ 
                     elif [[ "**/${changed_file_path_str}" == "${codeowners_filepath}" ]]
                     then 
                         in_codeowners="true"
@@ -248,12 +249,12 @@ do
                     then 
                         in_codeowners="true"
                         echo -e "${GREEN}FOUND! (**/folderName/* match!) ${COLOR_DONE}"
-                    #TODO: If it is **/folderName/extensionlessFilename
-                    #  If it is **/folderName/*.ext, **/folderName/sub1/*.ext, etc
-                    elif [[ "**/${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
+                    # If it is **/folderName/extensionlessFilename
+                    elif [[ "**/${changed_file_path_str}${changed_file_extensionless}" == "${codeowners_filepath}" ]]
                     then
                         in_codeowners="true"
                         echo -e "${GREEN}FOUND! (**/folderName/...*.ext match!) ${COLOR_DONE}" 
+                    #  If it is **/folderName/*.ext, **/folderName/sub1/*.ext, etc
                     # If it is **/folderName/filename.ext, **/folderName/sub1/filename.ext, 
                     elif [[ "**/${changed_file_path_str}${segs_last_ele}" == "${codeowners_filepath}" ]]
                     then
