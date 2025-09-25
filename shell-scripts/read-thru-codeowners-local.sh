@@ -57,7 +57,7 @@ done
 # echo "codeowners_lines length = ${#codeowners_lines}"
 # echo "codeowners_lines[0]  = ${codeowners_lines[0]}"
 # echo "codeowners_lines[2]  = ${codeowners_lines[2]}" # This index reflects a line with multiple spaces between filepath and owner
-exit
+
 
 #DELETE THIS WHEN TESTING COMPLETE
 # echo "!!!!Early exit!!!"
@@ -159,6 +159,8 @@ do
             #   echo "File $changed_file_path has no /'s in it and must be a top-level file. Was not found"
             #   break
             else
+                # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
+                # Also add terminating / to account for subfolders
                 changed_file_path_segs[0]="/${changed_file_path_segs[0]}/"
             fi
             # Perform the granular search
@@ -166,9 +168,6 @@ do
             # ex. sandbox/other/sub1/sub2/dummy-txt2.txt becomes ["sandbox","other","sub1","sub2","dummy-txt1.txt"]
             # There may not be a specific owner for the file, but there may be an owner for sandbox/other/sub2 (Hint: there is)
             # So we should look to see if there is an owner for the directory above us, but really anything above that too (ex. If someone owned sandbox/other they own all subdirectories in it)
-            
-            # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
-            # Also add terminating / to account for subfolders
             
             # Making a str arr with IFS will omit the delim, so let's add it back in as a suffix
             # Initialize at i=1 because we just took care of first element
@@ -253,8 +252,12 @@ do
                     elif [[ "**/${changed_file_path_str}${changed_file_extensionless}" == "${codeowners_filepath}" ]]
                     then
                         in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/folderName/...*.ext match!) ${COLOR_DONE}" 
+                        echo -e "${GREEN}FOUND! (**/folderName/extensionlessFilename match!) ${COLOR_DONE}" 
                     #  If it is **/folderName/*.ext, **/folderName/sub1/*.ext, etc
+                    elif [[ "**/${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
+                    then
+                        in_codeowners="true"
+                        echo -e "${GREEN}FOUND! (**/folderName/*.ext match!) ${COLOR_DONE}" 
                     # If it is **/folderName/filename.ext, **/folderName/sub1/filename.ext, 
                     elif [[ "**/${changed_file_path_str}${segs_last_ele}" == "${codeowners_filepath}" ]]
                     then
