@@ -11,9 +11,6 @@
 #TODO: Mention that some paths/files are specifically NOT in here to test CODEOWNERS action(s) that should alert user via PR comment??? that this is the case
 
 
-# ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
-# ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
-**/README.md @org-mushroom-kingdom/team-peach
 
 
 # Toad's team owns the file in ANY folder named 'images' throughout the repo (example of non-root based ownership)
@@ -28,6 +25,9 @@ images/ @org-mushroom-kingdom/team-toad
 
 # However, Peach's team should own the documentation for it (example of owning specific file)
 /shell-scripts/info.txt @org-mushroom-kingdom/team-peach
+
+# Luigi's team owns everything in sandbox/other but NOT its subdirectories
+/sandbox/other/* @org-mushroom-kingdom/team-luigi
 
 # Toad's team owns this specific file
 /sandbox/other/sub1/dummy-txt1.txt @org-mushroom-kingdom/team-toad
@@ -62,3 +62,10 @@ images/ @org-mushroom-kingdom/team-toad
 /sandbox/other/sub_a/sub_b/Jenkinsfile @org-mushroom-kingdom/team-luigi
 
 /test-json-output.txt @org-mushroom-kingdom/team-peach
+
+# ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
+# ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
+# This is at the bottom because CODEOWNERS uses 'last-match' logic. 
+# ex. team-luigi owns everything directly in sandbox/other (/sandbox/other/*), which has a README.md file. 
+# If this line were above that line, Luigi's team would own README.md, which is undesirable.
+**/README.md @org-mushroom-kingdom/team-peach

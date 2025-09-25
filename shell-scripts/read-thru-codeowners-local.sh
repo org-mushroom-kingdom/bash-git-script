@@ -210,7 +210,7 @@ do
                     # Break out of inner-inner loop early because we got a match
                     break
                 # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
-                # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
+                # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* mistakenly accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
                 # They both equal .../sub_a/*
                 elif [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
                 then
