@@ -60,6 +60,8 @@ images/ @org-mushroom-kingdom/team-toad
 # Luigi's team owns the Jenkinsfile (example of owning an extensionless file)
 /sandbox/other/sub_a/sub_b/Jenkinsfile @org-mushroom-kingdom/team-luigi
 
+#TODO: Some sort of syntax like logs/log1/*/runs/logrun.ext (wildcard folder)
+
 /test-json-output.txt @org-mushroom-kingdom/team-peach
 
 # ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
