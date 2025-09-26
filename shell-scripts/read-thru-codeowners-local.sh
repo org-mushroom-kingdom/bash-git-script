@@ -229,7 +229,20 @@ do
                     else
                         num_of_stars=$(echo "${codeowners_filepath}" | grep -o "*" | wc -l)
                         echo "num_of_stars = $num_of_stars"
-                        # if 
+                        if [ $num_of_stars -eq 1]
+                        then
+                            # Find where the * is (ex. /shell-scripts/*.sh, f1/f2/*/runs/something.txt, f1/f2/*-suffix.ext, f1/prefix-*)
+                            pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1)
+                            post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2)
+                            # If post_star_text * has no slashes in it AND isn't "" must be last part of codeowners_filepath
+                            if [[ ! "$post_star_text" == */* && ! -z "$post_star_text" ]]
+                                # Already checked for /* and *.ext above so don't check for those again
+                                # If post_star_text has a period in it, must be a filename sort of pattern
+                                if [[ "$post_star_text" == *"."* ]]
+                                then
+                                
+                                fi
+                            fi
                         # TODO: Incorporate this with star_count logic
                         # Account for **/...
                         elif [[ "$codeowners_filepath" =~ ^\*\* ]]
