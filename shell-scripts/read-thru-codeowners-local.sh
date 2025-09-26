@@ -202,12 +202,13 @@ do
             # echo "changed_file_extension = $changed_file_extension"
             for (( i=$segs_last_ele_index;i>0;i-- ))
             do
-                accounts_for="(${codeowners_filepath} accounts for ${changed_file_path})"
+                accounts_for="(CODEOWNERS filepath '${codeowners_filepath}' accounts for '${changed_file_path}')"
                 #TODO: Eventually refactor this with regex or grep or both
                 # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). First unset removes file ext 
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
                 unset 'changed_file_path_segs_clone[${#changed_file_path_segs_clone[@]}-1]'
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
+                # TODO: Explain *
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
                 echo "changed_file_path_str = ${changed_file_path_str}"
                 echo "changed_file_path_str w extension = ${changed_file_path_str}*${changed_file_extension}"
@@ -221,6 +222,7 @@ do
                 # If codeowners_filepath contains a *...
                 elif [[ "${codeowners_filepath}" =~ \* ]]
                 then
+                    # TODO: For both these if statements that are currently above the num_of_stars logic, put them in if num_of_stars = 1 logic
                     # If it is folderName/* AND if we are at the last element of segs
                     # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
                     # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* mistakenly accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
@@ -241,14 +243,14 @@ do
                         # echo "num_of_stars = $num_of_stars"
                         if [ $num_of_stars -eq 1 ]
                         then
-                            # Find where the * is (ex. /shell-scripts/*.sh, f1/f2/*/runs/something.txt, f1/f2/*-suffix.ext, f1/prefix-*)
+                            # Find where the * is (ex. /shell-scripts/*.sh, f1/f2/*/runs/something.txt, f1/f2/*-suffix.ext, f1/prefix-*, f1/prefix*suffix.ext)
                             pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1)
                             post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2)
                             # If post_star_text * has no slashes in it AND isn't "" must be last part of codeowners_filepath
                             if [[ ! "$post_star_text" == */* && ! -z "$post_star_text" ]]
                             then
                                 # Already checked for /* and *.ext above so don't check for those again
-                                # If post_star_text has a period in it, must be a filename sort of pattern
+                                # If post_star_text has a period in it, must be a filename with extension sort of pattern
                                 if [[ "$post_star_text" == *"."* ]]
                                 then
                                     between_star_dot_text=$(echo "$post_star_text" | cut -d'.' -f1) #ex -suffix.ext
@@ -263,6 +265,7 @@ do
                                             in_codeowners="true"
                                             echo -e "\n${GREEN}FOUND! (Ends in *-suffix.ext) ${accounts_for}${COLOR_DONE}"
                                             break
+                                        # TODO: Another elif here the accounts for pre_star_text
                                         fi
                                     else
                                         echo "Already checked for *.ext path"
