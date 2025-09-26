@@ -8,6 +8,7 @@
 # This is the local version, so there's no reliance on variables defined by Github Actions.
 
 readonly GREEN="\e[32m"
+readonly YELLOW="\e[33m"
 readonly COLOR_DONE="\e[0m"
 declare -a codeowners_raw_lines # String arr with ALL lines from CODEOWNERS
 declare -a codeowners_lines # String arr mapped from above, only lines that aren't comments (or empty)
@@ -201,6 +202,7 @@ do
             # echo "changed_file_extension = $changed_file_extension"
             for (( i=$segs_last_ele_index;i>0;i-- ))
             do
+                accounts_for="(${codeowners_filepath} accounts for ${changed_file_path})"
                 #TODO: Eventually refactor this with regex or grep or both
                 # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). First unset removes file ext 
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
@@ -226,7 +228,7 @@ do
                     if [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
                     then
                         in_codeowners="true"
-                        echo -e "\n${GREEN}FOUND via segs! (Ends in /*) (${codeowners_filepath} accounts for ${changed_file_path}) ${COLOR_DONE}"
+                        echo -e "\n${GREEN}FOUND via segs! (Ends in /*) ${accounts_for} ${COLOR_DONE}"
                         break
                     # If it is folderName/*.ext
                     elif [[ "${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
@@ -236,20 +238,38 @@ do
                         break
                     else
                         num_of_stars=$(echo "${codeowners_filepath}" | grep -o "*" | wc -l)
-                        echo "num_of_stars = $num_of_stars"
-                        if [ $num_of_stars -eq 1]
+                        # echo "num_of_stars = $num_of_stars"
+                        if [ $num_of_stars -eq 1 ]
                         then
                             # Find where the * is (ex. /shell-scripts/*.sh, f1/f2/*/runs/something.txt, f1/f2/*-suffix.ext, f1/prefix-*)
                             pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1)
                             post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2)
                             # If post_star_text * has no slashes in it AND isn't "" must be last part of codeowners_filepath
                             if [[ ! "$post_star_text" == */* && ! -z "$post_star_text" ]]
+                            then
                                 # Already checked for /* and *.ext above so don't check for those again
                                 # If post_star_text has a period in it, must be a filename sort of pattern
                                 if [[ "$post_star_text" == *"."* ]]
                                 then
-                                    #Check if it's just a suffix sort of thing like *marioOnly.csv
-                                    pre_dot_text=
+                                    between_star_dot_text=$(echo "$post_star_text" | cut -d'.' -f1) #ex -suffix.ext
+                                    echo -e "${YELLOW}between_star_dot_text = ${between_star_dot_text}${COLOR_DONE}"
+                                    echo -e "constructed path: ${YELLOW}${changed_file_path_str}*${between_star_dot_text}.${changed_file_extension}${COLOR_DONE}"
+                                    #If nothing before dot, then must be *.ext which was already checked for
+                                    if [[ ! -z "$between_star_dot_text" ]]
+                                    then
+                                        #Check if it's just a suffix sort of thing like *marioOnly.csv
+                                        if [[ "${changed_file_path_str}*${between_star_dot_text}${changed_file_extension}"  == "${codeowners_filepath}" ]] # ex. ...sub_b/List1-marioOnly.csv caught by ...sub_b/*marioOnly.csv
+                                        then
+                                            in_codeowners="true"
+                                            echo -e "\n${GREEN}FOUND! (Ends in *-suffix.ext) ${accounts_for}${COLOR_DONE}"
+                                            break
+                                        fi
+                                    else
+                                        echo "Already checked for *.ext path"
+                                        #TODO: Think if it makes sense to exit early here
+                                        # in_codeowners="false"
+                                        # break
+                                    fi
                                 fi
                             fi
                         # TODO: Incorporate this with star_count logic
