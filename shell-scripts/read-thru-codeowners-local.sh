@@ -143,7 +143,7 @@ do
             # !-- If cutting the path using / results in only 0?,1? pieces... 
             
             IFS='/' changed_file_path_segs=($changed_file_path) 
-            # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for 'text-json-output.txt' at CODEOWNERS level
+            # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for 'text-json-output.txt' at any level
             # TODO: (See above) Maybe handle this in first if
             # Assess path is top-level by looking at slashes. Can count arr length (top-level = 1) or count the slashes in string like below (for Bash learning purposes)
             # grep -o means "only matching" which prints only matching instances of the term, on separate output lines (so only print /) 
@@ -184,12 +184,21 @@ do
             changed_file_path_segs_clone=("${changed_file_path_segs[@]}")
             # TODO: Explain $(())
             segs_last_ele_index=$((${#changed_file_path_segs[@]}-1))
-            segs_last_ele="${changed_file_path_segs[$segs_last_ele_index]}"
+            segs_last_ele="${changed_file_path_segs[$segs_last_ele_index]}" #(ex. say-hello.sh, Jenkinsfile)
             # echo "segs_last_ele_index=${segs_last_ele_index}"
             # echo "segs_length = ${segs_length}"
-            changed_file_extensionless=$( echo "${segs_last_ele}" | cut -d '.' -f1)
-            # TODO: Explain how this works, more about the sed stuff than anything else
-            changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
+            
+            # If last element has an extension, capture the filename and extension separately
+            if [[ "$segs_last_ele" == *"."* ]]
+            then
+                # TODO: This used to be called changed_file_extensionless which is misleading
+                changed_filename=$( echo "${segs_last_ele}" | cut -d '.' -f1)
+                # TODO: Explain how this works, more about the sed stuff than anything else
+                changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
+            # If the last element doesn't have an extension, it's an extensionless file so just use segs_last_ele
+            else
+                changed_filename="$segs_last_ele"
+            fi
             # echo "changed_file_extension = $changed_file_extension"
             for (( i=$segs_last_ele_index;i>0;i-- ))
             do
@@ -240,7 +249,8 @@ do
                                 # If post_star_text has a period in it, must be a filename sort of pattern
                                 if [[ "$post_star_text" == *"."* ]]
                                 then
-                                
+                                    #Check if it's just a suffix sort of thing like *marioOnly.csv
+                                    pre_dot_text=
                                 fi
                             fi
                         # TODO: Incorporate this with star_count logic
