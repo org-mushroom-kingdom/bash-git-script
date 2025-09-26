@@ -35,7 +35,7 @@ mapfile -t codeowners_raw_lines < .github/CODEOWNERS
 # exec 3>&-
 echo "codeowners_raw_lines[0] = ${codeowners_raw_lines[0]}"
 echo "codeowners_raw_lines length = ${#codeowners_raw_lines[@]}"
-exit
+# exit
 # END DELETE THIS!!
 # Comment out the above mapfile line, and comment in the line below to see the output
 # gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode 
