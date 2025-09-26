@@ -3,7 +3,9 @@
 # CODEOWNERS inspects files from its TODO: Finishthis
 # Format: /path/to/file @username @org/team
 
-#TODO: Probs re-sort this to match teams
+#TODO: Probs re-sort this to match teams, but maybe not. This is so much directory path specific stuff so maybe preserve this format in a .txt file 
+# so the contents are the same but in a different order.
+
 # The order of the lines in this file is mostly in 'natural sort' order, where any path that begins with a character is earlier
 # than alphabetical characters (ex. .github is the first thing because it begins with a . then .gitignore is next because it also
 # begins with a period, but is alphabetically "later" than .github)

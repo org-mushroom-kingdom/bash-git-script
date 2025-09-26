@@ -195,6 +195,7 @@ do
             # echo "changed_file_extension = $changed_file_extension"
             for (( i=$segs_last_ele_index;i>0;i-- ))
             do
+                #TODO: Eventually refactor this with regex or grep or both
                 # unset is used to unset variables and array elements (essentially deletes array element, like JS pop()). First unset removes file ext 
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
                 unset 'changed_file_path_segs_clone[${#changed_file_path_segs_clone[@]}-1]'
@@ -209,62 +210,76 @@ do
                     echo -e "\n ${GREEN}FOUND via segs! (Ends in /) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
                     # Break out of inner-inner loop early because we got a match
                     break
-                # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
-                # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* mistakenly accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
-                # They both equal .../sub_a/* at some point
-                # 
-                elif [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
+                # If codeowners_filepath contains a *...
+                elif [[ "${codeowners_filepath}" =~ \* ]]
                 then
-                    in_codeowners=true
-                    echo -e "\n${GREEN}FOUND via segs! (Ends in /*) (${codeowners_filepath} accounts for ${changed_file_path}) ${COLOR_DONE}"
-                    break
-                elif [[ "${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
-                then
-                    in_codeowners=true
-                    echo -e "\n${GREEN}FOUND via segs! (Ends in /*.ext (${changed_file_extension})) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
-                    break
-                # Account for **/...
-                elif [[ "$codeowners_filepath" =~ ^\*\* ]]
-                then
-                    # All kinds of **/ scenarios. TODO: Could this be a giant OR statment (see below)? How to resolve echo's though...
-                    #TODO: grep or regex might help simplify this...
+                    # If it is folderName/* AND if we are at the last element of segs
+                    # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
+                    # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* mistakenly accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
+                    # 
+                    if [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
+                    then
+                        in_codeowners=true
+                        echo -e "\n${GREEN}FOUND via segs! (Ends in /*) (${codeowners_filepath} accounts for ${changed_file_path}) ${COLOR_DONE}"
+                        break
+                    # If it is folderName/*.ext
+                    elif [[ "${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
+                    then
+                        in_codeowners=true
+                        echo -e "\n${GREEN}FOUND via segs! (Ends in /*.ext (${changed_file_extension})) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
+                        break
 
-                    # If it is **/filename (account for extensionless files)
-                    if [[ "**/${changed_file_extensionless}" == "${codeowners_filepath}" ]]
+                    # TODO: Incorporate this into above elif
+                    # Account for **/...
+                    elif [[ "$codeowners_filepath" =~ ^\*\* ]]
                     then
-                        in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/extensionlessFilename match!) ${COLOR_DONE}" 
-                    # If it is **/*.ext (any file with certain extension)
-                    elif [[ "**/${changed_file_extension}" == "${codeowners_filepath}" ]]
-                    then
-                        in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/*.ext match!) ${COLOR_DONE}" 
-                    # If it is **/folderName/ 
-                    elif [[ "**/${changed_file_path_str}" == "${codeowners_filepath}" ]]
-                    then 
-                        in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/folderName/ match!) ${COLOR_DONE}"
-                    # If it is **/folderName/*
-                    elif [[ "**/${changed_file_path_str}*" == "${codeowners_filepath}" ]]
-                    then 
-                        in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/folderName/* match!) ${COLOR_DONE}"
-                    # If it is **/folderName/extensionlessFilename
-                    elif [[ "**/${changed_file_path_str}${changed_file_extensionless}" == "${codeowners_filepath}" ]]
-                    then
-                        in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/folderName/extensionlessFilename match!) ${COLOR_DONE}" 
-                    #  If it is **/folderName/*.ext, **/folderName/sub1/*.ext, etc
-                    elif [[ "**/${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
-                    then
-                        in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/folderName/*.ext match!) ${COLOR_DONE}" 
-                    # If it is **/folderName/filename.ext, **/folderName/sub1/filename.ext, 
-                    elif [[ "**/${changed_file_path_str}${segs_last_ele}" == "${codeowners_filepath}" ]]
-                    then
-                        in_codeowners="true"
-                        echo -e "${GREEN}FOUND! (**/folderName/...filename.ext match!) ${COLOR_DONE}" 
-                    
+                        # All kinds of **/ scenarios. TODO: Could this be a giant OR statment (see below)? How to resolve echo's though...
+                        #TODO: grep or regex might help simplify this...
+
+                        # If it is **/filename (account for extensionless files)
+                        if [[ "**/${changed_file_extensionless}" == "${codeowners_filepath}" ]]
+                        then
+                            in_codeowners="true"
+                            echo -e "${GREEN}FOUND! (**/extensionlessFilename match!) ${COLOR_DONE}" 
+                            break
+                        # If it is **/*.ext (any file with certain extension)
+                        elif [[ "**/${changed_file_extension}" == "${codeowners_filepath}" ]]
+                        then
+                            in_codeowners="true"
+                            echo -e "${GREEN}FOUND! (**/*.ext match!) ${COLOR_DONE}" 
+                            break
+                        # If it is **/folderName/ 
+                        elif [[ "**/${changed_file_path_str}" == "${codeowners_filepath}" ]]
+                        then 
+                            in_codeowners="true"
+                            echo -e "${GREEN}FOUND! (**/folderName/ match!) ${COLOR_DONE}"
+                            break
+                        # If it is **/folderName/*
+                        elif [[ "**/${changed_file_path_str}*" == "${codeowners_filepath}" ]]
+                        then 
+                            in_codeowners="true"
+                            echo -e "${GREEN}FOUND! (**/folderName/* match!) ${COLOR_DONE}"
+                            break
+                        # If it is **/folderName/extensionlessFilename
+                        elif [[ "**/${changed_file_path_str}${changed_file_extensionless}" == "${codeowners_filepath}" ]]
+                        then
+                            in_codeowners="true"
+                            echo -e "${GREEN}FOUND! (**/folderName/extensionlessFilename match!) ${COLOR_DONE}" 
+                            break
+                        #  If it is **/folderName/*.ext, **/folderName/sub1/*.ext, etc
+                        elif [[ "**/${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
+                        then
+                            in_codeowners="true"
+                            echo -e "${GREEN}FOUND! (**/folderName/*.ext match!) ${COLOR_DONE}" 
+                            break
+                        # If it is **/folderName/filename.ext, **/folderName/sub1/filename.ext, 
+                        elif [[ "**/${changed_file_path_str}${segs_last_ele}" == "${codeowners_filepath}" ]]
+                        then
+                            in_codeowners="true"
+                            echo -e "${GREEN}FOUND! (**/folderName/...filename.ext match!) ${COLOR_DONE}" 
+                            break
+                        
+                        fi
                     fi
                 fi
             done # End seg-matching AKA inner-inner loop
