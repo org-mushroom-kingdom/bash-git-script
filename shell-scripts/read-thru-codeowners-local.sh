@@ -206,7 +206,7 @@ do
                 # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
-                    in_codeowners=true
+                    in_codeowners="true"
                     echo -e "\n ${GREEN}FOUND via segs! (Ends in /) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
                     # Break out of inner-inner loop early because we got a match
                     break
@@ -219,17 +219,18 @@ do
                     # 
                     if [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
                     then
-                        in_codeowners=true
+                        in_codeowners="true"
                         echo -e "\n${GREEN}FOUND via segs! (Ends in /*) (${codeowners_filepath} accounts for ${changed_file_path}) ${COLOR_DONE}"
                         break
                     # If it is folderName/*.ext
                     elif [[ "${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
                     then
-                        in_codeowners=true
+                        in_codeowners="true"
                         echo -e "\n${GREEN}FOUND via segs! (Ends in /*.ext (${changed_file_extension})) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
                         break
-
-                    # TODO: Incorporate this into above elif
+                    elif
+                    then
+                    # TODO: Incorporate this with star_count logic
                     # Account for **/...
                     elif [[ "$codeowners_filepath" =~ ^\*\* ]]
                     then
