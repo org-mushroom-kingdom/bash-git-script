@@ -191,13 +191,12 @@ do
             # If last element has an extension, capture the filename and extension separately
             if [[ "$segs_last_ele" == *"."* ]]
             then
-                # TODO: This used to be called changed_file_extensionless which is misleading
-                changed_filename=$( echo "${segs_last_ele}" | cut -d '.' -f1)
+                changed_filename_no_ext=$( echo "${segs_last_ele}" | cut -d '.' -f1)
                 # TODO: Explain how this works, more about the sed stuff than anything else
                 changed_file_extension=$( echo "${changed_file_path_segs[$segs_last_ele_index]}" | cut -d '.' -f2 | sed 's/^/./')
             # If the last element doesn't have an extension, it's an extensionless file so just use segs_last_ele
             else
-                changed_filename="$segs_last_ele"
+                changed_filename_no_ext="$segs_last_ele"
             fi
             # echo "changed_file_extension = $changed_file_extension"
             for (( i=$segs_last_ele_index;i>0;i-- ))
@@ -261,7 +260,7 @@ do
                             #TODO: grep or regex might help simplify this...
 
                             # If it is **/filename (account for extensionless files)
-                            if [[ "**/${changed_file_extensionless}" == "${codeowners_filepath}" ]]
+                            if [[ "**/${changed_filename_no_ext}" == "${codeowners_filepath}" ]]
                             then
                                 in_codeowners="true"
                                 echo -e "${GREEN}FOUND! (**/extensionlessFilename match!) ${COLOR_DONE}" 
@@ -285,7 +284,7 @@ do
                                 echo -e "${GREEN}FOUND! (**/folderName/* match!) ${COLOR_DONE}"
                                 break
                             # If it is **/folderName/extensionlessFilename
-                            elif [[ "**/${changed_file_path_str}${changed_file_extensionless}" == "${codeowners_filepath}" ]]
+                            elif [[ "**/${changed_file_path_str}${changed_filename_no_ext}" == "${codeowners_filepath}" ]]
                             then
                                 in_codeowners="true"
                                 echo -e "${GREEN}FOUND! (**/folderName/extensionlessFilename match!) ${COLOR_DONE}" 
