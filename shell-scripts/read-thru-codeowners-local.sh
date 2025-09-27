@@ -122,7 +122,7 @@ do
     # For each line in CODEOWNERS, search for the changed_file_path or other lines that would indicate ownership
     for line in "${codeowners_lines[@]}"
     do
-        echo "codeowners line = ${line}"
+        # echo "codeowners line = ${line}"
         # exit
         codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
         owner=$(echo "$line" | cut -d' ' -f2)
@@ -226,8 +226,8 @@ do
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
                 # TODO: Explain *
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
-                echo "changed_file_path_str = ${changed_file_path_str}"
-                echo "changed_file_path_str w extension = ${changed_file_path_str}*${changed_file_extension}"
+                # echo "changed_file_path_str = ${changed_file_path_str}"
+                # echo "changed_file_path_str w extension = ${changed_file_path_str}*${changed_file_extension}"
                 # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
@@ -271,7 +271,7 @@ do
                                 then
                                     between_star_dot_text=$(echo "$post_star_text" | cut -d'.' -f1) #ex -suffix.ext
                                     echo -e "${YELLOW}between_star_dot_text = ${between_star_dot_text}${COLOR_DONE}"
-                                    echo -e "constructed path: ${YELLOW}${changed_file_path_str}*${between_star_dot_text}.${changed_file_extension}${COLOR_DONE}"
+                                    echo -e "constructed path: ${YELLOW}${changed_file_path_str}*${between_star_dot_text}${changed_file_extension}${COLOR_DONE}"
                                     #If nothing before dot, then must be *.ext which was already checked for
                                     if [[ ! -z "$between_star_dot_text" ]]
                                     then
