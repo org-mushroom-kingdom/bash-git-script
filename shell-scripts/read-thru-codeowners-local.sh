@@ -238,26 +238,12 @@ do
                 # If codeowners_filepath contains a * (\ used to escape *)...
                 elif [[ "${codeowners_filepath}" =~ \* ]]
                 then
-                    # TODO: For both these if statements that are currently above the num_of_stars logic, put them in if num_of_stars = 1 logic
-                    # If it is folderName/* AND if we are at the last element of segs
-                    # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
-                    # 
-                    # if [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
-                    # then
-                    #     in_codeowners="true"
-                    #     echo -e "\n${GREEN}FOUND via segs! (Ends in /*) ${accounts_for} ${COLOR_DONE}"
-                    #     break
-                    # # If it is folderName/*.ext
-                    # elif [[ "${changed_file_path_str}*${changed_file_extension}" == "${codeowners_filepath}" ]]
-                    # then
-                    #     in_codeowners="true"
-                    #     echo -e "\n${GREEN}FOUND via segs! (Ends in /*.ext (${changed_file_extension})) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
-                    #     break
-                    # else
                     num_of_stars=$(echo "${codeowners_filepath}" | grep -o "*" | wc -l)
                     echo "num_of_stars = $num_of_stars"
                     if [ $num_of_stars -eq 1 ]
                     then
+                        # If it is folderName/* AND if we are at the last element of segs
+                        # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
                         if [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
                         then
                             in_codeowners="true"
@@ -303,12 +289,13 @@ do
                                     fi
                                 else
                                     echo "post_star_text does NOT contain a ."
-                                    #post_star_text does NOT contain a .
+                                    #post_star_text does NOT contain . or / AND isn't blank
                                     # TODO:                                     
-                                    # If there's no / AND no . then codeowners_filepath must have been like .../*, ...*extensionlessSuffix, /whatever*
+                                    # If there's no / AND no . then codeowners_filepath must have been like /*extensionlessSuffix or /whatever*something
                                     # or more rarely top-level like 'Jenkinsfile' 
-                                    # Have to remember that a path like 'whatever' can match extensionless files AND acts like whatever/
-                                    # /* is already accounted for, 
+                                    # Have to remember that a path like 'whatever' (no terminating /) can match extensionless files AND acts like whatever/ (WHICH IS DUMB)
+                                    # Account for extensionless file
+                                    if [[ "${changed_file_path_str}" == "${codeowners_filepath}" ]]
                                 fi
                             else
                                 #post_star_text does NOT contain a / 
