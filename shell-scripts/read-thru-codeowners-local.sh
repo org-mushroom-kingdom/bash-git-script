@@ -106,7 +106,7 @@ do
     in_codeowners="false"
     echo -e "\n------------------------------------------------------------------------\n"
     echo "c_f_p_iterator=$c_f_p_iterator"
-    #TODO: Why is this syntax needed
+    #TODO: Why is this syntax needed $(())
     c_f_p_iterator=$((c_f_p_iterator+1))
     #TODO: DELETE THIS or modify it for testing purposes
     # if [[ $c_f_p_iterator -eq 2 ]]
@@ -235,13 +235,12 @@ do
                     echo -e "\n ${GREEN}FOUND via segs! (Ends in /) (${codeowners_filepath} accounts for ${changed_file_path})${COLOR_DONE}"
                     # Break out of inner-inner loop early because we got a match
                     break
-                # If codeowners_filepath contains a *...
+                # If codeowners_filepath contains a * (\ used to escape *)...
                 elif [[ "${codeowners_filepath}" =~ \* ]]
                 then
                     # TODO: For both these if statements that are currently above the num_of_stars logic, put them in if num_of_stars = 1 logic
                     # If it is folderName/* AND if we are at the last element of segs
                     # This accounts for codeowners_filepath ending in /* (direct ownership of folder, NOT subdirectories)
-                    # TODO: NOT RIGHT --> FOUND via segs! (Ends in /*) (/sandbox/other/sub_a/* mistakenly accounts for sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv)
                     # 
                     if [[ "${changed_file_path_str}*" == "$codeowners_filepath" && $i == $segs_last_ele_index ]]
                     then
@@ -260,6 +259,7 @@ do
                         if [ $num_of_stars -eq 1 ]
                         then
                             # Find where the * is (ex. /shell-scripts/*.sh, f1/f2/*/runs/something.txt, f1/f2/*-suffix.ext, f1/prefix-*, f1/prefix*suffix.ext)
+                            # More examples (f1/f2/*/Dockerfile, f1/f2/f3/)
                             pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1)
                             post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2)
                             # If post_star_text * has no slashes in it AND isn't "" must be last part of codeowners_filepath
@@ -270,7 +270,7 @@ do
                                 if [[ "$post_star_text" == *"."* ]]
                                 then
                                     between_star_dot_text=$(echo "$post_star_text" | cut -d'.' -f1) #ex -suffix.ext
-                                    echo -e "${YELLOW}between_star_dot_text = ${between_star_dot_text}${COLOR_DONE}"
+                                    [[ ! -z "$between_star_dot_text" ]] && echo -e "${YELLOW}between_star_dot_text = ${between_star_dot_text}${COLOR_DONE}"
                                     echo -e "constructed path: ${YELLOW}${changed_file_path_str}*${between_star_dot_text}${changed_file_extension}${COLOR_DONE}"
                                     #If nothing before dot, then must be *.ext which was already checked for
                                     if [[ ! -z "$between_star_dot_text" ]]
@@ -279,15 +279,26 @@ do
                                         if [[ "${changed_file_path_str}*${between_star_dot_text}${changed_file_extension}"  == "${codeowners_filepath}" ]] # ex. ...sub_b/List1-marioOnly.csv caught by ...sub_b/*marioOnly.csv
                                         then
                                             in_codeowners="true"
-                                            echo -e "\n${GREEN}FOUND! (Ends in *-suffix.ext) ${accounts_for}${COLOR_DONE}"
+                                            echo -e "\n${GREEN}FOUND! (Ends in *suffix.ext) ${accounts_for}${COLOR_DONE}"
                                             break
                                         # TODO: Another elif here the accounts for pre_star_text
                                         fi
-                                    else
-                                        echo "Already checked for *.ext path"
+                                    # else
+                                        # echo "Already checked for *.ext path"
                                         #TODO: Think if it makes sense to exit early here
                                         # in_codeowners="false"
                                         # break
+                                    fi
+                                else
+                                    #post_star_text does NOT contain a . 
+                                    if [[ "$post_star_text" == */* ]]
+                                    then
+                                        echo "post_star_text has slashes"
+
+                                    else
+                                        echo "post_star_text doesn't have slashes"
+                                        # If there's no slashes then codeowners_filepath must have been like .../*, .../Jenkinsfile, or more rarely 'Jenkinsfile' 
+                                        # /* is already accounted for, 
                                     fi
                                 fi
                             fi
@@ -305,7 +316,7 @@ do
                                 echo -e "${GREEN}FOUND! (**/extensionlessFilename match!) ${COLOR_DONE}" 
                                 break
                             # If it is **/*.ext (any file with certain extension)
-                            elif [[ "**/${changed_file_extension}" == "${codeowners_filepath}" ]]
+                            elif [[ "**/*${changed_file_extension}" == "${codeowners_filepath}" ]]
                             then
                                 in_codeowners="true"
                                 echo -e "${GREEN}FOUND! (**/*.ext match!) ${COLOR_DONE}" 
