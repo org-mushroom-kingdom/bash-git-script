@@ -13,7 +13,7 @@
 #TODO: Mention that some paths/files are specifically NOT in here to test CODEOWNERS action(s) that should alert user via PR comment??? that this is the case
 
 
-
+# TODO: Dumbass no-slash and no **/ format (ex. some-file-name.ext) path
 
 # Toad's team owns the file in ANY folder named 'images' throughout the repo (example of non-root based ownership)
 images/ @org-mushroom-kingdom/team-toad

@@ -160,6 +160,8 @@ do
             # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for 'text-json-output.txt' at any level
             # TODO: (See above) Maybe handle this in first if
             # Assess path is top-level by looking at slashes. Can count arr length (top-level = 1) or count the slashes in string like below (for Bash learning purposes)
+            
+            # The echo | grep | wc example here works and is used for Bash educational purposes. You could alternatively count the length of IFS and subtract 1 to this too
             # grep -o means "only matching" which prints only matching instances of the term, on separate output lines (so only print /) 
             # wc is word count which is used to count bytes/words/lines. The -l option prints only the newline counts (each output line = newline)
             # Putting it all together each / is on a new line so by counting new lines we effectively count /'s
@@ -169,7 +171,7 @@ do
             then
               in_codeowners="false"
             # A changed file path without /'s means the file is top level
-            # TODO: It may be top-level but CODEOWNERS path like '**/filename.ext' could exist or 'filename.ext' (which essentially acts as **/filename.ext)
+            # TODO: It may be top-level but CODEOWNERS path like 'filename.ext' could exist (which essentially acts as **/filename.ext)
             # 
             else
                 # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
@@ -181,7 +183,7 @@ do
             # ex. sandbox/other/sub1/sub2/dummy-txt2.txt becomes ["sandbox","other","sub1","sub2","dummy-txt1.txt"]
             # There may not be a specific owner for the file, but there may be an owner for sandbox/other/sub2 (Hint: there is)
             # So we should look to see if there is an owner for the directory above us, but really anything above that too (ex. If someone owned sandbox/other they own all subdirectories in it)
-            
+            # folder/filename.ext [/folder/,filename.ext] --> length of 2
             # Making a str arr with IFS will omit the delim, so let's add it back in as a suffix
             # Initialize at i=1 because we just took care of first element
             # Use -2 as loop terminal condition b/c We don't want to do this for the last element, because a slash isn't applicable (i.e. because it's a file)
@@ -203,7 +205,7 @@ do
             # echo "segs_last_ele_index=${segs_last_ele_index}"
             # echo "segs_length = ${segs_length}"
             
-            # If last element has an extension, capture the filename and extension separately
+            # If last element has an extension (indicated by presence of .), capture the filename and extension separately
             if [[ "$segs_last_ele" == *"."* ]]
             then
                 changed_filename_no_ext=$( echo "${segs_last_ele}" | cut -d '.' -f1)
