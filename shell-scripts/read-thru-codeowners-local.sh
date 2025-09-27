@@ -7,17 +7,23 @@
 
 # This is the local version, so there's no reliance on variables defined by Github Actions.
 
+# Listing readonly variables first. All other variables listed in order of appearance
 readonly GREEN="\e[32m"
 readonly YELLOW="\e[33m"
 readonly COLOR_DONE="\e[0m"
+
+declare -a changed_file_list # A preset String arr with selected repo file names to test with CODEOWNERS. This var is specific to read-thru-codeowners-local.sh
 declare -a codeowners_raw_lines # String arr with ALL lines from CODEOWNERS
 declare -a codeowners_lines # String arr mapped from above, only lines that aren't comments (or empty)
+files_not_in_codeowners="" # Comma-delimited String of all files that were not matched in CODEOWNERS
+c_f_p_iterator=0 #Used to iterate in the outermost loop. TODO: Might delete this, it's not doing much at the moment (9-27-25)
 total_output="" #Experimental. Build on this so the Action can spit out everything?
 num_of_slashes=0
 num_of_stars=0
-
+codeowners_filepath="" # Only the filepath from a line in CODEOWNERS (whose syntax is <filepath> <owner>)
 # Everything in here is accounted for in CODEOWNERS except sandbox/not-in-codeowners/README.md
 changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "sandbox/other/sub1/dummy-script1.sh" "sandbox/other/sub_a/enemyTypes1.csv" "sandbox/not-in-codeowners/README.md")
+accounts_for="" # String that appears in echo when file is accounted for in CODEOWNERS. Says that CODEOWNERS filepath covers the changed file path
 
 echo -e "\n Going to search for the following files: \n"
 for file in "${changed_file_list[@]}"
@@ -130,10 +136,17 @@ do
         # TODO: Enhance this somehow to just kick off to next line so full-line checks can be done first? (see num_of_slashes stuff below)
         if [[ "/${changed_file_path}" == "$codeowners_filepath" ]]
         then
-          in_codeowners="true"
-          echo -e "${GREEN}FOUND! (Exact file match) ${COLOR_DONE}"
-          # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
-          break
+            in_codeowners="true"
+            echo -e "${GREEN}FOUND! (Exact file match with root /) ${COLOR_DONE}"
+            # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
+            break
+        elif [[ "${changed_file_path}" == "$codeowners_filepath" ]]
+        then 
+            # This scenario is less common, so checking for it second
+            in_codeowners="true"
+            echo -e "${GREEN}FOUND! (Exact file match) ${COLOR_DONE}"
+            # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
+            break
         else
             # TODO: Any line below that begins with !-- is experimental. Try messing with it after you can do the initial granular search
 
@@ -155,8 +168,9 @@ do
             if [ $num_of_slashes == 0 ]
             then
               in_codeowners="false"
-            # TODO: A path without /'s means to match a file
-            # Don't bother searching because we already tested for the full file path, and lack of / means this file is top-level (but not in CODEOWNERS)
+            # A changed file path without /'s means the file is top level
+            # TODO: It may be top-level but CODEOWNERS path like '**/filename.ext' could exist or 'filename.ext' (which essentially acts as **/filename.ext)
+            # 
             else
                 # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
                 # Also add terminating / to account for subfolders
@@ -328,6 +342,7 @@ do
                         fi
                     fi
                 fi
+                # At this point: 1. it's not an exact match; 2. No segs are exact matches; 3. No * are present in codeowners_filepath 
             done # End seg-matching AKA inner-inner loop
 
             if [[ "$in_codeowners" == "true" ]]
