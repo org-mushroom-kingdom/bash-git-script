@@ -296,7 +296,11 @@ do
                                     # Have to remember that a path like 'whatever' (no terminating /) can match extensionless files AND acts like whatever/ (WHICH IS DUMB)
                                     # Account for extensionless file
                                     # ch_fp_str examples sandbox/other/sub1/sub2/sub3/prefix*suffix-->sandbox/other/sub1/sub2/sub3, sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
+                                    # Alt: sandbox/sub_a/savegame*DDMMYYYYtimestamp
                                     if [[ "${changed_file_path_str}" == "${codeowners_filepath}" ]]
+                                    then
+                                        echo "TBD"
+                                    fi
                                 fi
                             else
                                 #post_star_text does NOT contain a / 
