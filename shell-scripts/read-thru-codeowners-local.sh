@@ -260,7 +260,7 @@ do
                             # More examples (f1/f2/*/Dockerfile, f1/f2/f3/)
                             pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1)
                             post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2)
-                            # If post_star_text * has no slashes in it AND isn't "" must be last part of codeowners_filepath
+                            # If post_star_text * has no slashes in it AND isn't "" must be last (or only) part of codeowners_filepath
                             if [[ ! "$post_star_text" == */* && ! -z "$post_star_text" ]]
                             then
                                 # Already checked for /* and *.ext above so don't check for those again
@@ -289,12 +289,13 @@ do
                                     fi
                                 else
                                     echo "post_star_text does NOT contain a ."
-                                    #post_star_text does NOT contain . or / AND isn't blank
-                                    # TODO:                                     
+                                    #post_star_text does NOT contain . or / AND has 1 star AND isn't blank (and is still last/only part of codeowners_filepath)
+                                    # TODO: Again, regex/grep could help here...                                     
                                     # If there's no / AND no . then codeowners_filepath must have been like /*extensionlessSuffix or /whatever*something
                                     # or more rarely top-level like 'Jenkinsfile' 
                                     # Have to remember that a path like 'whatever' (no terminating /) can match extensionless files AND acts like whatever/ (WHICH IS DUMB)
                                     # Account for extensionless file
+                                    # ch_fp_str examples sandbox/other/sub1/sub2/sub3/prefix*suffix-->sandbox/other/sub1/sub2/sub3, sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                                     if [[ "${changed_file_path_str}" == "${codeowners_filepath}" ]]
                                 fi
                             else
