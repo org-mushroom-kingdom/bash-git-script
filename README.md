@@ -52,7 +52,7 @@ The main script is used for various things.
 TODO: Currently, it doesn't do a ton, just lists choices for things with the ability to go back to certain menus. In a while it should be able to fun things like reading through CODEOWNERS, perhaps. Or at least call a script that does that. 
 TODO: User branch deletion stuff? Branch search stuff? Stale?  
 TODO 8-28-2025: Really, I should fork this repo, keep just the Bash and Bash-relevant stuff for portfolio and knowledge transer purposes, but I'm not doing that for a minute haha.
-TODO: Finish this table
+TODO: Finish this table!
 
 | Name | Purpose |
 | -------- | -------- |
