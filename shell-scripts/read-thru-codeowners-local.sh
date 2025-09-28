@@ -239,7 +239,7 @@ do
                 elif [[ "${codeowners_filepath}" =~ \* ]]
                 then
                     num_of_stars=$(echo "${codeowners_filepath}" | grep -o "*" | wc -l)
-                    echo "num_of_stars = $num_of_stars"
+                    # echo "num_of_stars = $num_of_stars"
                     if [ $num_of_stars -eq 1 ]
                     then
                         # If it is folderName/* AND if we are at the last element of segs
@@ -260,11 +260,12 @@ do
                             # More examples (f1/f2/*/Dockerfile, f1/f2/f3/)
                             pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1)
                             post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2)
-                            # If post_star_text * has no slashes in it AND isn't "" must be last (or only) part of codeowners_filepath
+                            
+                            # If post_star_text * has no slashes in it AND isn't "" must be last (or only) part of codeowners_filepath LAST OR ONLY
                             if [[ ! "$post_star_text" == */* && ! -z "$post_star_text" ]]
                             then
                                 # Already checked for /* and *.ext above so don't check for those again
-                                # If post_star_text has a period in it, must be a filename with extension sort of pattern
+                                # If post_star_text has a period in it, must be a filename with extension sort of pattern (we got extension earlier)
                                 if [[ "$post_star_text" == *"."* ]]
                                 then
                                     between_star_dot_text=$(echo "$post_star_text" | cut -d'.' -f1) #ex -suffix.ext
@@ -274,32 +275,32 @@ do
                                     if [[ ! -z "$between_star_dot_text" ]]
                                     then
                                         #Check if it's just a suffix sort of thing like *marioOnly.csv
-                                        if [[ "${changed_file_path_str}*${between_star_dot_text}${changed_file_extension}"  == "${codeowners_filepath}" ]] # ex. ...sub_b/List1-marioOnly.csv caught by ...sub_b/*marioOnly.csv
+                                        if [[ "${pre_star_text}*${between_star_dot_text}${changed_file_extension}"  == "${codeowners_filepath}" ]] # ex. ...sub_b/List1-marioOnly.csv caught by ...sub_b/*marioOnly.csv
                                         then
                                             in_codeowners="true"
                                             echo -e "\n${GREEN}FOUND! (Ends in *suffix.ext) ${accounts_for}${COLOR_DONE}"
                                             break
                                             # TODO: Another elif here the accounts for pre_star_text
                                         fi
-                                        # else
-                                            # echo "Already checked for *.ext path"
-                                            #TODO: Think if it makes sense to exit early here
-                                            # in_codeowners="false"
-                                            # break
                                     fi
                                 else
                                     echo "post_star_text does NOT contain a ."
+                                    # TODO: Again, regex/grep could help here: get rid of if-contains-. logic and do regex like 
+                                    # TODO (cont):                                     
                                     #post_star_text does NOT contain . or / AND has 1 star AND isn't blank (and is still last/only part of codeowners_filepath)
-                                    # TODO: Again, regex/grep could help here...                                     
-                                    # If there's no / AND no . then codeowners_filepath must have been like /*extensionlessSuffix or /whatever*something
-                                    # or more rarely top-level like 'Jenkinsfile' 
-                                    # Have to remember that a path like 'whatever' (no terminating /) can match extensionless files AND acts like whatever/ (WHICH IS DUMB)
+                                    # So codeowners_filepath must have been like /*extensionlessSuffix or /something*whatever
+                                    # or more rarely top-level like 'Jenkins*' 
+                                    # Have to remember that a path like '*whatever' (no terminating /) can match extensionless files AND acts like *whatever/ (WHICH IS DUMB)
                                     # Account for extensionless file
                                     # ch_fp_str examples sandbox/other/sub1/sub2/sub3/prefix*suffix-->sandbox/other/sub1/sub2/sub3, sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
+                                    # ex. sandbox/other/sub1/sub2/sub3/prefix*suffix --> ".../prefix"+"*"+"suffix""
                                     # Alt: sandbox/sub_a/savegame*DDMMYYYYtimestamp
-                                    if [[ "${changed_file_path_str}" == "${codeowners_filepath}" ]]
+                                    # ex. sandbox/sub_a/savegame + * + DDMMYYYYtimestamp
+                                    if [[ "${pre_star_text}*${post_star_text}" == "${codeowners_filepath}" ]]
                                     then
-                                        echo "TBD"
+                                        in_codeowners="true"
+                                        echo -e "\n${GREEN}FOUND! (Ends in prefix*suffix.ext) ${accounts_for}${COLOR_DONE}"
+                                        break
                                     fi
                                 fi
                             else
