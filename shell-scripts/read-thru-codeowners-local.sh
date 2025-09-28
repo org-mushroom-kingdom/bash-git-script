@@ -22,7 +22,15 @@ num_of_slashes=0
 num_of_stars=0
 codeowners_filepath="" # Only the filepath from a line in CODEOWNERS (whose syntax is <filepath> <owner>)
 # Everything in here is accounted for in CODEOWNERS except sandbox/not-in-codeowners/README.md
-changed_file_list=("test-json-output.txt" "sandbox/other/sub_a/sub_b/Jenkinsfile" "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" "sandbox/other/sub1/dummy-script1.sh" "sandbox/other/sub_a/enemyTypes1.csv" "sandbox/not-in-codeowners/README.md")
+changed_file_list=("test-json-output.txt" 
+# "sandbox/other/sub_a/sub_b/Jenkinsfile" 
+# "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" 
+# "sandbox/other/sub1/dummy-script1.sh" 
+# "sandbox/other/sub_a/enemyTypes1.csv" 
+"sandbox/games/saves/savegame-1-01012021"
+# "sandbox/not-in-codeowners/README.md"
+)
+
 accounts_for="" # String that appears in echo when file is accounted for in CODEOWNERS. Says that CODEOWNERS filepath covers the changed file path
 
 echo -e "\n Going to search for the following files: \n"
@@ -258,8 +266,10 @@ do
                         else
                             # Find where the * is (ex. /shell-scripts/*.sh, f1/f2/*/runs/something.txt, f1/f2/*-suffix.ext, f1/prefix-*, f1/prefix*suffix.ext)
                             # More examples (f1/f2/*/Dockerfile, f1/f2/f3/)
-                            pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1)
-                            post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2)
+                            pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1) # ex. f1/f2/prefix*suffix --> f1/f2/prefix
+                            #TODO: WHY DOES THIS WORK
+                            between_slash_star_text="${pre_star_text##*/}" # ex. f1/f2/prefix --> prefix
+                            post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2) 
                             
                             # If post_star_text * has no slashes in it AND isn't "" must be last (or only) part of codeowners_filepath LAST OR ONLY
                             if [[ ! "$post_star_text" == */* && ! -z "$post_star_text" ]]
@@ -275,7 +285,7 @@ do
                                     if [[ ! -z "$between_star_dot_text" ]]
                                     then
                                         #Check if it's just a suffix sort of thing like *marioOnly.csv
-                                        if [[ "${pre_star_text}*${between_star_dot_text}${changed_file_extension}"  == "${codeowners_filepath}" ]] # ex. ...sub_b/List1-marioOnly.csv caught by ...sub_b/*marioOnly.csv
+                                        if [[ "${changed_file_path_str}*${between_star_dot_text}${changed_file_extension}"  == "${codeowners_filepath}" ]] # ex. ...sub_b/List1-marioOnly.csv caught by ...sub_b/*marioOnly.csv
                                         then
                                             in_codeowners="true"
                                             echo -e "\n${GREEN}FOUND! (Ends in *suffix.ext) ${accounts_for}${COLOR_DONE}"
@@ -284,7 +294,9 @@ do
                                         fi
                                     fi
                                 else
-                                    echo "post_star_text does NOT contain a ."
+                                    # echo "post_star_text does NOT contain a ."
+                                    #TODO: Don't bother with this is changed_file_path doesn't have a . too
+                                    
                                     # TODO: Again, regex/grep could help here: get rid of if-contains-. logic and do regex like 
                                     # TODO (cont):                                     
                                     #post_star_text does NOT contain . or / AND has 1 star AND isn't blank (and is still last/only part of codeowners_filepath)
@@ -296,11 +308,18 @@ do
                                     # ex. sandbox/other/sub1/sub2/sub3/prefix*suffix --> ".../prefix"+"*"+"suffix""
                                     # Alt: sandbox/sub_a/savegame*DDMMYYYYtimestamp
                                     # ex. sandbox/sub_a/savegame + * + DDMMYYYYtimestamp
-                                    if [[ "${pre_star_text}*${post_star_text}" == "${codeowners_filepath}" ]]
+                                    # if [[ ! "$post_star_text" == *"."* ]]
+                                    # then
+                                    if [[ $i == $segs_last_ele_index ]]
                                     then
-                                        in_codeowners="true"
-                                        echo -e "\n${GREEN}FOUND! (Ends in prefix*suffix.ext) ${accounts_for}${COLOR_DONE}"
-                                        break
+                                        echo -e "${YELLOW}filepath+pre_star*+post_star = ${changed_file_path_str}${between_slash_star_text}*${post_star_text}${YELLOW}"
+                                        if [[ "${changed_file_path_str}${between_slash_star_text}*${post_star_text}" == "${codeowners_filepath}" ]]
+                                        then
+                                            in_codeowners="true"
+                                            echo -e "\n${GREEN}FOUND! (Ends in prefix*suffix) ${accounts_for}${COLOR_DONE}"
+                                            break
+                                        fi
+                                        echo "UGH"
                                     fi
                                 fi
                             else

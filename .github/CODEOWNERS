@@ -28,6 +28,9 @@ images/ @org-mushroom-kingdom/team-toad
 # However, Peach's team should own the documentation for it (example of owning specific file)
 /shell-scripts/info.txt @org-mushroom-kingdom/team-peach
 
+# TODO: Some text here about extensionless file with star
+/sandbox/games/saves/savegame-1-*2021 @org-mushroom-kingdom/team-luigi
+
 # Luigi's team owns everything in sandbox/other but NOT its subdirectories
 /sandbox/other/* @org-mushroom-kingdom/team-luigi
 
