@@ -65,7 +65,8 @@ images/ @org-mushroom-kingdom/team-toad
 
 #TODO: Some sort of syntax like logs/log1/*/runs/logrun.ext (wildcard folder)
 
-/test-json-output.txt @org-mushroom-kingdom/team-peach
+# This accounts for ALL instances of test-json-output.txt ANYWHERE in the repo. Essentially it's **/test-json-output.txt in terms of function
+test-json-output.txt @org-mushroom-kingdom/team-peach
 
 # ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
 # ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"

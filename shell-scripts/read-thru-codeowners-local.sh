@@ -49,10 +49,9 @@ done
 # This is much faster than looping thru an array and using sed that way TODO: WHY 
 mapfile -t codeowners_raw_lines < <( sed 's/[[:space:]]\+/ /g' .github/CODEOWNERS)
 
-# echo "codeowners_raw_lines[0] = ${codeowners_raw_lines[0]}"
-# echo "codeowners_raw_lines length = ${#codeowners_raw_lines[@]}"
 
-# Comment in these lines to see specific values of the array created by mapfile 
+# Comment in these lines to see length of arr and specific values of the array created by mapfile 
+# echo "codeowners_raw_lines length = ${#codeowners_raw_lines[@]}"
 # echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
 # echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
 
@@ -61,10 +60,6 @@ mapfile -t codeowners_raw_lines < <( sed 's/[[:space:]]\+/ /g' .github/CODEOWNER
 echo -e "\nFiltering out comments and empty lines in CODEOWNERS..."
 for line in "${codeowners_raw_lines[@]}"
 do
-    # xargs is a command line utility tool that takes from standard input (we use | to redirect echo output to stdin)
-    # It's really meant more for filenames, but we can use it here to trim whitespace from line.  
-    # line=$(echo "$line" | xargs -0)
-
     if [[ ! -z "$line" && ! "${line}" == "#"* ]]
     then
         # echo "LINE! ${line}"
@@ -72,41 +67,19 @@ do
         codeowners_lines+=("${line}")
     fi
 done
+
 # echo "codeowners_lines length = ${#codeowners_lines}"
 # echo "codeowners_lines[0]  = ${codeowners_lines[0]}"
-# echo "codeowners_lines[2]  = ${codeowners_lines[2]}" # This index reflects a line with multiple spaces between filepath and owner
 
 
 #DELETE THIS WHEN TESTING COMPLETE
 # echo "!!!!Early exit!!!"
 # exit
-
-#Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt
-# Using .github/workflows/test-pr-action-2.yml as an example...
-# Split the path into strings via / ? Or maybe use cut and regex.
-# First see if '.github' or '.github/' or '.github/*' is in CODEOWNERS
-# A. If it is can mark in_codeowners as true (exit early?)
-# B. If not, do nothing
-# If B Then see if '.github/workflows' or '.github/workflows/*' is in CODEOWNERS
-# A/B (see above)
-# If B then do the whole filepath   
-
-# Look at each changed file and do the following:
-# 1. See IF the line in codeowners_lines is an exact match (rare is the occassion)
-# 2?. See IF almost a match? (See if CODEOWNERS path is everything but the file/extension? ex. docs/other/sub1/) 
-# ELIF not an exact match Split the path into an array of strings (file_path_segs) (ex. "docs/other" becomes ['docs','other']) --> IFS probably
-#
-# For each file_path_seg: (Or WHILE )
-# 2. See if partial match TODO: FIGURE THIS OUT
-#   FOR example if a changed file is docs/other/sub1/dummy-txt1.txt
-    # See if the CODEOWNERS filepath == "docs/"
-    # If it is don't add to in_codeowners, exit early
-    # If it isn't go to next iteration and check again (ex. is CODEOWERNS filepath == "docs/other/")
-    # Repeat this until end of loop is reached. If still no matches, add to is_not_in_codeowners string
-# 
+ 
 files_not_in_codeowners=""
 echo -e "\n \e[36mBEGIN SEARCH!!\e[0m \n"
 c_f_p_iterator=0
+
 for changed_file_path in "${changed_file_list[@]}"
 do
     #Examples of changed_file_path = .github/workflows/test-pr-action-2.yml, README.md, shell-scripts/info.txt, sandbox/other/sub_a/sub_b/Jenkinsfile
@@ -131,7 +104,6 @@ do
     for line in "${codeowners_lines[@]}"
     do
         # echo "codeowners line = ${line}"
-        # exit
         codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
         owner=$(echo "$line" | cut -d' ' -f2)
         echo "codeowners_filepath = $codeowners_filepath"
@@ -156,14 +128,6 @@ do
             # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
             break
         else
-            # TODO: Any line below that begins with !-- is experimental. Try messing with it after you can do the initial granular search
-
-            # TODO: This logic at the moment doesn't account for extensionless files really, or if it does it does it crappily
-            # TODO: Nor does it account for **/ logic
-            # !-- If the path is a top-level file don't do anything else? (ex. test-json-output.txt)
-            # !-- is_top_level_file="false"
-            # !-- If cutting the path using / results in only 0?,1? pieces... 
-            
             IFS='/' changed_file_path_segs=($changed_file_path) 
             # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for 'text-json-output.txt' at any level
             # TODO: (See above) Maybe handle this in first if
@@ -224,6 +188,7 @@ do
                 changed_filename_no_ext="$segs_last_ele"
             fi
             # echo "changed_file_extension = $changed_file_extension"
+            # Loop backwards thru the segs to make strings out of them. Working from innermost dir to outermost.
             for (( i=$segs_last_ele_index;i>0;i-- ))
             do
                 accounts_for="(CODEOWNERS filepath '${codeowners_filepath}' accounts for '${changed_file_path}')"
@@ -232,10 +197,12 @@ do
                 # TODO: With arrays, if you added another index after you deleted one, the index will not be continuous. SHOW THIS IN MAIN-SCRIPT
                 unset 'changed_file_path_segs_clone[${#changed_file_path_segs_clone[@]}-1]'
                 # Use IFS to join the arr to a string, with '' as the delimiter to preserve /'s
-                # TODO: Explain *
+                # array[*] means 'treat all elements of this array as a single word, using IFS as a delimiter'
+                # Here IFS is '' so this means join all the elements so they are right next to eachother (ex. ["folder/" "subdir/"] --> "folder/subdir/")
                 changed_file_path_str=$(IFS='' ; echo ${changed_file_path_segs_clone[*]})
                 # echo "changed_file_path_str = ${changed_file_path_str}"
-                # echo "changed_file_path_str w extension = ${changed_file_path_str}*${changed_file_extension}"
+                # echo "changed_file_path_str w *.ext = ${changed_file_path_str}*${changed_file_extension}"
+                
                 # This accounts for anything ending in SOLELY / (ex. sandbox/other/sub1/sub2/, sandbox/other/sub1/, sandbox/other/, sandbox/ )
                 if [[ "${changed_file_path_str}" == "$codeowners_filepath" ]]
                 then
@@ -267,7 +234,8 @@ do
                             # Find where the * is (ex. /shell-scripts/*.sh, f1/f2/*/runs/something.txt, f1/f2/*-suffix.ext, f1/prefix-*, f1/prefix*suffix.ext)
                             # More examples (f1/f2/*/Dockerfile, f1/f2/f3/)
                             pre_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f1) # ex. f1/f2/prefix*suffix --> f1/f2/prefix
-                            #TODO: WHY DOES THIS WORK
+                            # The ## syntax will remove the longest matching incidence of the subsequent pattern (*/, which is any char(*) followed by a /) 
+                            # Basically this removes everything before the last /
                             between_slash_star_text="${pre_star_text##*/}" # ex. f1/f2/prefix --> prefix
                             post_star_text=$(echo "$codeowners_filepath" | cut -d'*' -f2) 
                             
