@@ -22,13 +22,15 @@ num_of_slashes=0
 num_of_stars=0
 codeowners_filepath="" # Only the filepath from a line in CODEOWNERS (whose syntax is <filepath> <owner>)
 # Everything in here is accounted for in CODEOWNERS except sandbox/not-in-codeowners/README.md
+# Feel free to comment in/out various lines for testing purposes
+# TODO: Ideally you'd give these as options in a list or something and take user input or at least have that as an option
 changed_file_list=("test-json-output.txt" 
-# "sandbox/other/sub_a/sub_b/Jenkinsfile" 
-# "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" 
-# "sandbox/other/sub1/dummy-script1.sh" 
-# "sandbox/other/sub_a/enemyTypes1.csv" 
+"sandbox/other/sub_a/sub_b/Jenkinsfile" 
+"sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" 
+"sandbox/other/sub1/dummy-script1.sh" 
+"sandbox/other/sub_a/enemyTypes1.csv" 
 "sandbox/games/saves/savegame-1-01012021"
-# "sandbox/not-in-codeowners/README.md"
+"sandbox/not-in-codeowners/README.md"
 )
 
 accounts_for="" # String that appears in echo when file is accounted for in CODEOWNERS. Says that CODEOWNERS filepath covers the changed file path
@@ -127,7 +129,17 @@ do
             echo -e "${GREEN}FOUND! (Exact file match) ${COLOR_DONE}"
             # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
             break
-        else
+        fi
+    done
+
+    if [[ "$in_codeowners" == "false" ]]
+    then
+        echo "More advanced search logic..."
+        for line in "${codeowners_lines[@]}"
+        do
+            codeowners_filepath=$(echo "$line" | cut -d' ' -f1)
+            owner=$(echo "$line" | cut -d' ' -f2)
+            echo "codeowners_filepath = $codeowners_filepath"
             IFS='/' changed_file_path_segs=($changed_file_path) 
             # TODO: This should work but DOESN'T account for 'test-json-output.txt' as a line, which would account for 'text-json-output.txt' at any level
             # TODO: (See above) Maybe handle this in first if
@@ -141,7 +153,7 @@ do
             num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
             if [ $num_of_slashes == 0 ]
             then
-              in_codeowners="false"
+            in_codeowners="false"
             # A changed file path without /'s means the file is top level
             # TODO: It may be top-level but CODEOWNERS paths like 'filename.ext' or '*fileSuffix.ext; could exist (which essentially acts as **/filename.ext)
             # 
@@ -359,9 +371,8 @@ do
                 # if in_codeowners is true (due to seg-matching loop above), exit inner loop early b/c we found a match
                 break
             fi
-        fi
-    done # End for line in CODEOWNERS loop (AKA inner loop)
-    
+        done # End for line in CODEOWNERS loop (AKA inner loop)
+    fi 
     # If not in CODEOWNERS, add to files_not_in_codeowners via string concatentation
     # We use a string here rather than an arg because it's easier to pass that back to the workflow file
     if [[ "$in_codeowners" == "false" ]]
@@ -375,7 +386,7 @@ done #End for changed_file_path in changed_file_list
 # echo "$total_output"
 # Remove the last comma TODO: % syntax elaborate
 files_not_in_codeowners="${files_not_in_codeowners%,}"
-echo "$files_not_in_codeowners"
+# echo "$files_not_in_codeowners"
 
 # COMMENT THIS OUT OR DELETE THIS FOR ACTION WORKFLOW!!! 
 IFS=',' files_not_in_codeowners_arr=($files_not_in_codeowners)
