@@ -362,7 +362,8 @@ do
         fi
     done # End for line in CODEOWNERS loop (AKA inner loop)
     
-    # If not in CODEOWNERS, add to files_not_in_codeowners
+    # If not in CODEOWNERS, add to files_not_in_codeowners via string concatentation
+    # We use a string here rather than an arg because it's easier to pass that back to the workflow file
     if [[ "$in_codeowners" == "false" ]]
     then 
         echo -e "\n\e[31mFILE NOT FOUND\e[0m"
@@ -374,6 +375,9 @@ done #End for changed_file_path in changed_file_list
 # echo "$total_output"
 # Remove the last comma TODO: % syntax elaborate
 files_not_in_codeowners="${files_not_in_codeowners%,}"
+echo "$files_not_in_codeowners"
+
+# COMMENT THIS OUT OR DELETE THIS FOR ACTION WORKFLOW!!! 
 IFS=',' files_not_in_codeowners_arr=($files_not_in_codeowners)
 echo -e "\n Files not in CODEOWNERS:\n"
 for file in "${files_not_in_codeowners_arr[@]}"; do echo -e "- ${file}"; done
