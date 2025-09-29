@@ -76,4 +76,6 @@ test-json-output.txt @org-mushroom-kingdom/team-peach
 **/README.md @org-mushroom-kingdom/team-peach
 
 # There ISN'T an owner here on purpose
-/sandbox/not-in-codeowners/
+# TODO: This exhibits odd behavior though. r-t-c.sh and r-t-c-l.sh pick the .../not-in-codeowners/README.md as being owned because that line is above this one
+# Going to have to account for via owner var at some point 
+# /sandbox/not-in-codeowners/

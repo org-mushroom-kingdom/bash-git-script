@@ -32,8 +32,10 @@ changed_file_list=(
 # "sandbox/other/sub_a/enemyTypes1.csv" 
 # "sandbox/games/saves/savegame-1-01012021"
 "README.md"
-"sandbox/not-in-codeowners/README.md"
+# "sandbox/not-in-codeowners/README.md"
+"sandbox/not-in-codeowners/DONTREADME.md"
 )
+# TODO: Scenario where file is ignored!! i.e. owner = null or "" but a line exists
 
 accounts_for="" # String that appears in echo when file is accounted for in CODEOWNERS. Says that CODEOWNERS filepath covers the changed file path
 
