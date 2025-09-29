@@ -24,12 +24,14 @@ codeowners_filepath="" # Only the filepath from a line in CODEOWNERS (whose synt
 # Everything in here is accounted for in CODEOWNERS except sandbox/not-in-codeowners/README.md
 # Feel free to comment in/out various lines for testing purposes
 # TODO: Ideally you'd give these as options in a list or something and take user input or at least have that as an option
-changed_file_list=("test-json-output.txt" 
-"sandbox/other/sub_a/sub_b/Jenkinsfile" 
-"sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" 
-"sandbox/other/sub1/dummy-script1.sh" 
-"sandbox/other/sub_a/enemyTypes1.csv" 
-"sandbox/games/saves/savegame-1-01012021"
+changed_file_list=(
+# "test-json-output.txt" 
+# "sandbox/other/sub_a/sub_b/Jenkinsfile" 
+# "sandbox/other/sub_a/sub_b/wordTypes-marioOnly.csv" 
+# "sandbox/other/sub1/dummy-script1.sh" 
+# "sandbox/other/sub_a/enemyTypes1.csv" 
+# "sandbox/games/saves/savegame-1-01012021"
+"README.md"
 "sandbox/not-in-codeowners/README.md"
 )
 
@@ -91,6 +93,7 @@ do
     echo "c_f_p_iterator=$c_f_p_iterator"
     #TODO: Why is this syntax needed $(())
     c_f_p_iterator=$((c_f_p_iterator+1))
+    changed_filename=$(basename "$changed_file_path")
     #TODO: DELETE THIS or modify it for testing purposes
     # if [[ $c_f_p_iterator -eq 2 ]]
     # then
@@ -129,6 +132,13 @@ do
             echo -e "${GREEN}FOUND! (Exact file match) ${COLOR_DONE}"
             # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
             break
+        elif [[ "**/${changed_filename}" == "$codeowners_filepath" ]]
+        then
+            # Less common scenario, so check for it second. (ex. if changed file is test-json-output.txt CODEOWNERS line 'test-json-output.txt' accounts for it (acts like **/test-json-output.txt))
+            in_codeowners="true"
+            echo -e "${GREEN}FOUND! (**/filename match) ${COLOR_DONE}"
+            # Break out of inner loop/stop looking thru CODEOWNERS lines because we found a match
+            break
         fi
     done
 
@@ -153,10 +163,11 @@ do
             num_of_slashes=$(echo "${changed_file_path}" | grep -o "/" | wc -l)
             if [ $num_of_slashes == 0 ]
             then
-            in_codeowners="false"
-            # A changed file path without /'s means the file is top level
-            # TODO: It may be top-level but CODEOWNERS paths like 'filename.ext' or '*fileSuffix.ext; could exist (which essentially acts as **/filename.ext)
-            # 
+                in_codeowners="false"
+                # A changed file path without /'s means the file is top level
+                # TODO: It may be top-level but CODEOWNERS paths like 'filename.ext' or '*fileSuffix.ext' could exist (which essentially acts as **/filename.ext, **/*fileSuffix.ext, respectively)
+                # But already accounted for top-level no slash
+
             else
                 # Add / to beginning of file path (first element) to match how CODEOWNERS is written (first / indicates root)
                 # Also add terminating / to account for subfolders

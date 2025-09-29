@@ -74,3 +74,6 @@ test-json-output.txt @org-mushroom-kingdom/team-peach
 # ex. team-luigi owns everything directly in sandbox/other (/sandbox/other/*), IMagine this has a README.md file. 
 # If this line were above that line, Luigi's team would own README.md, which is undesirable.
 **/README.md @org-mushroom-kingdom/team-peach
+
+# There ISN'T an owner here on purpose
+/sandbox/not-in-codeowners/
