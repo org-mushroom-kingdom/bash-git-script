@@ -1,0 +1,5 @@
+# This represents an extensionless file in a directory. Essentially a dummy file without having dummy in the name 
+
+# Really savegame files are for games, but it was difficult to think of a real-word extensionless file whose naming isn't super strict.
+# Thinking back I could just name stuff like this extensionlessFile1, extensionlessFile2 or something because what if those were my propreitary file types?
+# But I like games so this works out

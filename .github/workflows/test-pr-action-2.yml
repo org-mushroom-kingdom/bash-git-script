@@ -1,0 +1,159 @@
+# Business: This action is used to test various PR-related things.
+# TODO: It's less about commenting, and SHOULD have some more flexible step-running stuff when it's more established.
+# TODO: THere's probably a way to inherit/borrow elements from test-pr-action-1, but have to look into it
+
+name: Test PR Action 2
+
+# Controls when the workflow will run
+on:
+  # TODO: Eventually comment this back in?
+  # pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      pr_number_manual:
+        description: "Optional PR number to use"
+        required: false
+        type: string
+        default: '61' # PR #61 has four changed files README.md and shell-scripts/info.txt 
+      pr_creator_manual:
+        description: "Optional user/PR creator to specify"
+        required: false
+        type: string
+      target_branch_manual:
+        description: "Optional target branch to specify"
+        required: false
+        type: string
+
+jobs:
+  # TODO: Change job-name and name: if the purpose changes
+  pr-related-things:
+    name: Perform logic related to PR
+  
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
+
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ORG: ${{ github.repository_owner }}
+      REPO_PATH: ${{ github.repository }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Echo things
+        run: echo "Will echo stuff here as needed"
+
+      - name: Assess pr_number_manual input
+        # If input is not default value, this is a manual run and PR number should be overwritten with manual input
+        # If input is default value (null), skip this step
+        if: ${{ github.event.inputs.pr_number_manual != null }}
+        run: |
+          echo "Job manually started: Setting PR_NUMBER to value of github.event.inputs.pr_number_manual (${{ github.event.inputs.pr_number_manual }})"
+          echo "PR_NUMBER=${{ github.event.inputs.pr_number_manual }}" >> $GITHUB_ENV
+      
+      # The 'git config' command is used in various ways to customize Git
+      
+      - name: Configure Git User
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      # TODO: EXPLAIN HOW YOU WERE ABLE TO WRITE TO JSONOUTPUT FILE, MOVE IT TO OTHER ACTION OR MAKE CONDITIONAL STEP
+      - name: Get List of Changed Files, set as str
+        id: changed_files
+        run: |
+          # [] = give separate output for each
+          mapfile -t changed_files < <(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files" | jq -r '.[].filename') 
+          
+          # gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files"
+          # changed_files_output=$(gh api --method GET "/repos/${{ github.repository }}/pulls/$PR_NUMBER/files")
+          # echo "$changed_files_output" > test-json-output.txt 
+          # git add test-json-output.txt
+          # git commit -m "Capture output from Github 'get changed files' call"
+          # git push origin main
+          
+          echo "Printing changed file list:"
+          printf "%s\\n" "${changed_files[@]}"
+          echo "Env vars can only be strings, so convert the array into a string then pass to GITHUB_ENV"
+          echo "This allows it to be used in the next step"
+
+          # IFS = Internal Field Separator, used for word splitting. Uses \space, \tab, and \n by default
+          # When in double quotes array[*] expands to a single word. 
+          # Combine both to turn the arr to a comma delimited str (ex. file1.txt,file2.cls)
+          IFS=','
+          changed_files_str="${changed_files[*]}"
+          echo "changed_files_str = ${changed_files_str}"
+          echo "CHANGED_FILES_STR=${changed_files_str}" >> $GITHUB_ENV
+      
+      - name: changed files str --> Array
+        run: |
+          echo "Note: This step might go away at some point"
+          echo "Attempt to print env.CHANGED_FILES_STR..."
+          echo "${{env.CHANGED_FILES_STR}}"
+          changed_files_str="${{env.CHANGED_FILES_STR}}"
+          # Join it back to an array
+          IFS=", "
+          changed_files_array=($changed_files_str)
+
+          # Look for that file's path in CODEOWNERS in a granular way
+          # Assume this is a script that returns a not_in_codeowners ,-delmitied string
+          # codeowners_thing=$(bash ./shell-scripts/read-thru-codeowners.sh)
+          # echo "codeowners_thing $codeowners_thing"
+          
+      - name: Validate Changed Files Are In CODEOWNERS
+        run: |
+          url="repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS"
+          # echo "url= ${url}"
+          # gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS
+          # gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode 
+          # Pass that string to next step which will... 
+          
+          line=$(bash ./shell-scripts/read-thru-codeowners.sh)
+          echo "line from read-thru-codeowners = ${line}"
+          
+          # DELETE THIS WHEN TESTING COMPLETE
+          # echo "Purpose fail"
+          # exit 1
+          mapfile -t codeowners_raw_lines < <(gh api repos/${REPO_PATH}/contents/.gitignore/CODEOWNERS | jq -r '.content' | base64 --decode )
+
+          # Get filepath (in PR), see if path is in 
+
+          # echo "codeowners_raw_lines[0] = ${codeowners_lines[0]}"
+          # echo "codeowners_raw_lines[1] = ${codeowners_lines[1]}"
+
+          # Filter out the comments in the array (essentially this is array mapping)
+          # Filter out lines that begin with # or are empty (use ${#line} to assess string length)
+          for raw_line in "${codeowners_raw_lines[@]}"
+          do
+              if [[ ${#raw_line} -gt 0 && "${raw_line}" != "#"* ]]
+              then
+                  trimmed_line=$(echo "$raw_line" | tr -s ' ')
+                  echo -e "LINE! ${trimmed_line}"
+                  codeowners_lines+=("$trimmed_line")
+              fi
+          done
+
+          # echo "codeowners_lines:"
+          # printf "\\n" "${codeowners_lines[@]}"
+          echo "codeowners_lines[1] = ${codeowners_lines[1]}"
+          for line in "${codeowners_lines[@]}"
+          do
+              # echo "line = $line"
+              filepath=$(echo "$line" | cut -d' ' -f1)
+              owner=$(echo "$line" | cut -d ' ' -f2)
+              
+              echo "filepath = $filepath"
+              echo "owner = $owner"
+
+          done
+
+          # If not_in_codeowners != "" then loop thru the string and make a multiline coment
+          # echo "changed_files_array[1] = ${changed_files_array[1]}"
+          # printf "%s\\n" "${changed_files[@]}"

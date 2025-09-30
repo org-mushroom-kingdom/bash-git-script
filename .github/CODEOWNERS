@@ -1,0 +1,81 @@
+#Bblablabalba TODO: Explain more about CODEOWNERS
+
+# CODEOWNERS inspects files from its TODO: Finishthis
+# Format: /path/to/file @username @org/team
+
+#TODO: Probs re-sort this to match teams, but maybe not. This is so much directory path specific stuff so maybe preserve this format in a .txt file 
+# so the contents are the same but in a different order.
+
+# The order of the lines in this file is mostly in 'natural sort' order, where any path that begins with a character is earlier
+# than alphabetical characters (ex. .github is the first thing because it begins with a . then .gitignore is next because it also
+# begins with a period, but is alphabetically "later" than .github)
+
+#TODO: Mention that some paths/files are specifically NOT in here to test CODEOWNERS action(s) that should alert user via PR comment??? that this is the case
+
+
+# TODO: Dumbass no-slash and no **/ format (ex. some-file-name.ext) path
+
+# Toad's team owns the file in ANY folder named 'images' throughout the repo (example of non-root based ownership)
+images/ @org-mushroom-kingdom/team-toad
+
+#Note: This purposefully has tabs in it to better test string splitting logic in read-thru-codeowners.sh 
+# Luigi's team owns everything in org/ and its subdirectories (example of recursively owning all files/folders in a directory)
+/org/      @org-mushroom-kingdom/team-luigi
+
+# Anything in shell-scripts/ (NOT subdirectories) that is a *.sh file is owned by Mario's team (example of owning certain files/exts in a directory, nonrecursively)
+/shell-scripts/*.sh @org-mushroom-kingdom/team-mario
+
+# However, Peach's team should own the documentation for it (example of owning specific file)
+/shell-scripts/info.txt @org-mushroom-kingdom/team-peach
+
+# TODO: Some text here about extensionless file with star
+/sandbox/games/saves/savegame-1-*2021 @org-mushroom-kingdom/team-luigi
+
+# Luigi's team owns everything in sandbox/other but NOT its subdirectories
+/sandbox/other/* @org-mushroom-kingdom/team-luigi
+
+# Toad's team owns this specific file
+/sandbox/other/sub1/dummy-txt1.txt @org-mushroom-kingdom/team-toad
+
+# Mario's team owns any *.sh files in sub1
+/sandbox/other/sub1/*.sh @org-mushroom-kingdom/team-mario
+
+# Luigi's team owns everything in sub2 and its subdirectories
+/sandbox/other/sub1/sub2/ @org-mushroom-kingdom/team-luigi
+
+
+# Mario's team owns everything in sub_a, but NOT any of its subdirectories (e.g. sub_b) (example of owning all files/folders in a directory, NOT recursively)
+# This covers ...sub_a/enemyTypes1.csv
+/sandbox/other/sub_a/* @org-mushroom-kingdom/team-mario
+
+#TODO: Elaborate on extensionless vs example/ 
+# /sandbox/other/sub_a/sub_b/sub_c @org-mushroom-kingdom/team-mario
+
+# Peach's team owns any csv file whose name begins with 'peachList' (example of owning files/exts with prefix matching)
+/sandbox/other/sub_a/sub_b/peachList*.csv @org-mushroom-kingdom/team-peach
+
+# Mario's team owns any csv file whose name ends with 'marioOnly' (example of owning files/exts with suffix matching)
+/sandbox/other/sub_a/sub_b/*marioOnly.csv @org-mushroom-kingdom/team-mario
+
+# Toad's team owns files that begin with 'onlyToad' and end with 'toadOnly', with whatever in the middle.
+/sandbox/other/sub_a/sub_b/onlyToad*toadOnly.csv @org-mushroom-kingdom/team-toad
+
+# Luigi's team owns the Jenkinsfile (example of owning an extensionless file)
+/sandbox/other/sub_a/sub_b/Jenkinsfile @org-mushroom-kingdom/team-luigi
+
+#TODO: Some sort of syntax like logs/log1/*/runs/logrun.ext (wildcard folder)
+
+# This accounts for ALL instances of test-json-output.txt ANYWHERE in the repo. Essentially it's **/test-json-output.txt in terms of function
+test-json-output.txt @org-mushroom-kingdom/team-peach
+
+# ANY README is also owned by Peach's team (example of owning specific filename regardless of directory.)
+# ** means match any directory/subdirectory. Since ** is being used at the top-level, it will look thru all folders in this repo for files named "README.md"
+# This is at the bottom because CODEOWNERS uses 'last-match' logic. 
+# ex. team-luigi owns everything directly in sandbox/other (/sandbox/other/*), IMagine this has a README.md file. 
+# If this line were above that line, Luigi's team would own README.md, which is undesirable.
+**/README.md @org-mushroom-kingdom/team-peach
+
+# There ISN'T an owner here on purpose
+# TODO: This exhibits odd behavior though. r-t-c.sh and r-t-c-l.sh pick the .../not-in-codeowners/README.md as being owned because that line is above this one
+# Going to have to account for via owner var at some point 
+# /sandbox/not-in-codeowners/

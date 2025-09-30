@@ -1,0 +1,14 @@
+[
+    {
+        "name": "team-mario",
+        "labels": "team-mario"
+    },
+    {
+        "name": "team-luigi",
+        "labels": ["team-luigi","no-waluigi"]
+    },
+    {
+        "name": "team-peach",
+        "labels": "team-peach"
+    }
+]

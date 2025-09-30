@@ -46,6 +46,7 @@ run()
     list_choices_and_execute_for "main"
 }
 
+# Debug Menu related Methods
 
 test_cyanize()
 {
@@ -95,6 +96,44 @@ verbose_echo()
     fi
 }
 
+string_delimiter_test()
+{
+    # Ask user to provide values for test_string, test_delimiter
+    test_string="Folder/Sub1/Sub2/Filename.ext"
+    test_delimiter="/"
+    echo "Give a string to delimit. If one is not provided then the string '${test_string}' will be used."
+    read test_string
+    if [[ -z "$test_string" ]]
+    then
+        test_string="Folder/Sub1/Sub2/Filename.ext"
+    fi
+    
+    echo -e "\n Choose your delimiter. Please use one character. If more than one character is used, only the first character of that string will be used."
+    echo "If one is not provided then the string '${test_delimiter}' will be used."
+    read test_delimiter
+    if [[ -z "$test_delimiter" ]]
+    then
+        test_delimiter="/"
+    elif [[ ${#test_delimiter} -gt 1 ]]
+    then
+        test_delimiter=$(echo "${test_delimiter}" | cut -c 1)
+        echo "More than one char entered. Using first character '${test_delimiter}' as delimiter."
+    fi
+    
+    echo -e "test_string = $test_string \n test_delimiter = $test_delimiter"
+
+    # Get the amount of delimiters
+    num_delimiters=$(echo "${test_string}" | grep -o "$test_delimiter" | wc -l)
+    echo "The string '$test_string' has $num_delimiters '$test_delimiter' in it"
+    
+    IFS="${test_delimiter}" delimited_arr=($test_string)
+    echo "Splitting the test string using '$test_delimiter' results in ${#delimited_arr[@]} pieces"
+
+
+}
+
+# Choice and User Input related methods
+
 list_choices_and_execute_for()
 {
     set=$1
@@ -135,7 +174,8 @@ list_choices()
         debug)
             echo -e "\n${DASH}Debug Menu (Debug Mode)${DASH}\n"
             echo -e "[1] Test" $(cyanize "cyanize()")
-            echo -e "[2] Verbose ON/OFF" #Probs becomes a debug menu option
+            echo -e "[2] Verbose ON/OFF" 
+            echo -e "[3] String-delimiter stuff" #TODO: Better name
             echo -e "${MAIN_OPT} \n"
             # echo -e "Other debug menu options TBD \n"
             ;;
@@ -215,6 +255,9 @@ execute_based_on_choice()
                 2)
                     set_verbose
                     ;;
+                3)
+                    string_delimiter_test
+                    ;;
                 q)
                     echo "Qutting. Hope you liked Debug Mode!"
                     exit
@@ -251,6 +294,7 @@ execute_based_on_choice()
 
 call_read_thru_codeowners()
 {
+    #TODO: Make this work when called from this script. It only works in context of Github Actions
     # Iterate thru the CODEOWNERS file
     # echo the filepath and owner in the form of filepath | owner (ex. /shell-scripts/*.sh | @org-mushroom-kingdom/team-mario)
     echo "call_read_thru_codeowners option was hit."
@@ -260,7 +304,7 @@ call_read_thru_codeowners()
     
     # The reason this needs ./shell-scripts is because Git Bash (the main terminal I am using for this), at the time of running
     # is pointed at my local's top-level (the top level of bash-git-script). So we need to direct
-    ./shell-scripts/read-thru-codeowners.sh
+    ./shell-scripts/read-thru-codeowners.sh "from-script"
     continue_or_quit "main"
 }
 
