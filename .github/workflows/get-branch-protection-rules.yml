@@ -18,7 +18,8 @@ jobs:
   get-branch-protection-rules:
     name: Get Branch Protection Rules (Job)
     runs-on: ubuntu-latest
-    # permissions: 
+    permissions: 
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
