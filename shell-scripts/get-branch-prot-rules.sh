@@ -8,3 +8,4 @@ then
     echo "Branch ruleset: $ruleset"
 else
     echo "'all' logic TBD'"
+fi
