@@ -78,3 +78,32 @@ TODO: Come up with a way to make a very basic PR with a simple change to a non-i
 TODO: Capture the HTTP status of the Github API comment and mark action as failed if HTTP status != 200 <--Is this done?
 TODO: Explain in this README the env/dev and env/qa1 branches
 TODO: Explain commit things like clarity, r-t-c.sh etc
+TODO: Explain how to generate tokens
+TODO: Branch protection rules list somewhere (IN A FILE??)
+TODO: How to create FGPAT for use by org repo
+1. Under personal account, hit Settings, then go to Developer Settings --> Personal Access Tokens --> Fine-grained tokens --> Generate new token
+2. Give token name
+3. Give token description
+4. Define resource owner (aka the organization)
+5. Set expiration
+6. Hit Only select repositories bullet
+7. Hit selected repo (ex. org-mushroom-kingdom/bash-git-script)
+8. Choose permissions
+9. Hit Generate Token
+10. Copy the value of the token as seen by Make sure to copy your personal access token now as you will not be able to see this again.
+11. Go to repo page that you granted access to 
+12. Hit Settings --> Security --> Secrets and variables
+13. Hit New Repository Secret
+14. Paste in the value of the token copied in step 10
+15. Hit add secret
+TODO: Add this crap somewhere
+
+TEAMS_READ_ACCESS has the following Repository Permissions:
+Actions: Read-only
+Metadata: Read-only
+TEAMS_READ_ACCESS has the following Organization Permissions:
+Members: Read-only
+
+TEAMS_READ_ACCESS has the following Repository Permissions:
+Administration: Read-only
+Metadata: Read-only
