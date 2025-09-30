@@ -1,0 +1,26 @@
+name: Get Branch Protection Rules
+
+on:
+
+  # This workflow should only ever be run manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      get_rules_for:
+        description: Name of branch to check for protection rules
+        type: choice
+        options: 
+          - 'main'
+          - 'env/qa1'
+          - 'all branches with rules'
+        default: 'main'
+
+jobs:
+  get-branch-protection-rules:
+    name: Get Branch Protection Rules (Job)
+    runs-on: ubuntu-latest
+    # permissions: 
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run get-branch-prot-rules script
+        run: ./shell-scripts/get-branch-prot-rules.sh 
