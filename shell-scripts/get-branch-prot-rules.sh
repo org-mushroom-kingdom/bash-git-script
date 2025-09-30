@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "You picked ${{ github.event.inputs.get_rules_for }}"
+echo "You picked ${{ $GET_RULES_FOR }}"

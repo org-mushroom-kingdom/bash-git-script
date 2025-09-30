@@ -21,7 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions: 
       contents: read
-
+    env:
+      GET_RULES_FOR: ${{github.event.inputs.get_rules_for}}
     steps:
       - uses: actions/checkout@v4
       
