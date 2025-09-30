@@ -23,5 +23,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Make shell scripts executable
+        run: chmod +x ./shell-scripts/*.sh # Gives execute permissions to the script
+      
       - name: Run get-branch-prot-rules script
         run: ./shell-scripts/get-branch-prot-rules.sh 
