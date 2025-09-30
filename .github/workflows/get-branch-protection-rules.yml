@@ -7,6 +7,7 @@ on:
     inputs:
       get_rules_for:
         description: Name of branch to check for protection rules
+        required: true
         type: choice
         options: 
           - 'main'
