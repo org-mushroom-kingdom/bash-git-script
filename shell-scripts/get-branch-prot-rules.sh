@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "You picked ${{ $GET_RULES_FOR }}"
+echo "You picked $GET_RULES_FOR "
