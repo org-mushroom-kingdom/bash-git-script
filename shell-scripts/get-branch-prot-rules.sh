@@ -4,8 +4,9 @@
 
 echo "You picked $GET_RULES_FOR "
 
-if [[ "$GET_RULES_FOR" != "all" ]]
+if [[ "$GET_RULES_FOR" != "all branches with rules" ]]
 then
+    GET_RULES_FOR="env/qa1"
     ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/branches/$GET_RULES_FOR/protection --header "Authorization: Bearer $REPO_READ_TOKEN")
     echo "Branch ruleset: $ruleset"
 else
