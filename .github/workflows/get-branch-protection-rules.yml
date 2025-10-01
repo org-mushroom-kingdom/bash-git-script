@@ -24,7 +24,8 @@ jobs:
     env:
       GET_RULES_FOR: ${{github.event.inputs.get_rules_for}}
       GH_TOKEN: ${{ github.token }}
-    
+      REPO_READ_TOKEN: ${{ secrets.REPO_ADMIN }}
+      ORG: ${{ github.repository_owner }}
     steps:
       - uses: actions/checkout@v4
       
