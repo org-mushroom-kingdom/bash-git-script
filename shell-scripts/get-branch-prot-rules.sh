@@ -3,9 +3,7 @@
 # This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
 
 echo "You picked $GET_RULES_FOR "
-
-if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
-then
+declare -a all_rules_json_arr
     BRANCH="env%2Fqa1"
     # ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/branches/env/qa1/protection -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
     # ruleset=$(gh api repos/org-mushroom-kingdom/bash-git-script/rules/branches -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
@@ -16,10 +14,15 @@ then
     -H "Authorization: Bearer $REPO_READ_TOKEN" \
     repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
     # echo "Branch ruleset: $ruleset"
+if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
+then
     for id in "${ruleset_ids[@]}"
     do
-        echo "Branch ruleset id: $id"
-    done 
+        # echo "Branch ruleset id: $id"
+        ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
+        all_rules_json_arr+=$ruleset
+    done
+    echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}" 
 else
     echo "Specific logic TBD'"
 fi
