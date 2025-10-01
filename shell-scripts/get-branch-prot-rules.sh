@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all)
+# This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
 
 echo "You picked $GET_RULES_FOR "
 

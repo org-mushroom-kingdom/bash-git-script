@@ -10,10 +10,10 @@ on:
         required: true
         type: choice
         options: 
+          - 'all branches with rules'
           - 'main'
           - 'env/qa1'
-          - 'all branches with rules'
-        default: 'main'
+        default: 'all branches with rules'
 
 jobs:
   get-branch-protection-rules:
