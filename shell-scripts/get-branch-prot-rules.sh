@@ -11,10 +11,10 @@ then
     # ruleset=$(gh api repos/org-mushroom-kingdom/bash-git-script/rules/branches -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
     # ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
     ruleset=$(gh api \
-    repos/org-mushroom-kingdom/bash-git-script/rulesets 
-    \ -H "Accept: application/vnd.github+json" \
+    -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
-    -H "Authorization: Bearer $REPO_READ_TOKEN")
+    -H "Authorization: Bearer $REPO_READ_TOKEN" \
+    repos/org-mushroom-kingdom/bash-git-script/rulesets)
     echo "Branch ruleset: $ruleset"
 else
     echo "'all' logic TBD'"
