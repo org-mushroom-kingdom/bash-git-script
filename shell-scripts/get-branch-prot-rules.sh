@@ -16,7 +16,7 @@ then
     -H "Authorization: Bearer $REPO_READ_TOKEN" \
     repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
     # echo "Branch ruleset: $ruleset"
-    for id in "$ruleset_ids[@]"
+    for id in "${ruleset_ids[@]}"
     do
         echo "Branch ruleset id: $id"
     done 
