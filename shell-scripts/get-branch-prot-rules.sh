@@ -21,6 +21,11 @@ then
         # echo "Branch ruleset id: $id"
         ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
         all_rules_json_arr+=$ruleset
+        #TODO: Use this as a scaffold to write to a file
+        # echo "$changed_files_output" > test-json-output.txt 
+        # git add test-json-output.txt
+        # git commit -m "Capture output from Github 'get changed files' call"
+        # git push origin main
     done
     echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}" 
 else
