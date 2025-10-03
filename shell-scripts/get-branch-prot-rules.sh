@@ -26,7 +26,7 @@ add_rule_chunk()
     echo "rule json str= $rule_json_str"
     rule_name=$(echo "$rule_json_str" | jq -r '.name')
     rule_chunk+="Name: $rule_name $br"
-    rule_active=$(echo: "$rule_json_str | jq -r '.enforcement'")
+    rule_active=$(echo: "$rule_json_str" | jq -r '.enforcement')
     echo "ACTIVE: ${rule_active^}"
     rule_chunk+="Status: ${rule_active^} $br"
 }
