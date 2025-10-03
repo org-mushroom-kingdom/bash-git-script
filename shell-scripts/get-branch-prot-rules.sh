@@ -19,7 +19,7 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 rule_chunk()
 {
     rule_json_str=$1
-    rule_name=$(echo "" | jq '.name')
+    rule_name=$(echo "$rule_json_str" | jq '.name')
     echo "rule_name = $rule_name"
 }
 
