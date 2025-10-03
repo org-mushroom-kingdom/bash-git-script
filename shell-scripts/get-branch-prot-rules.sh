@@ -19,6 +19,7 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 rule_chunk()
 {
     rule_json_str="$1"
+    echo "rule json str= $rule_json_str"
     rule_name=$(echo "$rule_json_str" | jq -r '.name')
     echo "rule_name = $rule_name"
 }
@@ -30,7 +31,7 @@ then
         # echo "Branch ruleset id: $id"
         ruleset_json=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN") 
         # ruleset_name=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN" | jq '.name') 
-        echo "$ruleset_json"
+        # echo "$ruleset_json"
         # Example of how to filter a single JSON for the desired values (ex. original JSON returns things like id, source_type, etc) 
         # This essentially creates a new JSON (note the {})
         # The 'effected_branches:' syntax creates a key called 'effected_branches' in the new JSON. 
