@@ -18,7 +18,7 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 
 rule_chunk()
 {
-    rule_json_str="$1"
+    rule_json_str=$1
     rule_name=$(echo "" | jq '.name')
     echo "rule_name = $rule_name"
 }
@@ -37,7 +37,7 @@ then
         # In ruleset_json, 'conditions' has a JSON value. The 'ref_name' key in THAT JSON is another JSON. 'include' is a key (with an array value) in the ref_name JSON.
         ruleset_json=$(echo "$ruleset_json" | jq '{name, effected_branches: .conditions.ref_name.include, enforcement, rules, updated_at}') 
         
-        all_rules_json_arr+=($ruleset_json)
+        all_rules_json_arr+=("$ruleset_json")
     done
     echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}"
     for rule_json in $all_rules_json_arr
