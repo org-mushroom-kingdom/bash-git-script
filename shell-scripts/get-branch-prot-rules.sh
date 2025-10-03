@@ -6,6 +6,7 @@
 echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
 BRANCH="env%2Fqa1"
+readonly BRANCH_PROT_FILE="./docs/branch-protection-rules.md"
 # ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/branches/env/qa1/protection -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
 # ruleset=$(gh api repos/org-mushroom-kingdom/bash-git-script/rules/branches -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
 # ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
@@ -22,6 +23,7 @@ rule_chunk()
     echo "rule json str= $rule_json_str"
     rule_name=$(echo "$rule_json_str" | jq -r '.name')
     echo "rule_name = $rule_name"
+
 }
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
@@ -40,12 +42,15 @@ then
         
         all_rules_json_arr+=("$ruleset_json")
     done
+    #  [rule1,rule2] length 2, last index is 1
     echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}"
-    # for rule_json in "${all_rules_json_arr[@]}"
-    for (( i=0; i<1; i++ ))
+    # clear out the existing contents of ./docs/branch-protection-rules.md
+    #  echo -n "" > ./docs/branch-protection-rules.md
+    for (( i=0; i<"${#all_rules_json_arr[@]}"; i++ ))
     do
         rule_chunk "${all_rules_json_arr[$i]}"
-        exit
+        #TODO: DELETE THIS
+        # exit
     done
     
     # TODO: Use this as a scaffold to push to a file
