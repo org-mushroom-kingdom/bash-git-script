@@ -20,15 +20,17 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 add_rule_chunk()
 {
     rule_json_str="$1"
-    rule_chunk=""
+    rule_chunk="-------------------------------------------------------------"
     br="<br>"
     
     echo "rule json str= $rule_json_str"
     rule_name=$(echo "$rule_json_str" | jq -r '.name')
     rule_chunk+="Name: $rule_name $br"
     rule_active=$(echo "$rule_json_str" | jq -r '.enforcement')
-    echo "ACTIVE: ${rule_active^}"
     rule_chunk+="Status: ${rule_active^} $br"
+    rule_updated_date_TZ=$(echo "$rule_json_str" | jq -r '.updated_at') #ex. "2025-10-01T03:12:39.393Z"
+    rule_updated_date_EST=$(TZ='America/New_York' date -d "$rule_updated_date_TZ" +'%m-%d-%Y %H:%M')
+    echo "rule_updated_date_EST=$rule_updated_date_EST"
 }
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
