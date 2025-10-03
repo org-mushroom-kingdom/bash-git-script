@@ -22,8 +22,8 @@ then
         ruleset_json=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN") 
         # ruleset_name=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN" | jq '.name') 
         echo "$ruleset_json"
-        # Example of how to filter a single JSON for the desired values (ex. original JSON returns things like id,) 
-        ruleset_json=$(echo "$ruleset_json" | jq '{name, conditions.include, enforcement, rules}') 
+        # Example of how to filter a single JSON for the desired values (ex. original JSON returns things like id, source_type, etc) 
+        ruleset_json=$(echo "$ruleset_json" | jq '{name, include: .conditions.ref_name.include, enforcement, rules}') 
         
         all_rules_json_arr+=("$ruleset_json")
         #TODO: Use this as a scaffold to write to a file
