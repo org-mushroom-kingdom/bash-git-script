@@ -40,7 +40,7 @@ then
         all_rules_json_arr+=("$ruleset_json")
     done
     echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}"
-    for rule_json in $all_rules_json_arr
+    for rule_json in "${all_rules_json_arr[@]}"
     do
         rule_chunk $rule_json
         exit
