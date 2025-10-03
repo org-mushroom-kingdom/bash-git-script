@@ -37,12 +37,13 @@ then
         # In ruleset_json, 'conditions' has a JSON value. The 'ref_name' key in THAT JSON is another JSON. 'include' is a key (with an array value) in the ref_name JSON.
         ruleset_json=$(echo "$ruleset_json" | jq '{name, effected_branches: .conditions.ref_name.include, enforcement, rules, updated_at}') 
         
-        all_rules_json_arr+=("$ruleset_json")
+        all_rules_json_arr+=($ruleset_json)
     done
     echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}"
     for rule_json in $all_rules_json_arr
     do
         rule_chunk $rule_json
+        exit
     done
     
     # TODO: Use this as a scaffold to push to a file
