@@ -2,6 +2,7 @@
 
 # This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
 
+# TODO: It would be great to schedule this like once a week/day to get the most current info on the rules
 echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
     BRANCH="env%2Fqa1"
@@ -26,7 +27,7 @@ then
         # This essentially creates a new JSON
         # The 'effected_branches:' syntax creates a key called 'effected_branches' in the new JSON. 
         # In ruleset_json, 'conditions' has a JSON value. The 'ref_name' key in THAT JSON is another JSON. 'include' is a key (with an array value) in the ref_name JSON.
-        ruleset_json=$(echo "$ruleset_json" | jq '{name, effected_branches: .conditions.ref_name.include, enforcement, rules}') 
+        ruleset_json=$(echo "$ruleset_json" | jq '{name, effected_branches: .conditions.ref_name.include, enforcement, rules, updated_at}') 
         
         all_rules_json_arr+=("$ruleset_json")
         #TODO: Use this as a scaffold to write to a file
