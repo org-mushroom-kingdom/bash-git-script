@@ -17,13 +17,18 @@ mapfile -t ruleset_ids < <(gh api \
 repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 # echo "Branch ruleset: $ruleset"
 
-rule_chunk()
+add_rule_chunk()
 {
     rule_json_str="$1"
+    rule_chunk=""
+    br="<br>"
+    
     echo "rule json str= $rule_json_str"
     rule_name=$(echo "$rule_json_str" | jq -r '.name')
-    echo "rule_name = $rule_name"
-
+    rule_chunk+="Name: $rule_name $br"
+    rule_active=$(echo: "$rule_json_str | jq -r '.enforcement'")
+    echo "ACTIVE: ${rule_active^}"
+    rule_chunk+="Status: ${rule_active^} $br"
 }
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
@@ -45,10 +50,12 @@ then
     #  [rule1,rule2] length 2, last index is 1
     echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}"
     # clear out the existing contents of ./docs/branch-protection-rules.md
-    #  echo -n "" > ./docs/branch-protection-rules.md
+    #  echo -n "" > $BRANCH_PROT_FILE
+    # TODO: Add template text (e.g. "this doc blablabla, last updated $TIMESTAMP)
+    # TODO: Get a nice formatted timestamp
     for (( i=0; i<"${#all_rules_json_arr[@]}"; i++ ))
     do
-        rule_chunk "${all_rules_json_arr[$i]}"
+        add_rule_chunk "${all_rules_json_arr[$i]}"
         #TODO: DELETE THIS
         # exit
     done
