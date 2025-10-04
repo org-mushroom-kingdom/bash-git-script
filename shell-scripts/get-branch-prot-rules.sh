@@ -42,8 +42,8 @@ add_rule_chunk()
     echo "rule_rulelist[0] = ${rule_rulelist[0]}"
     for rulelist_item in "${rule_rulelist[@]}"
     do
-        rule_description=$(get_rule_description "$rulelist_item")
-        # get_rule_description "$rulelist_item"
+        # rule_description=$(get_rule_description "$rulelist_item")
+        get_rule_description "$rulelist_item"
         echo "rule_description = $rule_description"
         rule_chunk+="    - $effected $br"
     done
@@ -53,6 +53,7 @@ get_rule_description()
 {
     rule_type=$1
     rule_desc="" # A description of the rule
+    echo "get_rule_description() firing!"
     case "$rule_type" in
     deletion)
         rule_desc="Only allow users with bypass permissions to delete matching refs."
