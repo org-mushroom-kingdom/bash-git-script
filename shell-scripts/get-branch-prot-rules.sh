@@ -2,6 +2,8 @@
 
 # This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
 
+# Please note: Detailed descriptions are mostly taken directly from the 'Available rules for rulesets' page in Github Documentation. See: https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets
+
 # TODO: It would be great to schedule this like once a week/day to get the most current info on the rules
 # TODO: Specifically all rules, and update a file with that info.
 echo "You picked $GET_RULES_FOR "
@@ -37,6 +39,7 @@ add_rule_chunk()
     rule_effected_branches=$(echo "$rule_json_str" | jq -r '.effected_branches')
     for effected in "${rule_effected_branches[@]}"
     do
+        #Attempt tabulation
         rule_chunk+="    - $effected $br"
     done
     mapfile -t rule_rulelist < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
@@ -53,8 +56,9 @@ add_rule_chunk()
 
 get_rule_description()
 {
+    #Given a rule_type, return a detailed description of the rule (rule_desc)
     rule_type=$1
-    rule_desc="" # A description of the rule
+    rule_desc="" # A detailed description of the rule
     # echo "get_rule_description() firing! rule_type = '$rule_type'"
     begin_desc="If selected, "
     case "$rule_type" in
@@ -68,9 +72,12 @@ get_rule_description()
         fi
         rule_desc="If selected, only users with bypass permissions can ${verb} branches or tags whose name matches the pattern(s) specified."
         ;;
-    "deletion")
+    "non_fast_forward")
         # echo "HEY"
-        rule_desc="If selected, only users with bypass permissions can delete branches or tags whose name matches the pattern you specify. This rule is selected by default."
+        rule_desc="${begin_desc} TBD"
+        ;;
+    "required_linear_history")
+        rule_desc="A required linear history prevents collaborators from pushing merge commits to the targeted branches or tags. This means that any pull requests merged into the branch or tag must use a squash merge or a rebase merge. A strictly linear commit history can help teams revert changes more easily. "
         ;;
     esac
     # echo "rule_desc = $rule_desc"
