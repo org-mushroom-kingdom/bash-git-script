@@ -94,7 +94,8 @@ get_rule_description()
         echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
         ;;
     "required_signatures")
-        echo "Required commit signing on a branch means that contributors and bots can only push commits that have been signed and verified to the branch."
+        rule_desc="Required commit signing on a branch means that contributors and bots can only push commits that have been signed and verified to the branch."
+        rule_desc+="<br>*Please note: This activity differs somewhat between rulesets and branch protection rules. Please see the [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-signed-commits) for more details.*"
         ;;
     "required_deployments")
         #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
