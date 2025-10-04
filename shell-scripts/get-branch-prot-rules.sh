@@ -37,7 +37,7 @@ add_rule_chunk()
     do
         rule_chunk+="    - $effected $br"
     done
-    rule_rules=$(echo "$rule_json_str" | jq -r '.rules' | jq -r '.type')
+    rule_rules=$(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
     echo "rule_rules = $rule_rules"
     echo "rule_rules[0] = ${rule_rules[0]}"
 }
