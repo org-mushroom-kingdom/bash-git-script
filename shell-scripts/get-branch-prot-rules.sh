@@ -53,7 +53,7 @@ get_rule_description()
 {
     rule_type=$1
     rule_desc="" # A description of the rule
-    echo "get_rule_description() firing!"
+    echo "get_rule_description() firing! rule_type = '$rule_type'"
     case "$rule_type" in
     deletion)
         rule_desc="Only allow users with bypass permissions to delete matching refs."
