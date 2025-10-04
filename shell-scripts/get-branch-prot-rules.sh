@@ -3,6 +3,10 @@
 # This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
 
 # Please note: Detailed descriptions are mostly taken directly from the 'Available rules for rulesets' page in Github Documentation. See: https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets
+# TODO: Disclaimer is that this only reads back info about rules, DOES NOT do logic check about rulesets
+
+#TODO: DELETE THIS AND BELOW LINE
+# README markdown documentation: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
 # TODO: It would be great to schedule this like once a week/day to get the most current info on the rules
 # TODO: Specifically all rules, and update a file with that info.
@@ -22,6 +26,7 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 
 add_rule_chunk()
 {
+    # Formats a chunk of text relating to the rule, and adds it to the corresponding ruleset README.md
     rule_json_str="$1"
     rule_chunk="-------------------------------------------------------------"
     br="<br>"
@@ -77,8 +82,45 @@ get_rule_description()
         rule_desc="${begin_desc} TBD"
         ;;
     "required_linear_history")
-        rule_desc="A required linear history prevents collaborators from pushing merge commits to the targeted branches or tags. This means that any pull requests merged into the branch or tag must use a squash merge or a rebase merge. A strictly linear commit history can help teams revert changes more easily. "
+        rule_desc="A required linear history prevents collaborators from pushing merge commits to the targeted branches or tags. This means that any pull requests merged into the branch or tag must use a squash merge or a rebase merge. A strictly linear commit history can help teams revert changes more easily."
+        rule_desc+="<br>For this logic to work, your repository must allow squash merging or rebase merging. Check the TODO NAME ME section to ensure this is the case."
         ;;
+    "merge_queue")
+        #TODO: Figure this out
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. So will have to sort thru that..."
+        ;;
+    "required_deployments")
+        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        ;;
+    "required_signatures")
+        echo "Required commit signing on a branch means that contributors and bots can only push commits that have been signed and verified to the branch."
+        ;;
+    "required_deployments")
+        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        ;;
+    "required_deployments")
+        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        ;;
+    "required_deployments")
+        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        ;;
+    "required_deployments")
+        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        ;;
+    "required_deployments")
+        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        ;;
+    "required_deployments")
+        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        ;;
+
     esac
     # echo "rule_desc = $rule_desc"
     echo "${rule_desc}"
@@ -114,7 +156,7 @@ then
     done
     
     # TODO: Use this as a scaffold to push to a file
-    # echo "$changed_files_output" > ./docs/branch-protection-rules.md 
+    # echo "$changed_files_output" > ./docs/branch-protection-rulesets/branch-protection-rules.md 
     # git add ./docs/branch-protection-rules.md #prepare for commit
     # git commit -m "Update branch-protection-rules"
     # git push origin main
