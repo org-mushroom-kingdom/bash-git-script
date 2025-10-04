@@ -56,6 +56,7 @@ get_rule_description()
     echo "get_rule_description() firing! rule_type = '$rule_type'"
     case "$rule_type" in
     "deletion")
+        echo "HEY"
         rule_desc="Only allow users with bypass permissions to delete matching refs."
         ;;
     esac
