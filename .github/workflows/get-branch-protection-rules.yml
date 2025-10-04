@@ -1,5 +1,11 @@
 name: Get Branch Protection Rules
 
+# TODO: It would be great to schedule this like once a week/day to get the most current info on the rules
+# TODO: Specifically all rules, and update a file with that info.
+# TODO: In regards to the schedule, this should be a configurable input if this were a Marketplace Action
+# TODO: In the same vein, the filepath should also be user configurable if this were a Marketplace Action.
+# Man I am too good. How did I get both of those lines to be the same length 
+
 on:
 
   # This workflow should only ever be run manually from the Actions tab

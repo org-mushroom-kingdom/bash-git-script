@@ -8,8 +8,6 @@
 #TODO: DELETE THIS AND BELOW LINE
 # README markdown documentation: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
-# TODO: It would be great to schedule this like once a week/day to get the most current info on the rules
-# TODO: Specifically all rules, and update a file with that info.
 echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
 BRANCH="env%2Fqa1"
