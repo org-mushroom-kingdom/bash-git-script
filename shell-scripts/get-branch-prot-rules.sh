@@ -51,7 +51,7 @@ add_rule_chunk()
 get_rule_description()
 {
     rule_type=$1
-    case $rule_type in
+    case "$rule_type" in
     deletion)
         rule_desc="Only allow users with bypass permissions to delete matching refs."
         ;;
