@@ -8,18 +8,23 @@
 #TODO: DELETE THIS AND BELOW LINE
 # README markdown documentation: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
+#TODO: COmment about what Action vars this receives
+
 echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
 BRANCH="env%2Fqa1"
 readonly BRANCH_PROT_FILE="./docs/branch-protection-rules.md"
-# ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/branches/env/qa1/protection -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
-# ruleset=$(gh api repos/org-mushroom-kingdom/bash-git-script/rules/branches -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
-# ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
+
+
+# FOR ALL RULESETS
 mapfile -t ruleset_ids < <(gh api \
 -H "Accept: application/vnd.github+json" \
 -H "X-GitHub-Api-Version: 2022-11-28" \
 -H "Authorization: Bearer $REPO_READ_TOKEN" \
 repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
+
+# FOR ONE RULESET
+# ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
 # echo "Branch ruleset: $ruleset"
 
 add_rule_chunk()
@@ -95,31 +100,22 @@ get_rule_description()
         rule_desc="Required commit signing on a branch means that contributors and bots can only push commits that have been signed and verified to the branch."
         rule_desc+="<br>*Please note: This activity differs somewhat between rulesets and branch protection rules. Please see the [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-signed-commits) for more details.*"
         ;;
-    "required_deployments")
-        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+    "pull_request")
+        #TODO: Figure this out. .
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. One of the keys is an array. So will have to sort thru that..."
         ;;
-    "required_deployments")
-        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+    "required_status_checks")
+        #TODO: Figure this out. 
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. One of the keys is a JSON array. So will have to sort thru that..."
         ;;
-    "required_deployments")
-        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+    "code_scanning")
+        #TODO: Figure this out.
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is a JSON array. So will have to sort thru that..."
         ;;
-    "required_deployments")
+    "copilot_code_review")
         #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. So will have to sort thru that..."
         ;;
-    "required_deployments")
-        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
-        ;;
-    "required_deployments")
-        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
-        ;;
-
     esac
     # echo "rule_desc = $rule_desc"
     echo "${rule_desc}"
