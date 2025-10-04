@@ -3,6 +3,7 @@
 # This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
 
 # TODO: It would be great to schedule this like once a week/day to get the most current info on the rules
+# TODO: Specifically all rules, and update a file with that info.
 echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
 BRANCH="env%2Fqa1"
@@ -27,11 +28,12 @@ add_rule_chunk()
     rule_name=$(echo "$rule_json_str" | jq -r '.name')
     rule_chunk+="Name: $rule_name $br"
     rule_active=$(echo "$rule_json_str" | jq -r '.enforcement')
+    # ${var}^ capitalizes the first letter
     rule_chunk+="Status: ${rule_active^} $br"
     rule_updated_date_TZ=$(echo "$rule_json_str" | jq -r '.updated_at') #ex. "2025-10-01T03:12:39.393Z"
     rule_updated_date_EST=$(TZ='America/New_York' date -d "$rule_updated_date_TZ" +'%m-%d-%Y %H:%M')
     rule_chunk+="Last Updated: $rule_updated_date_EST EST $br"
-    rule_chunk+="This rule effects the following branches/branch patterns: $br"
+    rule_chunk+="This branch protection ruleset effects the following branches/branch patterns: $br"
     rule_effected_branches=$(echo "$rule_json_str" | jq -r '.effected_branches')
     for effected in "${rule_effected_branches[@]}"
     do
@@ -45,7 +47,7 @@ add_rule_chunk()
         rule_description=$(get_rule_description "$rulelist_item")
         # get_rule_description "$rulelist_item"
         echo "rule_description = $rule_description"
-        rule_chunk+="    - $effected $br"
+        rule_chunk+="${rule_description} $br"
     done
 }
 
@@ -54,14 +56,25 @@ get_rule_description()
     rule_type=$1
     rule_desc="" # A description of the rule
     # echo "get_rule_description() firing! rule_type = '$rule_type'"
+    begin_desc="If selected, "
     case "$rule_type" in
+    "deletion" | "creation" | "update")
+        if [[ ! = "$rule_type" ]]
+        then
+            # Replace ion with e (ex. creation --> create)
+            verb=$( echo "$rule_type" | sed 's/ion/e/')
+        else
+            verb="$rule_type"
+        fi
+        rule_desc="If selected, only users with bypass permissions can ${verb} branches or tags whose name matches the pattern(s) specified."
+        ;;
     "deletion")
         # echo "HEY"
-        rule_desc="Only allow users with bypass permissions to delete matching refs."
+        rule_desc="If selected, only users with bypass permissions can delete branches or tags whose name matches the pattern you specify. This rule is selected by default."
         ;;
     esac
     # echo "rule_desc = $rule_desc"
-    echo "$rule_desc"
+    echo "${rule_desc}"
 }
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
