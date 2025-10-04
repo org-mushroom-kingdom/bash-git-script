@@ -43,6 +43,7 @@ add_rule_chunk()
     for rulelist_item in "${rule_rulelist[@]}"
     do
         rule_description=$(get_rule_description "$rulelist_item")
+        # get_rule_description "$rulelist_item"
         echo "rule_description = $rule_description"
         rule_chunk+="    - $effected $br"
     done
@@ -51,11 +52,13 @@ add_rule_chunk()
 get_rule_description()
 {
     rule_type=$1
+    rule_desc="" # A description of the rule
     case "$rule_type" in
     deletion)
         rule_desc="Only allow users with bypass permissions to delete matching refs."
         ;;
     esac
+    echo "$rule_desc"
 }
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
