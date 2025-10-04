@@ -37,9 +37,25 @@ add_rule_chunk()
     do
         rule_chunk+="    - $effected $br"
     done
-    mapfile -t rule_rules < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
+    mapfile -t rule_rulelist < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
     # echo "rule_rules = $rule_rules"
-    echo "rule_rules[0] = ${rule_rules[0]}"
+    echo "rule_rulelist[0] = ${rule_rulelist[0]}"
+    for rulelist_item in "${rule_rulelist[@]}"
+    do
+        rule_description=$(get_rule_description "$rulelist_item")
+        echo "rule_description = $rule_description"
+        rule_chunk+="    - $effected $br"
+    done
+}
+
+get_rule_description()
+{
+    rule_type=$1
+    case $rule_type in
+    deletion)
+        rule_desc="Only allow users with bypass permissions to delete matching refs."
+        ;;
+    esac
 }
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
