@@ -30,7 +30,9 @@ add_rule_chunk()
     rule_chunk+="Status: ${rule_active^} $br"
     rule_updated_date_TZ=$(echo "$rule_json_str" | jq -r '.updated_at') #ex. "2025-10-01T03:12:39.393Z"
     rule_updated_date_EST=$(TZ='America/New_York' date -d "$rule_updated_date_TZ" +'%m-%d-%Y %H:%M')
-    echo "rule_updated_date_EST=$rule_updated_date_EST"
+    rule_chunk+="Last Updated: $rule_updated_date_EST EST $br"
+    rule_effected_branches=$(echo "$rule_json_str" | jq -r '.effected_branches')
+    echo "rule_effected_branches = $rule_effected_branches"
 }
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
