@@ -73,7 +73,7 @@ get_rule_description()
     begin_desc="If selected, "
     case "$rule_type" in
     "deletion" | "creation" | "update")
-        if [[ ! = "$rule_type" ]]
+        if [[ ! "update" = "$rule_type" ]]
         then
             # Replace ion with e (ex. creation --> create)
             verb=$( echo "$rule_type" | sed 's/ion/e/')
