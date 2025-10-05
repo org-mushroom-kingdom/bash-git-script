@@ -142,7 +142,7 @@ then
         all_rules_json_arr+=("$ruleset_json")
     done
     #  [rule1,rule2] length 2, last index is 1
-    echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}"
+    # echo "all_rules_json_arr[0] = ${all_rules_json_arr[0]}"
     # clear out the existing contents of ./docs/branch-protection-rules.md
     #  echo -n "" > $BRANCH_PROT_FILE
     # TODO: Add template text (e.g. "this doc blablabla, last updated $TIMESTAMP)
