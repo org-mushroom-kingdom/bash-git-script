@@ -50,6 +50,8 @@ add_rule_chunk()
         #Attempt tabulation
         rule_chunk+="    - $effected $br"
     done
+    mapfile -t rule_json_arr < <(echo "$rule_json_str" | jq -r '.rules')
+    echo "rule_json_arr[0] = ${rule_json_arr[0]}"
     mapfile -t rule_ruletype_list < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
     # echo "rule_rules = $rule_rules"
     # echo "rule_ruletype_list[0] = ${rule_ruletype_list[0]}"
