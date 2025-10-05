@@ -60,7 +60,7 @@ add_rule_chunk()
     do
         rule_description=$(get_rule_description "$rulelist_item")
         # get_rule_description "$rulelist_item"
-        echo "rule_description = $rule_description"
+        # echo "rule_description = $rule_description"
         rule_chunk+="${rule_description} $br"
     done
 }
