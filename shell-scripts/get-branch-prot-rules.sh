@@ -50,14 +50,15 @@ add_rule_chunk()
         #Attempt tabulation
         rule_chunk+="    - $effected $br"
     done
-    # mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -r '.rules') # This doesn't work because it does literally every string "[" "{" }
-    # rule_json=$(echo "$rule_json_str" | jq -r '.[].rules') This doesn't work Cannot index string with string 'rules'
-    # rule_json=$(echo "$rule_json_str" | jq -c '.rules[]')
-    mapfile -t rule_json< <(echo "$rule_json_str" | jq -c '.rules[]')
-    echo "rule_json = ${rule_json[@]}"
-    echo "rule_json[0] = ${rule_json[0]}"
-    # rule_json_type=$(echo "$rule_json" | jq -r '.type')
-    # echo "rule_json_type = $rule_json_type"
+    
+    # The 'rules' key is a JSON array. Use jq -c to output each item in 'rules' as a single-line JSON object. 
+    # Use '.rules[]' to indicate we are targeting the 'rules' key and we want to iterate (indicated by []) over the elements inside it
+    # Use mapfile and <() to take those outputs and put into array.
+    mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -c '.rules[]')
+    echo "rule_json_arr = ${rule_json_arr[@]}"
+    echo "rule_json_arr[0] = ${rule_json_arr[0]}"
+    rule_json_0_str=$(echo "${rule_json_arr[0]}" | jq -r '.type')
+    echo "rule_json_0_str= $rule_json_0_str"
     # for rule_json in "${rule_json_arr[@]}"
     # do
     #     echo "rule_json = ${rule_json}"
