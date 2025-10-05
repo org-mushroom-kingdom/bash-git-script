@@ -52,7 +52,8 @@ add_rule_chunk()
     done
     # mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -r '.rules') # This doesn't work because it does literally every string "[" "{" }
     # rule_json=$(echo "$rule_json_str" | jq -r '.[].rules') This doesn't work Cannot index string with string 'rules'
-    rule_json=$(echo "$rule_json_str" | jq -c '.rules[]')
+    # rule_json=$(echo "$rule_json_str" | jq -c '.rules[]')
+    mapfile -t rule_json< <(echo "$rule_json_str" | jq -c '.rules[]')
     echo "rule_json = ${rule_json}"
     # rule_json_type=$(echo "$rule_json" | jq -r '.type')
     # echo "rule_json_type = $rule_json_type"
