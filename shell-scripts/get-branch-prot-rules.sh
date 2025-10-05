@@ -50,10 +50,10 @@ add_rule_chunk()
         #Attempt tabulation
         rule_chunk+="    - $effected $br"
     done
-    mapfile -t rule_rulelist < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
+    mapfile -t rule_ruletype_list < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
     # echo "rule_rules = $rule_rules"
-    # echo "rule_rulelist[0] = ${rule_rulelist[0]}"
-    for rulelist_item in "${rule_rulelist[@]}"
+    # echo "rule_ruletype_list[0] = ${rule_ruletype_list[0]}"
+    for ruletype_list_item in "${rule_ruletype_list[@]}"
     do
         rule_description=$(get_rule_description "$rulelist_item")
         # get_rule_description "$rulelist_item"
@@ -81,7 +81,7 @@ get_rule_description()
         rule_desc="If selected, only users with bypass permissions can ${verb} branches or tags whose name matches the pattern(s) specified."
         ;;
     "non_fast_forward")
-        # echo "HEY"
+        # TODO: Fill this out
         rule_desc="${begin_desc} TBD"
         ;;
     "required_linear_history")
@@ -90,6 +90,7 @@ get_rule_description()
         ;;
     "merge_queue")
         #TODO: Figure this out
+        rule_desc="This ruleset uses a merge queue. For more information on how merge queues work and their benefits see [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request-with-a-merge-queue#about-merge-queues)"
         echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. So will have to sort thru that..."
         ;;
     "required_deployments")
