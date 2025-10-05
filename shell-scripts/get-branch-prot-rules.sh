@@ -56,13 +56,15 @@ add_rule_chunk()
     # Use mapfile and <() to take those outputs and put into array.
     mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -c '.rules[]')
     echo "rule_json_arr = ${rule_json_arr[@]}"
-    echo "rule_json_arr[0] = ${rule_json_arr[0]}"
+    # echo "rule_json_arr[0] = ${rule_json_arr[0]}"
     rule_json_5_str=$(echo "${rule_json_arr[5]}" | jq -r '.parameters') #Returns null if doesn't exist
-    echo "rule_json_5_str_params= $rule_json_5_str"
+    # echo "rule_json_5_str_params= $rule_json_5_str"
     for rule_json in "${rule_json_arr[@]}"
     do
         rule_json_type=$(echo "$rule_json" | jq -r '.type')
-        echo "rule_json_type = $rule_json_type"
+        rule_description=$(get_rule_description "$rule_json_type")
+        rule_chunk+="$rule_description $br"
+        rule_json_parameters=$(echo "$rule_json" | jq -r '.parameters')
     done
     
     
@@ -83,6 +85,7 @@ add_rule_chunk()
 get_rule_description()
 {
     #Given a rule_type, return a detailed description of the rule (rule_desc)
+    # TODO: Where it says 'Do something' of 'Figure this out' that means make another method to deal w parameters JSON and account for this part
     rule_type=$1
     rule_desc="" # A detailed description of the rule
     # echo "get_rule_description() firing! rule_type = '$rule_type'"
@@ -107,33 +110,39 @@ get_rule_description()
         rule_desc+="<br>For this logic to work, your repository must allow squash merging or rebase merging. Check the TODO NAME ME section to ensure this is the case."
         ;;
     "merge_queue")
-        #TODO: Figure this out
+        # TODO: Fill this out
+        #TODO: Has parameters JSON. Do something
         rule_desc="This ruleset uses a merge queue. For more information on how merge queues work and their benefits see [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request-with-a-merge-queue#about-merge-queues)"
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. So will have to sort thru that..."
         ;;
     "required_deployments")
-        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is an array. So will have to sort thru that..."
+        #TODO: Fill this out
+        #TODO: Has parameters JSON with one key that is an array. Do something.
+        #TODO: Also need a deployment environment in repo for this to really work.
+        echo "TODO"
         ;;
     "required_signatures")
         rule_desc="Required commit signing on a branch means that contributors and bots can only push commits that have been signed and verified to the branch."
         rule_desc+="<br>*Please note: This activity differs somewhat between rulesets and branch protection rules. Please see the [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-signed-commits) for more details.*"
         ;;
     "pull_request")
-        #TODO: Figure this out. .
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. One of the keys is an array. So will have to sort thru that..."
+        #TODO: Fill this out
+        #TODO: Has parameters JSON with several keys, "allowed_merge_methods" is an array. Figure this out. 
+        echo "TODO"
         ;;
     "required_status_checks")
-        #TODO: Figure this out. 
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. One of the keys is a JSON array. So will have to sort thru that..."
+        #TODO: Fill this out
+        #TODO: Has parameters JSON with several keys, "required_status_checks" is a JSON array. Figure this out.
+        echo "TODO"
         ;;
     "code_scanning")
-        #TODO: Figure this out.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON with one key that is a JSON array. So will have to sort thru that..."
+        #TODO: Fill this out
+        #TODO: Has parameters JSON with several keys, "code_scanning_tools" is a JSON array. Figure this out.
+        echo "TODO"
         ;;
     "copilot_code_review")
-        #TODO: Figure this out. Also need a deployment environment in repo for this to really work.
-        echo "This returns two keys, one is the standard 'type' queue but the other 'parameters' is a JSON. So will have to sort thru that..."
+        # TODO: Fill this out
+        #TODO: Has parameters JSON. Do something
+        echo "TODO"
         ;;
     esac
     # echo "rule_desc = $rule_desc"
