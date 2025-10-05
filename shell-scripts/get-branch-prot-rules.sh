@@ -57,27 +57,27 @@ add_rule_chunk()
     mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -c '.rules[]')
     echo "rule_json_arr = ${rule_json_arr[@]}"
     echo "rule_json_arr[0] = ${rule_json_arr[0]}"
-    rule_json_5_str=$(echo "${rule_json_arr[5]}" | jq -r '.parameters')
+    rule_json_5_str=$(echo "${rule_json_arr[5]}" | jq -r '.parameters') #Returns null if doesn't exist
     echo "rule_json_5_str_params= $rule_json_5_str"
-    # for rule_json in "${rule_json_arr[@]}"
-    # do
-    #     echo "rule_json = ${rule_json}"
-    # done
-    # rule_json_arr=$(echo "$rule_json_str" | jq '.rules')
-    # echo "rule_json_arr = ${rule_json_arr}"
-    # echo "rule_json_arr[0] = ${rule_json_arr[0]}"
-    # echo "rule_json_arr = ${rule_json_arr[@]}"
-    # echo "rule_json_arr[0] = ${rule_json_arr[0]}"
-    mapfile -t rule_ruletype_list < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
-    # echo "rule_rules = $rule_rules"
-    # echo "rule_ruletype_list[0] = ${rule_ruletype_list[0]}"
-    for ruletype_list_item in "${rule_ruletype_list[@]}"
+    for rule_json in "${rule_json_arr[@]}"
     do
-        rule_description=$(get_rule_description "$rulelist_item")
-        # get_rule_description "$rulelist_item"
-        # echo "rule_description = $rule_description"
-        rule_chunk+="${rule_description} $br"
+        rule_json_type=$(echo "$rule_json" | jq -r '.type')
+        echo "rule_json_type = $rule_json_type"
     done
+    
+    
+    
+    
+    # mapfile -t rule_ruletype_list < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
+    # # echo "rule_rules = $rule_rules"
+    # # echo "rule_ruletype_list[0] = ${rule_ruletype_list[0]}"
+    # for ruletype_list_item in "${rule_ruletype_list[@]}"
+    # do
+    #     rule_description=$(get_rule_description "$rulelist_item")
+    #     # get_rule_description "$rulelist_item"
+    #     # echo "rule_description = $rule_description"
+    #     rule_chunk+="${rule_description} $br"
+    # done
 }
 
 get_rule_description()
