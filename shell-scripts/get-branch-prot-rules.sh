@@ -50,11 +50,13 @@ add_rule_chunk()
         #Attempt tabulation
         rule_chunk+="    - $effected $br"
     done
-    mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -r '.rules')
-    for rule_json in "${rule_json_arr[@]}"
-    do
-        echo "rule_json = ${rule_json}"
-    done
+    # mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -r '.rules') # This doesn't work because it does literally every string "[" "{" }
+    rule_json=$(echo "$rule_json_str" | jq -r '.')
+    echo "rule_json = $rule_json"
+    # for rule_json in "${rule_json_arr[@]}"
+    # do
+    #     echo "rule_json = ${rule_json}"
+    # done
     # rule_json_arr=$(echo "$rule_json_str" | jq '.rules')
     # echo "rule_json_arr = ${rule_json_arr}"
     # echo "rule_json_arr[0] = ${rule_json_arr[0]}"
