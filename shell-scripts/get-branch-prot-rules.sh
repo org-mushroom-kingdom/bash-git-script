@@ -57,8 +57,8 @@ add_rule_chunk()
     mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -c '.rules[]')
     echo "rule_json_arr = ${rule_json_arr[@]}"
     echo "rule_json_arr[0] = ${rule_json_arr[0]}"
-    rule_json_0_str=$(echo "${rule_json_arr[0]}" | jq -r '.parameters')
-    echo "rule_json_0_str_params= $rule_json_0_str"
+    rule_json_5_str=$(echo "${rule_json_arr[5]}" | jq -r '.parameters')
+    echo "rule_json_5_str_params= $rule_json_5_str"
     # for rule_json in "${rule_json_arr[@]}"
     # do
     #     echo "rule_json = ${rule_json}"
