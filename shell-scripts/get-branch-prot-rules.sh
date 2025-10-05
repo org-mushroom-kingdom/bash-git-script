@@ -53,6 +53,7 @@ add_rule_chunk()
     rule_json_arr=$(echo "$rule_json_str" | jq -r '.rules')
     # echo "rule_json_arr[0] = ${rule_json_arr[0]}"
     echo "rule_json_arr = ${rule_json_arr[@]}"
+    echo "rule_json_arr[0].type = ${rule_json_arr[0].type}"
     mapfile -t rule_ruletype_list < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
     # echo "rule_rules = $rule_rules"
     # echo "rule_ruletype_list[0] = ${rule_ruletype_list[0]}"
