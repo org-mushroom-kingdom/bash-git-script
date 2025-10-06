@@ -61,6 +61,7 @@ TODO: Finish this table, better r-t-c-l.sh description?
 | pr-labels.sh | In progress. TODO: Adds labels to PR based on: <br> 1. The teams the PR creator is a part of <br> 2. The target branch of the PR |
 | read-through-codeowners.sh | Jesus. What doesn't this do. |
 | read-through-codeowners-local.sh | Local version of read-through-codeowners.sh which uses preset changed files to search for ownership. Easy to call upon with Git Bash.  |
+| get-branch-protection-rules.sh | Gets the branch protection rulesets in this repo, and transcribes them to docs/README.md TODO: Subject to change. Change this when it's fleshed out |
 
 # Why Bash?
 
