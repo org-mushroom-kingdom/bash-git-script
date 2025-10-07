@@ -71,6 +71,11 @@ add_rule_chunk()
         then
             echo "JSON with type ${rule_json_type} has a parameters key"
             echo "rule_json_parameters = $rule_json_parameters"
+            if [[ "$rule_json_type" == "merge_queue" ]]
+            then
+                param=$(echo "$rule_json_parameters" | jq 'to_entries')
+                echo "param array = ${param[@]}"
+            fi
         fi
     done
     
