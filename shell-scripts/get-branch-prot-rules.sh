@@ -67,7 +67,7 @@ add_rule_chunk()
         rule_json_parameters=$(echo "$rule_json" | jq -r '.parameters')
         # If not null then...
         # Some method
-        if [[ -z "$rule_json_parameters" ]]
+        if [[ ! -z "$rule_json_parameters" ]]
         then
             echo "JSON with type ${rule_json_type} has a parameters key"
         fi
