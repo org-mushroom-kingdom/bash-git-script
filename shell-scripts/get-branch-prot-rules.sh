@@ -62,11 +62,11 @@ add_rule_chunk()
     for rule_json in "${rule_json_arr[@]}"
     do
         rule_json_type=$(echo "$rule_json" | jq -r '.type')
+        # TODO: Have a header here? That way description goes right under it
         rule_description=$(get_rule_description "$rule_json_type")
         rule_chunk+="$rule_description $br"
         rule_json_parameters=$(echo "$rule_json" | jq -r '.parameters')
-        # If not null then...
-        # Some method
+
         if [[ $rule_json_parameters != null ]]
         then
             echo "JSON with type ${rule_json_type} has a parameters key"
