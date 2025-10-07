@@ -70,6 +70,7 @@ add_rule_chunk()
         if [[ ! -z "$rule_json_parameters" ]]
         then
             echo "JSON with type ${rule_json_type} has a parameters key"
+            echo "rule_json_parameters = $rule_json_parameters"
         fi
     done
     
