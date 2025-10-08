@@ -73,10 +73,14 @@ add_rule_chunk()
             echo "rule_json_parameters = $rule_json_parameters"
             #TODO: explain jq 'to_entries'
             parameter_key_val_arr=$(echo "$rule_json_parameters" | jq 'to_entries')
-            echo "parameter_key_val_arr = ${parameter_key_val_arr[@]}" # [ {key: "", value: ""},{} ]
+            # echo "parameter_key_val_arr = ${parameter_key_val_arr[@]}" # [ {key: "", value: ""},{} ]
             if [[ "$rule_json_type" == "merge_queue" ]]
             then
-                
+                for param_json in "${parameter_key_val_arr[@]}"
+                do
+                    echo "param_json = ${param_json}"
+                    echo "param_json.key = ${param_json.key}"
+                done
                 echo "TODO: case statement logic. merge_queue keys all point to string values!"
             fi
         fi
