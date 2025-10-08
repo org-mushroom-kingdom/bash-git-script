@@ -83,7 +83,7 @@ add_rule_chunk()
                 # echo "TODO: case statement logic. merge_queue keys all point to string values!"
             fi
         fi
-    done+
+    done
     
     
     
