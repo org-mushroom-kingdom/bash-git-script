@@ -14,7 +14,8 @@ echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
 BRANCH="env%2Fqa1"
 readonly BRANCH_PROT_FILE="./docs/branch-protection-rules.md"
-
+readonly SPACER="    " #Use this for tabulation
+readonly br="<br>" 
 
 # FOR ALL RULESETS
 mapfile -t ruleset_ids < <(gh api \
@@ -32,7 +33,6 @@ add_rule_chunk()
     # Formats a chunk of text relating to the rule, and adds it to the corresponding ruleset README.md
     rule_json_str="$1"
     rule_chunk="-------------------------------------------------------------"
-    br="<br>"
     
     # echo "rule json str= $rule_json_str"
     rule_name=$(echo "$rule_json_str" | jq -r '.name')
@@ -48,7 +48,7 @@ add_rule_chunk()
     for effected in "${rule_effected_branches[@]}"
     do
         #Attempt tabulation
-        rule_chunk+="    - $effected $br"
+        rule_chunk+="${SPACER}- $effected $br"
     done
     
     # The 'rules' key is a JSON array. Use jq -c to output each item in 'rules' as a single-line JSON object. 
@@ -75,7 +75,8 @@ add_rule_chunk()
             # echo "parameter_key_val_arr = ${parameter_key_val_arr[@]}" # [ {key: "", value: ""},{} ]
             if [[ "$rule_json_type" == "merge_queue" ]]
             then
-                echo "$rule_json_parameters" | jq 'to_entries[] | .key, .value' | \
+                rule_chunk+="The merge queue specifications are: $br"
+                echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
                     echo "Key: $key, Value: $value"
                 done
