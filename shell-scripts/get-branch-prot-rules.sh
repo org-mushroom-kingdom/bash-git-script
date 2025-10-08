@@ -78,7 +78,8 @@ add_rule_chunk()
                 rule_chunk+="The merge queue specifications are: $br"
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
-                    echo "Key: $key, Value: $value"
+                    mq_desc=$(echo "${key/_/ }" | sed 's/^./\U&/')
+                    echo "mq_desc: mq_desc, Value: $value"
                 done
                 exit
                 # echo "TODO: case statement logic. merge_queue keys all point to string values!"
