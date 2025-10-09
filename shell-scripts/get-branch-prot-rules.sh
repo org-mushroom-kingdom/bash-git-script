@@ -75,8 +75,15 @@ add_rule_chunk()
             if [[ "$rule_json_type" == "merge_queue" ]]
             then
                 rule_chunk+="The merge queue specifications are: $br"
-                # TODO: Explain this
+                # to_entries takes an object and transforms each key value pair into an array element (ex {name: "square", sides: 4} --> [{key: "name", value: "square"}])
+                # [] will unwrap this array and [would] output each piece as a separate JSON
+                # Then piping to .key, .value filters that output to only output the key, then the value (on two separate lines due to -r)
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
+                # The last pipe takes those 2 outputs and treats them as inputs to the while loop
+                # Use read to take the 2 inputs from above and store in variables named $key and $value
+                # IFS uses \n as delimiter (2 outputs on 2 separate lines, separated by \n)
+                # The while here is saying 'while I am able to assign values to $key and $value (from the two inputs I am receiving)'
+                # When there are no more inputs, read returns a non-zero (bad) status code which evaluates to false so loop is closed
                 while IFS=$'\n' read -r key && read -r value; do
                     # First remove all(//) '_' from key, replace with ' '. Then use sed to capitalize (\U&) first (^) char (.) (ex. "merge_method" --> "Merge method")
                     mq_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
@@ -117,7 +124,11 @@ add_rule_chunk()
             elif [[ "$rule_json_type" == "pull_request" ]]
             then
                 echo "type = pull_request"
-                echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
+                #Everything in the pull_request parameter JSON aside from one entry is a number or boolean. (allowed_merge_methods is key that points to array)
+                # Use jq to_entries to get [{key: "key_name", value: "value_of"} ,{}] again
+                # Use select to filter out things where value key DOES not correlate to an array
+                # Then output key and value on separate lines
+                echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array") | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
                     echo "value of pull_request param: ${value}"
                 done
