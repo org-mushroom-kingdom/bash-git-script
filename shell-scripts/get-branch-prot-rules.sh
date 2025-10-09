@@ -131,6 +131,8 @@ add_rule_chunk()
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array") | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
                     echo "value of pull_request param: ${value}"
+                    pr_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
+                    echo "pr_desc: $pr_desc, Value: $value"
                 done
                 exit
         #                 "type": "pull_request",
