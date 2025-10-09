@@ -112,16 +112,32 @@ add_rule_chunk()
                             ;;
                     esac
                     #TODO: Italicize ruleset_page_name or mq_desc
-                    thing="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
-                    echo "all together: $thing"
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
-                #   "grouping_strategy": "ALLGREEN",
-                #   "check_response_timeout_minutes": 60
                 done
                 exit
-                # echo "TODO: case statement logic. merge_queue keys all point to string values!"
+            elif [[ "$rule_json_type" == "pull_request" ]]
+            then
+                echo "type = pull_request"
+                echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
+                while IFS=$'\n' read -r key && read -r value; do
+                    echo "value of pull_request param: ${value}"
+                done
+
+        #                 "type": "pull_request",
+        # "parameters": {
+        #   "required_approving_review_count": 1,
+        #   "dismiss_stale_reviews_on_push": true,
+        #   "require_code_owner_review": true,
+        #   "require_last_push_approval": true,
+        #   "required_review_thread_resolution": true,
+        #   "automatic_copilot_code_review_enabled": true,
+        #   "allowed_merge_methods": [
+        #     "merge",
+        #     "squash",
+        #     "rebase"
+        #   ]
             fi
-        fi
+        fi # End if parameters JSON != null
     done
     
     
@@ -168,11 +184,11 @@ get_rule_description()
         ;;
     "merge_queue")
         # TODO: Fill this out
-        #TODO: Has parameters JSON. Do something (IN PROGRESS)
+        #Note: Has parameters JSON. Done.
         rule_desc="This ruleset uses a merge queue. For more information on how merge queues work and their benefits see [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request-with-a-merge-queue#about-merge-queues)"
         ;;
     "required_deployments")
-        #TODO: Fill this out
+        #TODO: Fill this out ON HOLD (see third TODO about deployment environment)
         #TODO: Has parameters JSON with one key that is an array. Do something.
         #TODO: Also need a deployment environment in repo for this to really work.
         echo "TODO"
