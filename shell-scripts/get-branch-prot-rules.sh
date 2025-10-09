@@ -83,7 +83,7 @@ add_rule_chunk()
                     echo "mq_desc: $mq_desc, Value: $value"
                     ruleset_page_name="" #The name of the setting as it appears on the rulesets page
                     addl_details=", " #Additional details/description of the setting as it appears on the rulesets page
-                    case $mq_desc in)
+                    case "$mq_desc" in
                         "merge_method")
                             ruleset_page_name="${mq_desc}" #mq_desc and page name are the same
                             mq_desc="" #Set this to '' so rule_chunk formatting isn't duplicated
