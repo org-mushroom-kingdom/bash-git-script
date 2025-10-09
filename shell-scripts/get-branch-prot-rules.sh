@@ -71,11 +71,11 @@ add_rule_chunk()
         then
             echo "JSON with type ${rule_json_type} has a parameters key"
             echo "rule_json_parameters = $rule_json_parameters"
-            #TODO: explain jq 'to_entries'
-            # echo "parameter_key_val_arr = ${parameter_key_val_arr[@]}" # [ {key: "", value: ""},{} ]
+            # TODO: Reminder Github Copilot has similar structure, so can reuse this logic!!
             if [[ "$rule_json_type" == "merge_queue" ]]
             then
                 rule_chunk+="The merge queue specifications are: $br"
+                # TODO: Explain this
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
                     # First remove all(//) '_' from key, replace with ' '. Then use sed to capitalize (\U&) first (^) char (.) (ex. "merge_method" --> "Merge method")
@@ -112,6 +112,8 @@ add_rule_chunk()
                             ;;
                     esac
                     #TODO: Italicize ruleset_page_name or mq_desc
+                    thing="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
+                    echo "all together: $thing"
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
                 #   "grouping_strategy": "ALLGREEN",
                 #   "check_response_timeout_minutes": 60
@@ -166,7 +168,7 @@ get_rule_description()
         ;;
     "merge_queue")
         # TODO: Fill this out
-        #TODO: Has parameters JSON. Do something
+        #TODO: Has parameters JSON. Do something (IN PROGRESS)
         rule_desc="This ruleset uses a merge queue. For more information on how merge queues work and their benefits see [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request-with-a-merge-queue#about-merge-queues)"
         ;;
     "required_deployments")
