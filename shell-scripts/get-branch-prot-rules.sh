@@ -114,7 +114,6 @@ add_rule_chunk()
                     #TODO: Italicize ruleset_page_name or mq_desc
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
                 done
-                exit
             elif [[ "$rule_json_type" == "pull_request" ]]
             then
                 echo "type = pull_request"
@@ -122,7 +121,7 @@ add_rule_chunk()
                 while IFS=$'\n' read -r key && read -r value; do
                     echo "value of pull_request param: ${value}"
                 done
-
+                exit
         #                 "type": "pull_request",
         # "parameters": {
         #   "required_approving_review_count": 1,
