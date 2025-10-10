@@ -127,13 +127,17 @@ add_rule_chunk()
                 #Everything in the pull_request parameter JSON aside from one entry is a number or boolean. (allowed_merge_methods is key that points to array)
                 # Use jq to_entries to get [{key: "key_name", value: "value_of"} ,{}] again
                 # Use select to filter out things where value key DOES not correlate to an array
-                # Then output key and value on separate lines
+                # Then output key and value on separate lines, use while with reads to process and add to rule_chunk
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array") | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
                     echo "value of pull_request param: ${value}"
                     pr_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
                     echo "pr_desc: $pr_desc, Value: $value"
+                    #TODO: Use case statment from merge_queue structure to add to rule_chunk
                 done
+                #TODO: How to deal with array?
+                pr_array=$(echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array")')
+                echo "pr_array[@] = ${pr_array[@]}" 
                 exit
         #                 "type": "pull_request",
         # "parameters": {
@@ -240,12 +244,11 @@ then
     do
         # echo "Branch ruleset id: $id"
         ruleset_json=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN") 
-        # ruleset_name=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN" | jq '.name') 
         # echo "$ruleset_json"
         # Example of how to filter a single JSON for the desired values (ex. original JSON returns things like id, source_type, etc) 
         # This essentially creates a new JSON (note the {})
         # The 'effected_branches:' syntax creates a key called 'effected_branches' in the new JSON. 
-        # In ruleset_json, 'conditions' has a JSON value. The 'ref_name' key in THAT JSON is another JSON. 'include' is a key (with an array value) in the ref_name JSON.
+        # In ruleset_json, 'conditions' key has a JSON value. The 'ref_name' key in THAT JSON is another JSON. 'include' is a key (with an array value) in the ref_name JSON.
         ruleset_json=$(echo "$ruleset_json" | jq '{name, effected_branches: .conditions.ref_name.include, enforcement, rules, updated_at}') 
         
         all_rules_json_arr+=("$ruleset_json")
