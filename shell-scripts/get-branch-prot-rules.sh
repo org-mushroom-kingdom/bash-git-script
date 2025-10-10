@@ -136,7 +136,7 @@ add_rule_chunk()
                     #TODO: Use case statment from merge_queue structure to add to rule_chunk
                 done
                 #TODO: How to deal with array?
-                pr_array=$(echo "$rule_json_parameters" | jq -r '.parameters.pr_array[]')
+                pr_array=$(echo "$rule_json_parameters" | jq -r '.parameters.allowed_merge_methods[]')
                 echo "pr_array[@] = ${pr_array[@]}" 
                 echo "pr_array[0] = ${pr_array[1]}" 
                 exit
