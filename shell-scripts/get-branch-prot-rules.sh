@@ -138,6 +138,7 @@ add_rule_chunk()
                 #TODO: How to deal with array?
                 pr_array=$(echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type == "array") | .value')
                 echo "pr_array[@] = ${pr_array[@]}" 
+                echo "pr_array[0] = ${pr_array[1]}" 
                 exit
         #                 "type": "pull_request",
         # "parameters": {
