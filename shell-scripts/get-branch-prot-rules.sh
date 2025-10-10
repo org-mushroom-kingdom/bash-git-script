@@ -130,13 +130,13 @@ add_rule_chunk()
                 # Then output key and value on separate lines, use while with reads to process and add to rule_chunk
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array") | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
-                    echo "value of pull_request param: ${value}"
+                    # echo "value of pull_request param: ${value}"
                     pr_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
                     echo "pr_desc: $pr_desc, Value: $value"
                     #TODO: Use case statment from merge_queue structure to add to rule_chunk
                 done
                 #TODO: How to deal with array?
-                pr_array=$(echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type == "array") | .value')
+                pr_array=$(echo "$rule_json_parameters" | jq -r '.parameters.pr_array[]')
                 echo "pr_array[@] = ${pr_array[@]}" 
                 echo "pr_array[0] = ${pr_array[1]}" 
                 exit
