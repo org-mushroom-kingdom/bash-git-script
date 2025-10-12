@@ -91,7 +91,7 @@ add_rule_chunk()
                     echo "mq_desc: $mq_desc, Value: $value"
                     # ruleset_page_name="" #The name of the setting as it appears on the rulesets page
                     # addl_details=", " #Additional details/description of the setting as it appears on the rulesets page
-                    ruleset_page_name=$(get_ruleset_page_name "${mq_desc}")
+                    ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${mq_desc}")
                     addl_details=$(get_addl_details "${rule_json_type}" "${mq_desc}")
                     if [[ "$mq_desc" == "Merge method" ]]
                     then
@@ -224,31 +224,36 @@ get_rule_description()
 
 get_ruleset_page_name()
 {
-    desc=$1
-    ruleset_page_name="" 
-    case "${desc}" in
-        "Merge method")
-            ruleset_page_name="${desc}" #mq_desc and page name are the same
-            ;;
-        "Max entries to build")
-            ruleset_page_name="Build concurrency"
-            ;;
-        "Min entries to merge")
-            ruleset_page_name="Minimum group size"
-            ;;
-        "Max entries to merge")
-            ruleset_page_name="Maximum group size"
-            ;;
-        "Min entries to merge wait minutes")
-            ruleset_page_name="Wait time to meet minimum group size (minutes)"
-            ;;
-        "Grouping strategy")
-            ruleset_page_name="Require all queue entries to pass required checks"
-            ;;
-        "Check response timeout minutes")
-            ruleset_page_name="Status check timeout (minutes)"
-            ;;
-    esac
+    #TODO: Could this be merged with get_addl_details to make a json with keys that point to these strings instead? Would it be faster?
+    rule_type=$1
+    desc=$2
+    ruleset_page_name=""
+    if [[ "$rule_type" == "merge_queue" ]]
+    then 
+        case "${desc}" in
+            "Merge method")
+                ruleset_page_name="${desc}" #mq_desc and page name are the same
+                ;;
+            "Max entries to build")
+                ruleset_page_name="Build concurrency"
+                ;;
+            "Min entries to merge")
+                ruleset_page_name="Minimum group size"
+                ;;
+            "Max entries to merge")
+                ruleset_page_name="Maximum group size"
+                ;;
+            "Min entries to merge wait minutes")
+                ruleset_page_name="Wait time to meet minimum group size (minutes)"
+                ;;
+            "Grouping strategy")
+                ruleset_page_name="Require all queue entries to pass required checks"
+                ;;
+            "Check response timeout minutes")
+                ruleset_page_name="Status check timeout (minutes)"
+                ;;
+        esac
+    fi
     echo "${ruleset_page_name}"
 }
 
