@@ -89,37 +89,20 @@ add_rule_chunk()
                     # First remove all(//) '_' from key, replace with ' '. Then use sed to capitalize (\U&) first (^) char (.) (ex. "merge_method" --> "Merge method")
                     mq_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
                     echo "mq_desc: $mq_desc, Value: $value"
-                    ruleset_page_name="" #The name of the setting as it appears on the rulesets page
-                    addl_details=", " #Additional details/description of the setting as it appears on the rulesets page
+                    # ruleset_page_name="" #The name of the setting as it appears on the rulesets page
+                    # addl_details=", " #Additional details/description of the setting as it appears on the rulesets page
                     ruleset_page_name=$(get_ruleset_page_name "${mq_desc}")
+                    addl_details=$(get_addl_details "${rule_json_type}" "${mq_desc}")
                     if [[ "$mq_desc" == "Merge method" ]]
                     then
                         mq_desc="" #Set this to '' so rule_chunk formatting isn't duplicated
                     fi
-                    case "$mq_desc" in
-                        "Merge method")
-                            addl_details="Method to use when merging changes from queued pull requests."
-                            ;;
-                        "Max entries to build")
-                            #TODO: What is this actually saying
-                            addl_details+="Limit the number of queued pull requests requesting checks and workflow runs at the same time."
-                            ;;
-                        "Min entries to merge")
-                            addl_details+="The minimum number of PRs that will be merged together in a group."
-                            ;;
-                        "Max entries to merge")
-                            addl_details+="The maximum number of PRs that will be merged together in a group."
-                            ;;
-                        "Min entries to merge wait minutes")
-                            addl_details+="The time merge queue should wait after the first PR is added to the queue for the minimum group size to be met. After this time has elapsed, the minimum group size will be ignored and a smaller group will be merged."
-                            ;;
-                        "Grouping strategy")
-                            addl_details+="When this setting is disabled, only the commit at the head of the merge group, i.e. the commit containing changes from all of the PRs in the group, must pass its required checks to merge."
-                            ;;
-                    esac
                     #TODO: Italicize ruleset_page_name or mq_desc
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
+                    echo "ruleset_page_name = ${ruleset_page_name}"
+                    echo "addl_details = ${addl_details}"
                 done
+                    exit
             elif [[ "$rule_json_type" == "pull_request" ]]
             then
                 echo "type = pull_request"
@@ -243,7 +226,7 @@ get_ruleset_page_name()
 {
     desc=$1
     ruleset_page_name="" 
-    case "${rule_type}" in
+    case "${desc}" in
         "Merge method")
             ruleset_page_name="${desc}" #mq_desc and page name are the same
             ;;
@@ -267,7 +250,34 @@ get_ruleset_page_name()
 }
 
 get_addl_details()
-{}
+{
+    rule_type=$1
+    desc=$2
+    addl_details=", "
+    if [[ "$rule_type" == "merge_queue" ]]
+    case "$desc" in
+        "Merge method")
+            addl_details="Method to use when merging changes from queued pull requests."
+            ;;
+        "Max entries to build")
+            #TODO: What is this actually saying
+            addl_details+="Limit the number of queued pull requests requesting checks and workflow runs at the same time."
+            ;;
+        "Min entries to merge")
+            addl_details+="The minimum number of PRs that will be merged together in a group."
+            ;;
+        "Max entries to merge")
+            addl_details+="The maximum number of PRs that will be merged together in a group."
+            ;;
+        "Min entries to merge wait minutes")
+            addl_details+="The time merge queue should wait after the first PR is added to the queue for the minimum group size to be met. After this time has elapsed, the minimum group size will be ignored and a smaller group will be merged."
+            ;;
+        "Grouping strategy")
+            addl_details+="When this setting is disabled, only the commit at the head of the merge group, i.e. the commit containing changes from all of the PRs in the group, must pass its required checks to merge."
+            ;;
+    esac
+    echo "${addl_details}"
+}
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
