@@ -74,6 +74,7 @@ add_rule_chunk()
             # TODO: Reminder Github Copilot has similar structure, so can reuse this logic!!
             if [[ "$rule_json_type" == "merge_queue" ]]
             then
+                # TODO Mention structuring of rule_chunk ${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}
                 rule_chunk+="The merge queue specifications are: $br"
                 # to_entries takes an object and transforms each key value pair into an array element (ex {name: "square", sides: 4} --> [{key: "name", value: "square"}])
                 # [] will unwrap this array and [would] output each piece as a separate JSON
@@ -90,31 +91,29 @@ add_rule_chunk()
                     echo "mq_desc: $mq_desc, Value: $value"
                     ruleset_page_name="" #The name of the setting as it appears on the rulesets page
                     addl_details=", " #Additional details/description of the setting as it appears on the rulesets page
+                    ruleset_page_name=$(get_ruleset_page_name "${mq_desc}")
+                    if [[ "$mq_desc" == "Merge method" ]]
+                    then
+                        mq_desc="" #Set this to '' so rule_chunk formatting isn't duplicated
+                    fi
                     case "$mq_desc" in
                         "Merge method")
-                            ruleset_page_name="${mq_desc}" #mq_desc and page name are the same
-                            mq_desc="" #Set this to '' so rule_chunk formatting isn't duplicated
                             addl_details="Method to use when merging changes from queued pull requests."
                             ;;
                         "Max entries to build")
-                            ruleset_page_name="Build concurrency"
                             #TODO: What is this actually saying
                             addl_details+="Limit the number of queued pull requests requesting checks and workflow runs at the same time."
                             ;;
                         "Min entries to merge")
-                            ruleset_page_name="Minimum group size"
                             addl_details+="The minimum number of PRs that will be merged together in a group."
                             ;;
                         "Max entries to merge")
-                            ruleset_page_name="Maximum group size"
                             addl_details+="The maximum number of PRs that will be merged together in a group."
                             ;;
                         "Min entries to merge wait minutes")
-                            ruleset_page_name="Wait time to meet minimum group size (minutes)"
                             addl_details+="The time merge queue should wait after the first PR is added to the queue for the minimum group size to be met. After this time has elapsed, the minimum group size will be ignored and a smaller group will be merged."
                             ;;
                         "Grouping strategy")
-                            ruleset_page_name="Require all queue entries to pass required checks"
                             addl_details+="When this setting is disabled, only the commit at the head of the merge group, i.e. the commit containing changes from all of the PRs in the group, must pass its required checks to merge."
                             ;;
                     esac
@@ -181,7 +180,7 @@ get_rule_description()
     rule_desc="" # A detailed description of the rule
     # echo "get_rule_description() firing! rule_type = '$rule_type'"
     begin_desc="If selected, "
-    case "$rule_type" in
+    case "${rule_type}" in
     "deletion" | "creation" | "update")
         if [[ ! "update" = "$rule_type" ]]
         then
@@ -239,6 +238,36 @@ get_rule_description()
     # echo "rule_desc = $rule_desc"
     echo "${rule_desc}"
 }
+
+get_ruleset_page_name()
+{
+    desc=$1
+    ruleset_page_name="" 
+    case "${rule_type}" in
+        "Merge method")
+            ruleset_page_name="${desc}" #mq_desc and page name are the same
+            ;;
+        "Max entries to build")
+            ruleset_page_name="Build concurrency"
+            ;;
+        "Min entries to merge")
+            ruleset_page_name="Minimum group size"
+            ;;
+        "Max entries to merge")
+            ruleset_page_name="Maximum group size"
+            ;;
+        "Min entries to merge wait minutes")
+            ruleset_page_name="Wait time to meet minimum group size (minutes)"
+            ;;
+        "Grouping strategy")
+            ruleset_page_name="Require all queue entries to pass required checks"
+            ;;
+    esac
+    echo "${ruleset_page_name}"
+}
+
+get_addl_details()
+{}
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
