@@ -245,6 +245,9 @@ get_ruleset_page_name()
         "Grouping strategy")
             ruleset_page_name="Require all queue entries to pass required checks"
             ;;
+        "Check response timeout minutes")
+            ruleset_page_name="Status check timeout (minutes)"
+            ;;
     esac
     echo "${ruleset_page_name}"
 }
@@ -275,6 +278,9 @@ get_addl_details()
                 ;;
             "Grouping strategy")
                 addl_details+="When this setting is disabled, only the commit at the head of the merge group, i.e. the commit containing changes from all of the PRs in the group, must pass its required checks to merge."
+                ;;
+            "Check response timeout minutes")
+                addl_details="Maximum time for a required status check to report a conclusion. After this much time has elapsed, checks that have not reported a conclusion will be assumed to have failed."
                 ;;
         esac
     fi
