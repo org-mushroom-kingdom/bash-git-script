@@ -328,26 +328,26 @@ get_addl_details()
     then
         case "${desc}" in
             "Required approving review count")
-                ruleset_page_name="The number of approving reviews that are required before a pull request can be merged."
+                addl_details="The number of approving reviews that are required before a pull request can be merged."
                 ;;
             "Dismiss stale reviews on push")
-                ruleset_page_name="New, reviewable commits pushed will dismiss previous pull request review approvals."
+                addl_details="New, reviewable commits pushed will dismiss previous pull request review approvals."
                 ;;
             "Require code owner review")
-                ruleset_page_name="Require an approving review in pull requests that modify files that have a designated code owner."
+                addl_details="Require an approving review in pull requests that modify files that have a designated code owner."
                 ;;
             "Require last push approval")
-                ruleset_page_name="Whether the most recent reviewable push must be approved by someone other than the person who pushed it."
+                addl_details="Whether the most recent reviewable push must be approved by someone other than the person who pushed it."
                 ;;
             "Required review thread resolution")
-                ruleset_page_name="All conversations on code must be resolved before a pull request can be merged."
+                addl_details="All conversations on code must be resolved before a pull request can be merged."
                 ;;
             "Automatic copilot code review enabled")
-                ruleset_page_name="Request Copilot code review for new pull requests automatically if the author has access to Copilot code review."
+                addl_details="Request Copilot code review for new pull requests automatically if the author has access to Copilot code review."
                 ;;
             "Allowed merge methods")
                 # Note: This ISN'T from the ruleset page, but paraphrased from it.
-                ruleset_page_name="The allowed methods a pull request can be performed. One must always be enabled."
+                addl_details="The allowed methods a pull request can be performed. One must always be enabled."
                 ;;
         esac
     fi
