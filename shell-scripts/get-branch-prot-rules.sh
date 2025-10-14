@@ -119,7 +119,8 @@ add_rule_chunk()
                 done
                 #TODO: How to deal with array?
                 echo "$rule_json_parameters"
-                maplfile -t pr_array< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
+                maplfile -t pr_array< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods')
+                echo "pr_array[@] = ${pr_array}" 
                 echo "pr_array[@] = ${pr_array[@]}" 
                 echo "pr_array[0] = ${pr_array[1]}" 
                 exit
