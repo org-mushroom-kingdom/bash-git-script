@@ -106,6 +106,7 @@ add_rule_chunk()
             elif [[ "$rule_json_type" == "pull_request" ]]
             then
                 echo "type = pull_request"
+                rule_chunk+="The pull request specifications are: $br"
                 #Everything in the pull_request parameter JSON aside from one entry is a number or boolean. (allowed_merge_methods is key that points to array)
                 # Use jq to_entries to get [{key: "key_name", value: "value_of"} ,{}] again
                 # Use select to filter out things where value key DOES not correlate to an array
@@ -115,15 +116,23 @@ add_rule_chunk()
                     # echo "value of pull_request param: ${value}"
                     pr_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
                     echo "pr_desc: $pr_desc, Value: $value"
+                    ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${pr_desc}")
+                    addl_details=$(get_addl_details "${rule_json_type}" "${pr_desc}")
+                    rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
+                    echo "ruleset_page_name = ${ruleset_page_name}"
+                    echo "addl_details = ${addl_details}"
                     #TODO: Use case statment from merge_queue structure to add to rule_chunk
                 done
-                #TODO: How to deal with array?
-                echo "$rule_json_parameters"
-                mapfile -t pr_array< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
+                # Deal with the merge methods array, an array of strings. Note: This array will always have at least 1 value
+                mapfile -t merge_methods< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
+                for merge_method in "${merge_methods[@]}"
+                do
+                    echo "merge_method = $merge_method"
+                done
                 # pr_array=$(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
                 # echo "pr_array = ${pr_array}" 
-                echo "pr_array[@] = ${pr_array[@]}" 
-                echo "pr_array[0] = ${pr_array[1]}" 
+                # echo "pr_array[@] = ${pr_array[@]}" 
+                # echo "pr_array[0] = ${pr_array[1]}" 
                 exit
         #                 "type": "pull_request",
         # "parameters": {
@@ -202,7 +211,7 @@ get_rule_description()
     "pull_request")
         #TODO: Fill this out
         #TODO: Has parameters JSON with several keys, "allowed_merge_methods" is an array. Figure this out. 
-        echo "TODO"
+        echo "Require all commits be made to a non-target branch and submitted via a pull request before they can be merged."
         ;;
     "required_status_checks")
         #TODO: Fill this out
