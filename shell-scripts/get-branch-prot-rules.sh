@@ -133,6 +133,9 @@ add_rule_chunk()
                     rule_chunk+="${SPACER}${SPACER}- ${$merge_method} $br"
                 done
                 # exit
+            elif [[ "$rule_json_type" == "required_status_checks" ]]
+            then
+                echo "TBD"
             fi
         fi # End if parameters JSON != null
     done
