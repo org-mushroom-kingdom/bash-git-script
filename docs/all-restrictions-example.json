@@ -78,6 +78,16 @@
               "tool": "CodeQL",
               "security_alerts_threshold": "high_or_higher",
               "alerts_threshold": "errors"
+            },
+            {
+                "tool":"example-tool",
+                "security_alerts_threshold":"high_or_higher",
+                "alerts_threshold":"errors_and_warnings"
+            },
+            {
+                "tool":"example-tool-2",
+                "security_alerts_threshold":"all",
+                "alerts_threshold":"all"
             }
           ]
         }
