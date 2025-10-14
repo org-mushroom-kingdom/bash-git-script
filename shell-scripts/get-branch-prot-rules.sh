@@ -51,8 +51,8 @@ add_rule_chunk()
         rule_chunk+="${SPACER}- $effected $br"
     done
     
-    # The 'rules' key is a JSON array. Use jq -c to output each item in 'rules' as a single-line JSON object. 
-    # Use '.rules[]' to indicate we are targeting the 'rules' key and we want to iterate (indicated by []) over the elements inside it
+    # The 'rules' key is a JSON array. Use jq -c to output each item in 'rules' as a single-line JSON object. (ex. [{}{}{}] ) 
+    # Use '.rules[]' to indicate we are targeting the 'rules' key and we want to iterate/output (indicated by []) over the elements inside it
     # Use mapfile and <() to take those outputs and put into array.
     mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -c '.rules[]')
     echo "rule_json_arr = ${rule_json_arr[@]}"
@@ -119,9 +119,9 @@ add_rule_chunk()
                 done
                 #TODO: How to deal with array?
                 echo "$rule_json_parameters"
-                # mapfile -t pr_array< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods')
-                pr_array=$(echo "$rule_json_parameters" | jq -r '.[].allowed_merge_methods')
-                echo "pr_array = ${pr_array}" 
+                mapfile -t pr_array< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
+                # pr_array=$(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
+                # echo "pr_array = ${pr_array}" 
                 echo "pr_array[@] = ${pr_array[@]}" 
                 echo "pr_array[0] = ${pr_array[1]}" 
                 exit
@@ -299,6 +299,7 @@ then
     for id in "${ruleset_ids[@]}"
     do
         # echo "Branch ruleset id: $id"
+        # Get the JSON for a particular rule
         ruleset_json=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN") 
         # echo "$ruleset_json"
         # Example of how to filter a single JSON for the desired values (ex. original JSON returns things like id, source_type, etc) 

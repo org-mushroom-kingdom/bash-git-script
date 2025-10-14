@@ -1,4 +1,5 @@
 {
+    "comment": "This JSON file is an example of the filtered JSON comment returned by the Github API. This 'comment' key does NOT actually appear in the JSON returned by the Github API ruleset id endpoint.",
     "name": "all-restrictions",
     "effected_branches": [
       "refs/heads/nothing-this-is-an-example"
