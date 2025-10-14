@@ -102,7 +102,7 @@ add_rule_chunk()
                     echo "ruleset_page_name = ${ruleset_page_name}"
                     echo "addl_details = ${addl_details}"
                 done
-                    exit
+                    # exit
             elif [[ "$rule_json_type" == "pull_request" ]]
             then
                 echo "type = pull_request"
