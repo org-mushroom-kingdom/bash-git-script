@@ -264,6 +264,31 @@ get_ruleset_page_name()
                 ruleset_page_name="Status check timeout (minutes)"
                 ;;
         esac
+    elif [[ "$rule_type" == "pull_request" ]]
+    then
+        case "${desc}" in
+            "Required approving review count")
+                ruleset_page_name="Required approvals"
+                ;;
+            "Dismiss stale reviews on push")
+                ruleset_page_name="Dismiss stale pull request approvals when new commits are pushed"
+                ;;
+            "Require code owner review")
+                ruleset_page_name="Require review from Code Owners"
+                ;;
+            "Require last push approval")
+                ruleset_page_name="Require approval of the most recent reviewable push"
+                ;;
+            "Required review thread resolution")
+                ruleset_page_name="Require conversation resolution before merging"
+                ;;
+            "Automatic copilot code review enabled")
+                ruleset_page_name="Automatically request Copilot code review"
+                ;;
+            "Allowed merge methods")
+                ruleset_page_name="Allowed merge methods"
+                ;;
+        esac
     fi
     echo "${ruleset_page_name}"
 }
@@ -297,6 +322,32 @@ get_addl_details()
                 ;;
             "Check response timeout minutes")
                 addl_details="Maximum time for a required status check to report a conclusion. After this much time has elapsed, checks that have not reported a conclusion will be assumed to have failed."
+                ;;
+        esac
+    elif [[ "$rule_type" == "pull_request" ]]
+    then
+        case "${desc}" in
+            "Required approving review count")
+                ruleset_page_name="The number of approving reviews that are required before a pull request can be merged."
+                ;;
+            "Dismiss stale reviews on push")
+                ruleset_page_name="New, reviewable commits pushed will dismiss previous pull request review approvals."
+                ;;
+            "Require code owner review")
+                ruleset_page_name="Require an approving review in pull requests that modify files that have a designated code owner."
+                ;;
+            "Require last push approval")
+                ruleset_page_name="Whether the most recent reviewable push must be approved by someone other than the person who pushed it."
+                ;;
+            "Required review thread resolution")
+                ruleset_page_name="All conversations on code must be resolved before a pull request can be merged."
+                ;;
+            "Automatic copilot code review enabled")
+                ruleset_page_name="Request Copilot code review for new pull requests automatically if the author has access to Copilot code review."
+                ;;
+            "Allowed merge methods")
+                # Note: This ISN'T from the ruleset page, but paraphrased from it.
+                ruleset_page_name="The allowed methods a pull request can be performed. One must always be enabled."
                 ;;
         esac
     fi
