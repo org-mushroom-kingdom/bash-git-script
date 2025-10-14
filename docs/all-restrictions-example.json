@@ -1,5 +1,10 @@
 {
-    "comment": "This JSON file is an example of the filtered JSON comment returned by the Github API. This 'comment' key does NOT actually appear in the JSON returned by the Github API ruleset id endpoint.",
+    "read-this": {
+        "comment-1": "This JSON file is an example of the filtered ruleset JSON returned by the Github API.",
+        "comment-2": "Specifically for the 'all-restrictions' ruleset in the org-mushroom-kingdom/bash-git-script repo",
+        "comment-3": "This ruleset has every kind of ruleset parameter covered in some way.",
+        "comment-4": "The 'read-this' key and contained keys do NOT actually appear in the JSON returned by the Github API ruleset id endpoint."
+    },
     "name": "all-restrictions",
     "effected_branches": [
       "refs/heads/nothing-this-is-an-example"
