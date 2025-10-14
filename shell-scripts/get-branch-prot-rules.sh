@@ -81,6 +81,7 @@ add_rule_chunk()
                 # Then piping to .key, .value filters that output to only output the key, then the value (on two separate lines due to -r)
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
                 # The last pipe takes those 2 outputs and treats them as inputs to the while loop
+                
                 # Use read to take the 2 inputs from above and store in variables named $key and $value
                 # IFS uses \n as delimiter (2 outputs on 2 separate lines, separated by \n)
                 # The while here is saying 'while I am able to assign values to $key and $value (from the two inputs I am receiving)'
@@ -131,24 +132,7 @@ add_rule_chunk()
                     # Use double spacer b/c 'merge methods' is already tab'd
                     rule_chunk+="${SPACER}${SPACER}- ${$merge_method} $br"
                 done
-                # pr_array=$(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
-                # echo "pr_array = ${pr_array}" 
-                # echo "pr_array[@] = ${pr_array[@]}" 
-                # echo "pr_array[0] = ${pr_array[1]}" 
-                exit
-        #                 "type": "pull_request",
-        # "parameters": {
-        #   "required_approving_review_count": 1,
-        #   "dismiss_stale_reviews_on_push": true,
-        #   "require_code_owner_review": true,
-        #   "require_last_push_approval": true,
-        #   "required_review_thread_resolution": true,
-        #   "automatic_copilot_code_review_enabled": true,
-        #   "allowed_merge_methods": [
-        #     "merge",
-        #     "squash",
-        #     "rebase"
-        #   ]
+                # exit
             fi
         fi # End if parameters JSON != null
     done
