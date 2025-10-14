@@ -14,7 +14,7 @@ echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
 BRANCH="env%2Fqa1"
 readonly BRANCH_PROT_FILE="./docs/branch-protection-rules.md"
-readonly SPACER="    " #Use this for tabulation
+readonly SPACER="    " #Use this for tabulation. Four spaces, essentially a tab
 readonly br="<br>" 
 
 # FOR ALL RULESETS
@@ -123,11 +123,13 @@ add_rule_chunk()
                     echo "addl_details = ${addl_details}"
                     #TODO: Use case statment from merge_queue structure to add to rule_chunk
                 done
-                # Deal with the merge methods array, an array of strings. Note: This array will always have at least 1 value
+                # Deal with the merge methods array, an array of strings. Note: This array will always have at least 1 value, so no need to check if key exists.
                 mapfile -t merge_methods< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
+                rule_chunk+="${SPACER}The allowed merged methods are: $br"
                 for merge_method in "${merge_methods[@]}"
                 do
-                    echo "merge_method = $merge_method"
+                    # Use double spacer b/c 'merge methods' is already tab'd
+                    rule_chunk+="${SPACER}${SPACER}- ${$merge_method} $br"
                 done
                 # pr_array=$(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
                 # echo "pr_array = ${pr_array}" 
@@ -178,7 +180,7 @@ get_rule_description()
     "deletion" | "creation" | "update")
         if [[ ! "update" = "$rule_type" ]]
         then
-            # Replace ion with e (ex. creation --> create)
+            # Replace 'ion' with e (ex. creation --> create)
             verb=$( echo "$rule_type" | sed 's/ion/e/')
         else
             verb="$rule_type"
@@ -194,7 +196,6 @@ get_rule_description()
         rule_desc+="<br>For this logic to work, your repository must allow squash merging or rebase merging. Check the TODO NAME ME section to ensure this is the case."
         ;;
     "merge_queue")
-        # TODO: Fill this out
         #Note: Has parameters JSON. Done.
         rule_desc="This ruleset uses a merge queue. For more information on how merge queues work and their benefits see [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request-with-a-merge-queue#about-merge-queues)"
         ;;
@@ -209,8 +210,7 @@ get_rule_description()
         rule_desc+="<br>*Please note: This activity differs somewhat between rulesets and branch protection rules. Please see the [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-signed-commits) for more details.*"
         ;;
     "pull_request")
-        #TODO: Fill this out
-        #TODO: Has parameters JSON with several keys, "allowed_merge_methods" is an array. Figure this out. 
+        #TODO: Has parameters JSON with several keys, "allowed_merge_methods" is an array. PRELIME Done.
         echo "Require all commits be made to a non-target branch and submitted via a pull request before they can be merged."
         ;;
     "required_status_checks")
