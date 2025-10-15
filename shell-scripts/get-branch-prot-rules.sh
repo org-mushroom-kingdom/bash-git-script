@@ -136,7 +136,7 @@ add_rule_chunk()
                     # Use double spacer b/c 'merge methods' is already tab'd
                     # rule_chunk+="${SPACER}${SPACER}- ${$merge_method} $br"
                 done
-                # exit
+                exit
             elif [[ "$rule_json_type" == "required_status_checks" ]]
             then
                 rule_chunk+="The pull request specifications are: $br"
