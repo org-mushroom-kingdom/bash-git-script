@@ -65,6 +65,7 @@ add_rule_chunk()
         # TODO: Have a header here? That way description goes right under it
         rule_description=$(get_rule_description "$rule_json_type")
         rule_chunk+="$rule_description $br"
+        
         rule_json_parameters=$(echo "$rule_json" | jq -r '.parameters')
 
         if [[ $rule_json_parameters != null ]]
@@ -135,8 +136,27 @@ add_rule_chunk()
                 # exit
             elif [[ "$rule_json_type" == "required_status_checks" ]]
             then
-                echo "TBD"
+                rule_chunk+="The pull request specifications are: $br"
+                echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array") | .key, .value' | \
+                while IFS=$'\n' read -r key && read -r value; do
+                    rsc_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
+                    echo "rsc_desc: $rsc_desc, Value: $value"
+                    ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${rsc_desc}")
+                    addl_details=$(get_addl_details "${rule_json_type}" "${rsc_desc}")
+                    #TODO: Italicize ruleset_page_name or rsc_desc
+                    rule_chunk+="${SPACER}${ruleset_page_name} (${rsc_desc}${addl_details}): ${value}"
+                    echo "ruleset_page_name = ${ruleset_page_name}"
+                    echo "addl_details = ${addl_details}"
+                done
             fi
+        # "parameters": {
+        #   "strict_required_status_checks_policy": true,
+        #   "do_not_enforce_on_create": true,
+        #   "required_status_checks": [
+        #     {
+        #       "context": "not-an-actual-check-sorry"
+        #     }
+        #   ]
         fi # End if parameters JSON != null
     done
     
@@ -274,6 +294,16 @@ get_ruleset_page_name()
                 ;;
             "Allowed merge methods")
                 ruleset_page_name="Allowed merge methods"
+                ;;
+        esac
+    elif [[ "$rule_type" == "required_status_checks" ]]
+    then
+        case "${desc}" in
+            "Strict required status checks policy")
+                ruleset_page_name="Require branches to be up to date before merging"
+                ;;
+            "Do not enforce on create")
+                ruleset_page_name="Do not require status checks on creation"
                 ;;
         esac
     fi
