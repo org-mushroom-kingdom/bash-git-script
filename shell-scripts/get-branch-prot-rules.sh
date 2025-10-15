@@ -130,8 +130,9 @@ add_rule_chunk()
                 rule_chunk+="${SPACER}The allowed merged methods are: $br"
                 for merge_method in "${merge_methods[@]}"
                 do
+                    echo "merge_method = ${merge_method}"
                     # Use double spacer b/c 'merge methods' is already tab'd
-                    rule_chunk+="${SPACER}${SPACER}- ${$merge_method} $br"
+                    # rule_chunk+="${SPACER}${SPACER}- ${$merge_method} $br"
                 done
                 # exit
             elif [[ "$rule_json_type" == "required_status_checks" ]]
