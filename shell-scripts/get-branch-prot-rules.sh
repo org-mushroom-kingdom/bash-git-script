@@ -131,7 +131,7 @@ add_rule_chunk()
                 for merge_method in "${merge_methods[@]}"
                 do
                     echo "merge_method = '${merge_method}'"
-                    to_be_added="${SPACER}${SPACER}- "
+                    to_be_added="${SPACER}${SPACER}- ${$merge_method} "
                     echo "to_be_added = ${to_be_added}"
                     # Use double spacer b/c 'merge methods' is already tab'd
                     # rule_chunk+="${SPACER}${SPACER}- ${$merge_method} $br"
