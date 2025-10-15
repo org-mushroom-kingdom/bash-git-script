@@ -367,6 +367,16 @@ get_addl_details()
                 addl_details="The allowed methods a pull request can be performed. One must always be enabled."
                 ;;
         esac
+    elif [[ "$rule_type" == "required_status_checks" ]]
+    then
+        case "${desc}" in
+            "Strict required status checks policy")
+                addl_details="If true, pull requests targeting a matching branch must be tested with the latest code. This setting will not take effect unless at least one status check is enabled."
+                ;;
+            "Do not enforce on create")
+                addl_details="If true, allow repositories and branches to be created if a check would otherwise prohibit it."
+                ;;
+        esac
     fi
     echo "${addl_details}"
 }
