@@ -148,6 +148,7 @@ add_rule_chunk()
                     echo "ruleset_page_name = ${ruleset_page_name}"
                     echo "addl_details = ${addl_details}"
                 done
+                exit
             fi
         # "parameters": {
         #   "strict_required_status_checks_policy": true,
