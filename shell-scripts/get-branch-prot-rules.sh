@@ -148,6 +148,11 @@ add_rule_chunk()
                     echo "ruleset_page_name = ${ruleset_page_name}"
                     echo "addl_details = ${addl_details}"
                 done
+                echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type == "array") | .key, .value' | \
+                while IFS=$'\n' read -r key && read -r value; do
+                    echo "ARRAY. key = $key"
+                    echo "ARRAY. value = ${value[@]}}"
+                done
                 exit
             fi
         # "parameters": {
