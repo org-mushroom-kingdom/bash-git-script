@@ -149,8 +149,10 @@ add_rule_chunk()
                     echo "addl_details = ${addl_details}"
                 done
                 # .[].required_status_checks doesn't work
-                arr=$(echo "$rule_json_parameters" | jq -r '.required_status_checks ')
-                echo "arr[1] = ${arr[1]}}"
+                # Remember that the syntax '.key[]' essentially means iterate thru the array at that key
+                # The 'rules' key is a JSON array. Use jq -c to output each item in 'rules' as a single-line JSON object. (ex. [{}{}{}] ) 
+                status_checks_arr=$(echo "$rule_json_parameters" | jq -c '.required_status_checks[]')
+                echo "status_checks_arr[1] = ${status_checks_arr[1]}"
                 exit
             fi
         # "parameters": {
@@ -159,6 +161,7 @@ add_rule_chunk()
         #   "required_status_checks": [
         #     {
         #       "context": "not-an-actual-check-sorry"
+        #       "integration_id": "somehting"
         #     }
         #   ]
         fi # End if parameters JSON != null
@@ -228,7 +231,7 @@ get_rule_description()
         #TODO: Fill this out
         #TODO: Has parameters JSON with several keys, "required_status_checks" is a JSON array. Figure this out.
         echo "TODO"
-        ;;
+        ;;/
     "code_scanning")
         #TODO: Fill this out
         #TODO: Has parameters JSON with several keys, "code_scanning_tools" is a JSON array. Figure this out.
