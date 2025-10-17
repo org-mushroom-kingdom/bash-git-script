@@ -152,7 +152,7 @@ add_rule_chunk()
                 # Remember that the syntax '.key[]' essentially means iterate thru the array at that key
                 # The 'rules' key is a JSON array. Use jq -c to output each item in 'rules' as a single-line JSON object. (ex. [{}{}{}] ) 
                 status_checks_arr=$(echo "$rule_json_parameters" | jq -c '.required_status_checks[]')
-                echo "status_checks_arr[1] = ${status_checks_arr[1]}"
+                echo "status_checks_arr[1] = ${status_checks_arry[1]}"
                 exit
             fi
         # "parameters": {
@@ -231,7 +231,7 @@ get_rule_description()
         #TODO: Fill this out
         #TODO: Has parameters JSON with several keys, "required_status_checks" is a JSON array. Figure this out.
         echo "TODO"
-        ;;/
+        ;;
     "code_scanning")
         #TODO: Fill this out
         #TODO: Has parameters JSON with several keys, "code_scanning_tools" is a JSON array. Figure this out.
