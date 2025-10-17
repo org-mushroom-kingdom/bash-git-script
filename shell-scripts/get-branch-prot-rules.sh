@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
-
+# There is no current (10-16-25) way for users without admin permissions to know the details of branch protection rulesets, so this action proves quite useful
+# as it gets the branch ruleset information and writes this to a file.
 # Please note: Detailed descriptions are mostly taken directly from the 'Available rules for rulesets' page in Github Documentation. See: https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets
 # TODO: Disclaimer is that this only reads back info about rules, DOES NOT do logic check about rulesets
 
@@ -136,7 +137,7 @@ add_rule_chunk()
                 # exit
             elif [[ "$rule_json_type" == "required_status_checks" ]]
             then
-                rule_chunk+="The pull request specifications are: $br"
+                rule_chunk+="The required status checks specifications are: $br"
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array") | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
                     rsc_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
@@ -148,15 +149,28 @@ add_rule_chunk()
                     echo "ruleset_page_name = ${ruleset_page_name}"
                     echo "addl_details = ${addl_details}"
                 done
-                # .[].required_status_checks doesn't work
-                # Remember that the syntax '.key[]' essentially means iterate thru the array at that key
-                # The 'rules' key is a JSON array. Use jq -c to output each item in 'rules' as a single-line JSON object. (ex. [{}{}{}] ) 
-                mapfile -t status_checks_arr < <(echo "$rule_json_parameters" | jq -c '.required_status_checks[]')
-                for status_check_json in "${status_checks_arr[@]}"
-                do
-                    context=$(echo "$status_check_json" | jq -r '.context' )
-                    echo "context = $context"
-                done
+                # Remember that the syntax '.key[]' essentially means iterate thru [the array] at that key
+                # Use jq -c to output each item in 'required_status_checks' as a single-line JSON object. 
+                # Use // [] here as the alternative--if required_status_checks is null, then use an empty array (so you don't get an 'cannot iterate over null' error)
+                # The final .[] is just saying to iterate over what is piped before it (so a JSON array or nothing)
+                mapfile -t status_checks_arr < <(echo "$rule_json_parameters" | jq -c '.required_status_checks // [] | .[]')
+                # Only process status_checks if there's something to process (status_checks_arr will just be [])
+                if [[ ${#status_checks_arr[@]} > 0 ]]
+                then
+                    rule_chunk+="${SPACER}The details about each status check can be seen below"
+                    for status_check_json in "${status_checks_arr[@]}"
+                    do
+                        context=$(echo "$status_check_json" | jq -r '.context')
+                        integration_id=$(echo "$status_check_json" | jq -r '.integration_id' )
+                        if [[ $integration_id != null ]]
+                        then
+                            echo "context =${SPACER}${SPACER}- Name: ${context} | Integration ID: ${integration_id}"
+                        else
+                            echo "context =${SPACER}${SPACER}- Name: ${context} | Integration ID: any source"
+                        fi
+
+                    done
+                fi
                 exit
             fi
         # "parameters": {
