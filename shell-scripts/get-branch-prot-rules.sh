@@ -150,7 +150,7 @@ add_rule_chunk()
                 done
                 # .[].required_status_checks doesn't work
                 arr=$(echo "$rule_json_parameters" | jq -r '.required_status_checks ')
-                echo "ARRAY. value = ${arr[0]}}"
+                echo "arr[1] = ${arr[1]}}"
                 exit
             fi
         # "parameters": {
