@@ -148,8 +148,9 @@ add_rule_chunk()
                     echo "ruleset_page_name = ${ruleset_page_name}"
                     echo "addl_details = ${addl_details}"
                 done
+                # .[].required_status_checks doesn't work
                 arr=$(echo "$rule_json_parameters" | jq -r '.required_status_checks ')
-                echo "ARRAY. value = ${arr[@]}}"
+                echo "ARRAY. value = ${arr[0]}}"
                 exit
             fi
         # "parameters": {
