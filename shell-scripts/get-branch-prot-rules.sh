@@ -66,7 +66,7 @@ add_rule_chunk()
         rule_json_type=$(echo "$rule_json" | jq -r '.type')
         # TODO: Have a header here? That way description goes right under it
         rule_description=$(get_rule_description "$rule_json_type")
-        rule_chunk+="$rule_description $br"
+        rule_chunk+="${rule_description} $br"
         
         rule_json_parameters=$(echo "$rule_json" | jq -r '.parameters')
 
@@ -155,7 +155,7 @@ add_rule_chunk()
                 # Use // [] here as the alternative--if required_status_checks is null, then use an empty array (so you don't get an 'cannot iterate over null' error)
                 # The final .[] is just saying to iterate over what is piped before it (so a JSON array or nothing)
                 mapfile -t status_checks_arr < <(echo "$rule_json_parameters" | jq -c '.required_status_checks // [] | .[]')
-                # Only process status_checks if there's something to process (status_checks_arr will just be [])
+                # Only process status_checks if there's something to process (status_checks_arr will just be [] if required_status_checks is null)
                 if [[ ${#status_checks_arr[@]} > 0 ]]
                 then
                     rule_chunk+="${SPACER}The details about each status check can be seen below $br"
@@ -171,20 +171,14 @@ add_rule_chunk()
                         else
                             rule_chunk+="context =${SPACER}${SPACER}- Name: ${context} | Integration ID: any source $br"
                         fi
-
                     done
                 fi
                 exit
             fi
-        # "parameters": {
-        #   "strict_required_status_checks_policy": true,
-        #   "do_not_enforce_on_create": true,
-        #   "required_status_checks": [
-        #     {
-        #       "context": "not-an-actual-check-sorry"
-        #       "integration_id": "somehting"
-        #     }
-        #   ]
+            elif [[ "$rule_json_type" == "code_scanning" ]]
+            then
+
+            fi
         fi # End if parameters JSON != null
     done
     
@@ -245,13 +239,13 @@ get_rule_description()
         rule_desc+="<br>*Please note: This activity differs somewhat between rulesets and branch protection rules. Please see the [relevant documentation] (https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-signed-commits) for more details.*"
         ;;
     "pull_request")
-        #TODO: Has parameters JSON with several keys, "allowed_merge_methods" is an array. PRELIME Done.
+        #TODO: Has parameters JSON with several keys, "allowed_merge_methods" is an array. PRELIM Done.
         echo "Require all commits be made to a non-target branch and submitted via a pull request before they can be merged."
         ;;
     "required_status_checks")
-        #TODO: Fill this out
-        #TODO: Has parameters JSON with several keys, "required_status_checks" is a JSON array. Figure this out.
-        echo "TODO"
+        #TODO: Has parameters JSON with several keys, "required_status_checks" is a JSON array. Need a status check with a real ID to fully test this.
+        # Note: Paraphrased from ruleset page
+        echo "When this check is enabled, certain status checks must pass before the ref is updated. Associated commits must first be pushed to another ref where the checks pass."
         ;;
     "code_scanning")
         #TODO: Fill this out
