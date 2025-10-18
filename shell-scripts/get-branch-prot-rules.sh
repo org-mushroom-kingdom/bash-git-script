@@ -173,8 +173,7 @@ add_rule_chunk()
                         fi
                     done
                 fi
-                exit
-            fi
+                # exit
             elif [[ "$rule_json_type" == "code_scanning" ]]
             then
                 echo "The required tools and their thresholds are listed below:"
