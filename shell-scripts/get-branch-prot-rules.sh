@@ -183,11 +183,12 @@ add_rule_chunk()
                 for scanning_tool_json in "${scanning_tools_arr[@]}"
                 do
                     tool=$(echo "$scanning_tool_json" | jq -r '.tool')
-                    security_alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.security_alerts_threshold' )
+                    security_alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.security_alerts_threshold' | sed 's/_/ /g' | sed 's/^./\U&/')
                     alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.alerts_threshold' )
                     echo "tool = ${tool}"
                     echo "security_alerts_threshold = ${security_alerts_threshold}"
                     echo "alerts_threshold = ${alerts_threshold}"
+                    echo "| ${tool} | | |"
                 done
                 exit
             fi
