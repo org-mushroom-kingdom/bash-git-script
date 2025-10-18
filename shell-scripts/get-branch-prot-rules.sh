@@ -176,7 +176,20 @@ add_rule_chunk()
                 # exit
             elif [[ "$rule_json_type" == "code_scanning" ]]
             then
-                echo "The required tools and their thresholds are listed below:"
+                mapfile -t scanning_tools_arr < <(echo "$rule_json_parameters" | jq -c '.code_scanning_tools // [] | .[]')
+                rule_chunk+="The required tools and their thresholds are listed below: $br"
+                # Table formatting fun
+                rule_chunk+="| Tool Name | Security Alerts Threshold | Alerts Threshold |"
+                for scanning_tool_json in "${scanning_tools_arr[@]}"
+                do
+                    tool=$(echo "$scanning_tool_json" | jq -r '.tool')
+                    security_alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.security_alerts_threshold' )
+                    alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.alerts_threshold' )
+                    echo "tool =${tool}"
+                    echo "security_alerts_threshold =${security_alerts_threshold}"
+                    echo "alerts_threshold =${alerts_threshold}"
+
+                done
             fi
         fi # End if parameters JSON != null
     done
