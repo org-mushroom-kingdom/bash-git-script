@@ -255,12 +255,11 @@ get_rule_description()
     "required_status_checks")
         #TODO: Has parameters JSON with several keys, "required_status_checks" is a JSON array. Need a status check with a real ID to fully test this.
         # Note: Paraphrased from ruleset page
-        echo "When this check is enabled, certain status checks must pass before the ref is updated. Associated commits must first be pushed to another ref where the checks pass."
+        rule_desc="${begin_desc} certain status checks must pass before the ref is updated. Associated commits must first be pushed to another ref where the checks pass."
         ;;
     "code_scanning")
-        #TODO: Fill this out
         #TODO: Has parameters JSON with several keys, "code_scanning_tools" is a JSON array. Figure this out.
-        echo "${begin_desc} selected tools must provide code scanning results before the reference is updated. When configured, code scanning must be enabled and have results for both the commit and the reference being updated."
+        rule_desc="${begin_desc} selected tools must provide code scanning results before the reference is updated. (Code scanning analyzes the code in a GitHub repository to determine security vulnerabilities and coding errors.) When configured, code scanning must be enabled and have results for both the commit and the reference being updated."
         ;;
     "copilot_code_review")
         # TODO: Fill this out
