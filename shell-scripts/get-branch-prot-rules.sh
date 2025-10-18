@@ -158,16 +158,18 @@ add_rule_chunk()
                 # Only process status_checks if there's something to process (status_checks_arr will just be [])
                 if [[ ${#status_checks_arr[@]} > 0 ]]
                 then
-                    rule_chunk+="${SPACER}The details about each status check can be seen below"
+                    rule_chunk+="${SPACER}The details about each status check can be seen below $br"
                     for status_check_json in "${status_checks_arr[@]}"
                     do
                         context=$(echo "$status_check_json" | jq -r '.context')
                         integration_id=$(echo "$status_check_json" | jq -r '.integration_id' )
                         if [[ $integration_id != null ]]
                         then
+                            #TODO: Make a status check in the rule that has an integration ID (some dummy action or something)
+                            # Make sure you update the all-restrictions-example.json accordingly!
                             echo "context =${SPACER}${SPACER}- Name: ${context} | Integration ID: ${integration_id}"
                         else
-                            echo "context =${SPACER}${SPACER}- Name: ${context} | Integration ID: any source"
+                            rule_chunk+="context =${SPACER}${SPACER}- Name: ${context} | Integration ID: any source $br"
                         fi
 
                     done
