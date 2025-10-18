@@ -9,7 +9,7 @@
 #TODO: DELETE THIS AND BELOW LINE
 # README markdown documentation: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
-#TODO: COmment about what Action vars this receives
+#TODO: Comment about what Action vars this receives
 
 echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
@@ -26,6 +26,7 @@ mapfile -t ruleset_ids < <(gh api \
 repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 
 # FOR ONE RULESET
+# TODO: This might become vestigial...
 # ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
 # echo "Branch ruleset: $ruleset"
 
