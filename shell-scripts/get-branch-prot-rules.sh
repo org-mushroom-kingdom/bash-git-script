@@ -177,7 +177,7 @@ add_rule_chunk()
             fi
             elif [[ "$rule_json_type" == "code_scanning" ]]
             then
-
+                echo "The required tools and their thresholds are listed below:"
             fi
         fi # End if parameters JSON != null
     done
@@ -204,7 +204,7 @@ get_rule_description()
     rule_type=$1
     rule_desc="" # A detailed description of the rule
     # echo "get_rule_description() firing! rule_type = '$rule_type'"
-    begin_desc="If selected, "
+    begin_desc="If this check is enabled,"
     case "${rule_type}" in
     "deletion" | "creation" | "update")
         if [[ ! "update" = "$rule_type" ]]
@@ -214,7 +214,7 @@ get_rule_description()
         else
             verb="$rule_type"
         fi
-        rule_desc="If selected, only users with bypass permissions can ${verb} branches or tags whose name matches the pattern(s) specified."
+        rule_desc="${begin_desc} only users with bypass permissions can ${verb} branches or tags whose name matches the pattern(s) specified."
         ;;
     "non_fast_forward")
         # TODO: Fill this out
@@ -250,7 +250,7 @@ get_rule_description()
     "code_scanning")
         #TODO: Fill this out
         #TODO: Has parameters JSON with several keys, "code_scanning_tools" is a JSON array. Figure this out.
-        echo "TODO"
+        echo "${begin_desc} selected tools must provide code scanning results before the reference is updated. When configured, code scanning must be enabled and have results for both the commit and the reference being updated."
         ;;
     "copilot_code_review")
         # TODO: Fill this out
