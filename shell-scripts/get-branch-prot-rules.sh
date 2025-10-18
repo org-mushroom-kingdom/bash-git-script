@@ -185,11 +185,11 @@ add_rule_chunk()
                     tool=$(echo "$scanning_tool_json" | jq -r '.tool')
                     security_alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.security_alerts_threshold' )
                     alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.alerts_threshold' )
-                    echo "tool =${tool}"
-                    echo "security_alerts_threshold =${security_alerts_threshold}"
-                    echo "alerts_threshold =${alerts_threshold}"
-
+                    echo "tool = ${tool}"
+                    echo "security_alerts_threshold = ${security_alerts_threshold}"
+                    echo "alerts_threshold = ${alerts_threshold}"
                 done
+                exit
             fi
         fi # End if parameters JSON != null
     done
