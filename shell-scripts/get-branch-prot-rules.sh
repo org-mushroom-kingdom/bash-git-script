@@ -177,7 +177,7 @@ add_rule_chunk()
             then
                 mapfile -t scanning_tools_arr < <(echo "$rule_json_parameters" | jq -c '.code_scanning_tools // [] | .[]')
                 rule_chunk+="The required tools and their thresholds are listed below: $br"
-                # Table formatting fun
+                # Table formatting 
                 rule_chunk+="| Tool Name | Security Alerts Threshold | Alerts Threshold |"
                 for scanning_tool_json in "${scanning_tools_arr[@]}"
                 do
@@ -251,9 +251,8 @@ get_rule_description()
         rule_desc="${begin_desc} selected tools must provide code scanning results before the reference is updated. (Code scanning analyzes the code in a GitHub repository to determine security vulnerabilities and coding errors.) When configured, code scanning must be enabled and have results for both the commit and the reference being updated."
         ;;
     "copilot_code_review")
-        # TODO: Fill this out
         #TODO: Has parameters JSON. Do something
-        echo "TODO"
+        echo "${begin_desc} Copilot code review for new pull requests will be automatically requested if the author has access to Copilot code review."
         ;;
     esac
     # echo "rule_desc = $rule_desc"
@@ -326,6 +325,16 @@ get_ruleset_page_name()
                 ruleset_page_name="Do not require status checks on creation"
                 ;;
         esac
+    elif [[ "$rule_type" == "copilot_code_review" ]]
+    then
+        case "${desc}" in
+            "Review on push")
+                ruleset_page_name="Review new pushes"
+                ;;
+            "Review draft pull requests")
+                ruleset_page_name="${desc}"
+                ;;
+        esac
     fi
     echo "${ruleset_page_name}"
 }
@@ -395,6 +404,16 @@ get_addl_details()
                 ;;
             "Do not enforce on create")
                 addl_details="If true, allow repositories and branches to be created if a check would otherwise prohibit it."
+                ;;
+        esac
+    elif [[ "$rule_type" == "copilot_code_review" ]]
+    then
+        case "${desc}" in
+            "Review on push")
+                addl_details="Copilot automatically reviews each new push to the pull request."
+                ;;
+            "Review draft pull requests")
+                addl_details="Copilot automatically reviews draft pull requests before they are marked as ready for review."
                 ;;
         esac
     fi
