@@ -59,8 +59,7 @@ add_rule_chunk()
     mapfile -t rule_json_arr< <(echo "$rule_json_str" | jq -c '.rules[]')
     echo "rule_json_arr = ${rule_json_arr[@]}"
     # echo "rule_json_arr[0] = ${rule_json_arr[0]}"
-    rule_json_5_str=$(echo "${rule_json_arr[5]}" | jq -r '.parameters') #Returns null if doesn't exist
-    # echo "rule_json_5_str_params= $rule_json_5_str"
+
     for rule_json in "${rule_json_arr[@]}"
     do
         rule_json_type=$(echo "$rule_json" | jq -r '.type')
@@ -69,7 +68,8 @@ add_rule_chunk()
         rule_chunk+="${rule_description} $br"
         
         rule_json_parameters=$(echo "$rule_json" | jq -r '.parameters')
-
+        
+        # If no parameters key exists, rule_json_parameters will be null
         if [[ $rule_json_parameters != null ]]
         then
             echo "JSON with type ${rule_json_type} has a parameters key"
@@ -125,7 +125,6 @@ add_rule_chunk()
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
                     echo "ruleset_page_name = ${ruleset_page_name}"
                     echo "addl_details = ${addl_details}"
-                    #TODO: Use case statment from merge_queue structure to add to rule_chunk
                 done
                 # Deal with the merge methods array, an array of strings. Note: This array will always have at least 1 value, so no need to check if key exists.
                 mapfile -t merge_methods< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
@@ -188,28 +187,17 @@ add_rule_chunk()
                     echo "| ${tool} | ${security_alerts_threshold} | ${alerts_threshold} |"
                 done
                 exit
+            elif [[ "$rule_json_type" == "copilot_code_review" ]]
+            then
+                echo "TBD"
             fi
         fi # End if parameters JSON != null
     done
-    
-    
-    
-    
-    # mapfile -t rule_ruletype_list < <(echo "$rule_json_str" | jq -r '.rules' | jq -r '.[].type')
-    # # echo "rule_rules = $rule_rules"
-    # # echo "rule_ruletype_list[0] = ${rule_ruletype_list[0]}"
-    # for ruletype_list_item in "${rule_ruletype_list[@]}"
-    # do
-    #     rule_description=$(get_rule_description "$rulelist_item")
-    #     # get_rule_description "$rulelist_item"
-    #     # echo "rule_description = $rule_description"
-    #     rule_chunk+="${rule_description} $br"
-    # done
 }
 
 get_rule_description()
 {
-    #Given a rule_type, return a detailed description of the rule (rule_desc)
+    # Given a rule_type, return a detailed description of the rule (rule_desc)
     # TODO: Where it says 'Do something' of 'Figure this out' that means make another method to deal w parameters JSON and account for this part
     rule_type=$1
     rule_desc="" # A detailed description of the rule
@@ -259,6 +247,7 @@ get_rule_description()
         ;;
     "code_scanning")
         #TODO: Has parameters JSON with several keys, "code_scanning_tools" is a JSON array. Figure this out.
+        # Note: Text in parentheses paraphrased from 'About code scanning' Github documentation page 
         rule_desc="${begin_desc} selected tools must provide code scanning results before the reference is updated. (Code scanning analyzes the code in a GitHub repository to determine security vulnerabilities and coding errors.) When configured, code scanning must be enabled and have results for both the commit and the reference being updated."
         ;;
     "copilot_code_review")
@@ -417,9 +406,11 @@ then
     for id in "${ruleset_ids[@]}"
     do
         # echo "Branch ruleset id: $id"
+        
         # Get the JSON for a particular rule
         ruleset_json=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN") 
         # echo "$ruleset_json"
+        
         # Example of how to filter a single JSON for the desired values (ex. original JSON returns things like id, source_type, etc) 
         # This essentially creates a new JSON (note the {})
         # The 'effected_branches:' syntax creates a key called 'effected_branches' in the new JSON. 
