@@ -196,6 +196,7 @@ add_rule_chunk()
                     rule_chunk+="${SPACER}${ruleset_page_name} (${cc_desc}${addl_details}): ${value}"
                     [[ $VERBOSE == "true" ]] && echo "merge queue ruleset_page_name = ${ruleset_page_name}"
                     [[ $VERBOSE == "true" ]] && echo "merge queue addl_details = ${addl_details}"
+                done
                 echo "TBD"
             fi
         fi # End if parameters JSON != null
