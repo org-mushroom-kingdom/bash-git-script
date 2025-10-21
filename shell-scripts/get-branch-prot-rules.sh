@@ -433,19 +433,6 @@ get_addl_details()
 # ---------------------------------------Main-----------------------------------------------------
 
 echo "You picked $GET_RULES_FOR "
-# FOR ALL RULESETS
-mapfile -t ruleset_ids < <(gh api \
--H "Accept: application/vnd.github+json" \
--H "X-GitHub-Api-Version: 2022-11-28" \
--H "Authorization: Bearer $REPO_READ_TOKEN" \
-repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
-
-mapfile -t ruleset_names_and_ids < <(gh api \
--H "Accept: application/vnd.github+json" \
--H "X-GitHub-Api-Version: 2022-11-28" \
--H "Authorization: Bearer $REPO_READ_TOKEN" \
-repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: .id,branches_effected: .conditions.ref_name})')
-# [{name:"",id:""}{name:"",id:""}]
 
 # FOR ONE RULESET
 # TODO: This might become vestigial...
@@ -455,6 +442,11 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: 
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
+    mapfile -t ruleset_ids < <(gh api \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    -H "Authorization: Bearer $REPO_READ_TOKEN" \
+    repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
     #TODO: Descriptor section
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
@@ -494,5 +486,11 @@ then
 
 else
     # Given a branch, get the rulesets that apply to it
+    mapfile -t ruleset_names_and_ids < <(gh api \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    -H "Authorization: Bearer $REPO_READ_TOKEN" \
+    repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR)
+    # repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR | jq  'map({name: .name,id: .id,branches_effected: .conditions.ref_name})')
     echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
 fi
