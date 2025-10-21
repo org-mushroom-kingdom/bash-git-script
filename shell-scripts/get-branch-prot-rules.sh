@@ -179,6 +179,23 @@ add_rule_chunk()
                 # exit
             elif [[ "$rule_json_type" == "copilot_code_review" ]]
             then
+                echo "$rule_json_parameters" | jq -r 'to_entries[] | .key, .value' | \
+                while IFS=$'\n' read -r key && read -r value; do
+                    # First remove all(//) '_' from key, replace with ' '. Then use sed to capitalize (\U&) first (^) char (.) (ex. "merge_method" --> "Merge method")
+                    cc_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
+                    [[ $VERBOSE == "true" ]] && echo "cc_desc: $cc_desc, Value: $value"
+                    # ruleset_page_name="" #The name of the setting as it appears on the rulesets page
+                    # addl_details=", " #Additional details/description of the setting as it appears on the rulesets page
+                    ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${cc_desc}")
+                    addl_details=$(get_addl_details "${rule_json_type}" "${cc_desc}")
+                    # if [[ "$mq_desc" == "Merge method" ]]
+                    # then
+                    #     mq_desc="" #Set this to '' so rule_chunk formatting isn't duplicated
+                    # fi
+                    #TODO: Italicize ruleset_page_name or mq_desc
+                    rule_chunk+="${SPACER}${ruleset_page_name} (${cc_desc}${addl_details}): ${value}"
+                    [[ $VERBOSE == "true" ]] && echo "merge queue ruleset_page_name = ${ruleset_page_name}"
+                    [[ $VERBOSE == "true" ]] && echo "merge queue addl_details = ${addl_details}"
                 echo "TBD"
             fi
         fi # End if parameters JSON != null
