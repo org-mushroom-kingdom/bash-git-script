@@ -54,6 +54,7 @@ add_rule_chunk()
     for rule_json in "${rule_json_arr[@]}"
     do
         rule_json_type=$(echo "$rule_json" | jq -r '.type')
+        echo "-----------------------------------------------------------"
         # TODO: Have a header here? That way description goes right under it
         rule_description=$(get_rule_description "$rule_json_type")
         rule_chunk+="${rule_description} $br"
@@ -192,7 +193,9 @@ add_rule_chunk()
                     # then
                     #     mq_desc="" #Set this to '' so rule_chunk formatting isn't duplicated
                     # fi
-                    #TODO: Italicize ruleset_page_name or mq_desc
+                    #TODO: Italicize ruleset_page_name or cc_desc
+                    thing="${SPACER}${ruleset_page_name} (${cc_desc}${addl_details}): ${value}"
+                    echo "CC!!!! ${thing}"
                     rule_chunk+="${SPACER}${ruleset_page_name} (${cc_desc}${addl_details}): ${value}"
                     [[ $VERBOSE == "true" ]] && echo "merge queue ruleset_page_name = ${ruleset_page_name}"
                     [[ $VERBOSE == "true" ]] && echo "merge queue addl_details = ${addl_details}"
