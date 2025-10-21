@@ -427,7 +427,7 @@ if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
     #TODO: Descriptor section
     echo "VERBOSE = $VERBOSE"
-    [[ $VERBOSE == "false" ]] && echo "!!VERBOSE = $VERBOSE"
+    [[ $VERBOSE == "true" ]] && echo "!!VERBOSE = $VERBOSE"
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
     do
