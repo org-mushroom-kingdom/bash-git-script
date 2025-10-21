@@ -490,7 +490,7 @@ else
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     -H "Authorization: Bearer $REPO_READ_TOKEN" \
-    repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR | jq -r '.[].id')
-    # repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR)
+    repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR)
+    # repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR | jq -r '.[].id')
     echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
 fi
