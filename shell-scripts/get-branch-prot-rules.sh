@@ -76,7 +76,7 @@ add_rule_chunk()
         # If no parameters key exists, rule_json_parameters will be null
         if [[ $rule_json_parameters != null ]]
         then
-            echo "JSON with type ${rule_json_type} has a parameters key"
+            [[ $VERBOSE == "true" ]] && echo "JSON with type ${rule_json_type} has a parameters key"
             echo "rule_json_parameters = $rule_json_parameters"
             # TODO: Reminder Github Copilot has similar structure, so can reuse this logic!!
             if [[ "$rule_json_type" == "merge_queue" ]]
@@ -427,6 +427,7 @@ if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
     #TODO: Descriptor section
     echo "VERBOSE = $VERBOSE"
+    [[ $VERBOSE == "true" ]] && echo "!!VERBOSE = $VERBOSE"
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
     do
