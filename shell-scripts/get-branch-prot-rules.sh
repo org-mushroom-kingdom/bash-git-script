@@ -194,9 +194,9 @@ add_rule_chunk()
                     #     mq_desc="" #Set this to '' so rule_chunk formatting isn't duplicated
                     # fi
                     #TODO: Italicize ruleset_page_name or cc_desc
-                    thing="${SPACER}${ruleset_page_name} (${cc_desc}${addl_details}): ${value}"
+                    thing="${SPACER}${ruleset_page_name} (${cc_desc} ${addl_details}): ${value}"
                     echo "CC!!!! ${thing}"
-                    rule_chunk+="${SPACER}${ruleset_page_name} (${cc_desc}${addl_details}): ${value}"
+                    rule_chunk+="${SPACER}${ruleset_page_name} (${cc_desc} ${addl_details}): ${value}"
                     [[ $VERBOSE == "true" ]] && echo "merge queue ruleset_page_name = ${ruleset_page_name}"
                     [[ $VERBOSE == "true" ]] && echo "merge queue addl_details = ${addl_details}"
                 done
@@ -440,6 +440,13 @@ mapfile -t ruleset_ids < <(gh api \
 -H "Authorization: Bearer $REPO_READ_TOKEN" \
 repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 
+mapfile -t ruleset_names_and_ids < <(gh api \
+-H "Accept: application/vnd.github+json" \
+-H "X-GitHub-Api-Version: 2022-11-28" \
+-H "Authorization: Bearer $REPO_READ_TOKEN" \
+repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: .id})')
+# [{name:"",id:""}{name:"",id:""}]
+
 # FOR ONE RULESET
 # TODO: This might become vestigial...
 # ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
@@ -448,6 +455,8 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
+    echo "ruleset_names_and_ids = ${ruleset_names_and_ids}"
+    exit
     #TODO: Descriptor section
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
