@@ -96,7 +96,7 @@ add_rule_chunk()
                 while IFS=$'\n' read -r key && read -r value; do
                     # First remove all(//) '_' from key, replace with ' '. Then use sed to capitalize (\U&) first (^) char (.) (ex. "merge_method" --> "Merge method")
                     mq_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
-                    echo "mq_desc: $mq_desc, Value: $value"
+                    [[ $VERBOSE == "true" ]] && echo "mq_desc: $mq_desc, Value: $value"
                     # ruleset_page_name="" #The name of the setting as it appears on the rulesets page
                     # addl_details=", " #Additional details/description of the setting as it appears on the rulesets page
                     ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${mq_desc}")
@@ -122,7 +122,7 @@ add_rule_chunk()
                 while IFS=$'\n' read -r key && read -r value; do
                     # echo "value of pull_request param: ${value}"
                     pr_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
-                    echo "pr_desc: $pr_desc, Value: $value"
+                    [[ $VERBOSE == "true" ]] && echo "pr_desc: $pr_desc, Value: $value"
                     ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${pr_desc}")
                     addl_details=$(get_addl_details "${rule_json_type}" "${pr_desc}")
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
