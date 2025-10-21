@@ -455,7 +455,7 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: 
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
-    echo "ruleset_names_and_ids = ${ruleset_names_and_ids}"
+    echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
     exit
     #TODO: Descriptor section
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
