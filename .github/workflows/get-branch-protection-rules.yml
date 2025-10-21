@@ -20,6 +20,11 @@ on:
           - 'main'
           - 'env/qa1'
         default: 'all branches with rules'
+      verbose:
+        description: Verbose (shows several print statements for additional info/debugging)
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   get-branch-protection-rules:
@@ -32,8 +37,12 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       REPO_READ_TOKEN: ${{ secrets.REPO_ADMIN_READ }}
       ORG: ${{ github.repository_owner }}
+      VERBOSE: ${{github.event.inputs.verbose}}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Verbose testing
+        run: echo "VERBOSE = $VERBOSE"
       
       - name: Make shell scripts executable
         run: chmod +x ./shell-scripts/*.sh # Gives execute permissions to the script

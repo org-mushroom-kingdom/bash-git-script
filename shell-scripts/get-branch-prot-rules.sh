@@ -3,13 +3,17 @@
 # This gets the branch protection rules based on what the user input was in get-branch-protection-rules.yml (default is all branches with rules)
 # There is no current (10-16-25) way for users without admin permissions to know the details of branch protection rulesets, so this action proves quite useful
 # as it gets the branch ruleset information and writes this to a file.
-# Please note: Detailed descriptions are mostly taken directly from the 'Available rules for rulesets' page in Github Documentation. See: https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets
-# TODO: Disclaimer is that this only reads back info about rules, DOES NOT do logic check about rulesets
 
-#TODO: DELETE THIS AND BELOW LINE
+# Please note: Detailed descriptions are mostly taken directly from the 'Available rules for rulesets' page in Github Documentation. See: https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets
+# Additionally this only reads back info about rules, it DOES NOT do any sort of logic check regarding rulesets
+
+# This script receives and uses the following env variables:
+#   GET_RULES_FOR -- directs which ruleset(s) to add to file
+#   REPO_READ_TOKEN: A token with admin read permission, which is needed to get ruleset info
+
+# Note that the file being written to is a README (.md) file.  
 # README markdown documentation: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
-#TODO: Comment about what Action vars this receives
 
 echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
@@ -220,7 +224,7 @@ get_rule_description()
         ;;
     "required_linear_history")
         rule_desc="A required linear history prevents collaborators from pushing merge commits to the targeted branches or tags. This means that any pull requests merged into the branch or tag must use a squash merge or a rebase merge. A strictly linear commit history can help teams revert changes more easily."
-        rule_desc+="<br>For this logic to work, your repository must allow squash merging or rebase merging. Check the TODO NAME ME section to ensure this is the case."
+        rule_desc+="<br>For this logic to work, your repository must allow squash merging or rebase merging. Check the 'Settings --> General --> Pull Requests' section to ensure this is the case."
         ;;
     "merge_queue")
         #Note: Has parameters JSON. Done.
@@ -246,7 +250,6 @@ get_rule_description()
         rule_desc="${begin_desc} certain status checks must pass before the ref is updated. Associated commits must first be pushed to another ref where the checks pass."
         ;;
     "code_scanning")
-        #TODO: Has parameters JSON with several keys, "code_scanning_tools" is a JSON array. Figure this out.
         # Note: Text in parentheses paraphrased from 'About code scanning' Github documentation page 
         rule_desc="${begin_desc} selected tools must provide code scanning results before the reference is updated. (Code scanning analyzes the code in a GitHub repository to determine security vulnerabilities and coding errors.) When configured, code scanning must be enabled and have results for both the commit and the reference being updated."
         ;;
@@ -422,6 +425,8 @@ get_addl_details()
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
+    #TODO: Descriptor section
+    descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
     do
         # echo "Branch ruleset id: $id"
