@@ -444,7 +444,7 @@ mapfile -t ruleset_names_and_ids < <(gh api \
 -H "Accept: application/vnd.github+json" \
 -H "X-GitHub-Api-Version: 2022-11-28" \
 -H "Authorization: Bearer $REPO_READ_TOKEN" \
-repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: .id,branches_effected: .conditions.ref_name.include})')
+repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: .id,branches_effected: .conditions.ref_name})')
 # [{name:"",id:""}{name:"",id:""}]
 
 # FOR ONE RULESET
