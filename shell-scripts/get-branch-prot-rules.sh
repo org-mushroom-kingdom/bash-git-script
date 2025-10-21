@@ -150,7 +150,7 @@ add_rule_chunk()
                     #TODO: Italicize ruleset_page_name or rsc_desc
                     rule_chunk+="${SPACER}${ruleset_page_name} (${rsc_desc}${addl_details}): ${value}"
                     [[ $VERBOSE == "true" ]] && echo "status checks ruleset_page_name = ${ruleset_page_name}"
-                    [[ $VERBOSE == "true" ]] && echo  "status checks addl_details = ${addl_details}"
+                    [[ $VERBOSE == "true" ]] && echo "status checks addl_details = ${addl_details}"
                 done
                 # Remember that the syntax '.key[]' essentially means iterate thru [the array] at that key
                 # Use jq -c to output each item in 'required_status_checks' as a single-line JSON object. 
@@ -189,7 +189,7 @@ add_rule_chunk()
                     alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.alerts_threshold' | sed 's/_/ /g' | sed 's/^./\U&/')
                     [[ $VERBOSE == "true" ]] && echo "| ${tool} | ${security_alerts_threshold} | ${alerts_threshold} |"
                 done
-                exit
+                # exit
             elif [[ "$rule_json_type" == "copilot_code_review" ]]
             then
                 echo "TBD"
