@@ -10,7 +10,7 @@
 # This script receives and uses the following env variables:
 #   GET_RULES_FOR -- directs which ruleset(s) to add to file
 #   REPO_READ_TOKEN: A token with admin read permission, which is needed to get ruleset info
-
+#   VERBOSE: When enabled, does way more print statements 
 # Note that the file being written to is a README (.md) file.  
 # README markdown documentation: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
@@ -426,6 +426,7 @@ get_addl_details()
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
     #TODO: Descriptor section
+    echo "VERBOSE = $VERBOSE"
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
     do
