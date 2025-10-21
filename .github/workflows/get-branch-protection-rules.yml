@@ -23,7 +23,10 @@ on:
       verbose:
         description: Verbose (shows several print statements for additional info/debugging)
         required: true
-        type: boolean
+        type: choice
+        options:
+          - "false"
+          - "true"
         default: false
 
 jobs:
