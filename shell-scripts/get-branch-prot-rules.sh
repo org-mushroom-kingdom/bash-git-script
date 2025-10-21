@@ -15,24 +15,11 @@
 # README markdown documentation: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
 
-echo "You picked $GET_RULES_FOR "
 declare -a all_rules_json_arr
 BRANCH="env%2Fqa1"
 readonly BRANCH_PROT_FILE="./docs/branch-protection-rules.md"
 readonly SPACER="    " #Use this for tabulation. Four spaces, essentially a tab
 readonly br="<br>" 
-
-# FOR ALL RULESETS
-mapfile -t ruleset_ids < <(gh api \
--H "Accept: application/vnd.github+json" \
--H "X-GitHub-Api-Version: 2022-11-28" \
--H "Authorization: Bearer $REPO_READ_TOKEN" \
-repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
-
-# FOR ONE RULESET
-# TODO: This might become vestigial...
-# ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
-# echo "Branch ruleset: $ruleset"
 
 add_rule_chunk()
 {
@@ -421,6 +408,22 @@ get_addl_details()
     fi
     echo "${addl_details}"
 }
+
+# ---------------------------------------Main-----------------------------------------------------
+
+echo "You picked $GET_RULES_FOR "
+# FOR ALL RULESETS
+mapfile -t ruleset_ids < <(gh api \
+-H "Accept: application/vnd.github+json" \
+-H "X-GitHub-Api-Version: 2022-11-28" \
+-H "Authorization: Bearer $REPO_READ_TOKEN" \
+repos/org-mushroom-kingdom/bash-git-script/rulesets | jq -r '.[].id')
+
+# FOR ONE RULESET
+# TODO: This might become vestigial...
+# ruleset=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/8111052 -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN")
+# echo "Branch ruleset: $ruleset"
+
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
