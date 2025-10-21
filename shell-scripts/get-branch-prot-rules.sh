@@ -107,13 +107,12 @@ add_rule_chunk()
                     fi
                     #TODO: Italicize ruleset_page_name or mq_desc
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
-                    echo "ruleset_page_name = ${ruleset_page_name}"
-                    echo "addl_details = ${addl_details}"
+                    [[ $VERBOSE == "true" ]] && echo "merge queue ruleset_page_name = ${ruleset_page_name}"
+                    [[ $VERBOSE == "true" ]] && echo "merge queue addl_details = ${addl_details}"
                 done
                     # exit
             elif [[ "$rule_json_type" == "pull_request" ]]
             then
-                echo "type = pull_request"
                 rule_chunk+="The pull request specifications are: $br"
                 #Everything in the pull_request parameter JSON aside from one entry is a number or boolean. (allowed_merge_methods is key that points to array)
                 # Use jq to_entries to get [{key: "key_name", value: "value_of"} ,{}] again
@@ -127,8 +126,8 @@ add_rule_chunk()
                     ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${pr_desc}")
                     addl_details=$(get_addl_details "${rule_json_type}" "${pr_desc}")
                     rule_chunk+="${SPACER}${ruleset_page_name} (${mq_desc}${addl_details}): ${value}"
-                    echo "ruleset_page_name = ${ruleset_page_name}"
-                    echo "addl_details = ${addl_details}"
+                    [[ $VERBOSE == "true" ]] && echo "pull request ruleset_page_name = ${ruleset_page_name}"
+                    [[ $VERBOSE == "true" ]] && echo "pull request addl_details = ${addl_details}"
                 done
                 # Deal with the merge methods array, an array of strings. Note: This array will always have at least 1 value, so no need to check if key exists.
                 mapfile -t merge_methods< <(echo "$rule_json_parameters" | jq -r '.allowed_merge_methods[]')
@@ -145,13 +144,13 @@ add_rule_chunk()
                 echo "$rule_json_parameters" | jq -r 'to_entries[] | select(.value | type != "array") | .key, .value' | \
                 while IFS=$'\n' read -r key && read -r value; do
                     rsc_desc=$(echo "${key//_/ }" | sed 's/^./\U&/')
-                    echo "rsc_desc: $rsc_desc, Value: $value"
+                    [[ $VERBOSE == "true" ]] && echo "rsc_desc: $rsc_desc, Value: $value"
                     ruleset_page_name=$(get_ruleset_page_name "${rule_json_type}" "${rsc_desc}")
                     addl_details=$(get_addl_details "${rule_json_type}" "${rsc_desc}")
                     #TODO: Italicize ruleset_page_name or rsc_desc
                     rule_chunk+="${SPACER}${ruleset_page_name} (${rsc_desc}${addl_details}): ${value}"
-                    echo "ruleset_page_name = ${ruleset_page_name}"
-                    echo "addl_details = ${addl_details}"
+                    [[ $VERBOSE == "true" ]] && echo "status checks ruleset_page_name = ${ruleset_page_name}"
+                    [[ $VERBOSE == "true" ]] && echo  "status checks addl_details = ${addl_details}"
                 done
                 # Remember that the syntax '.key[]' essentially means iterate thru [the array] at that key
                 # Use jq -c to output each item in 'required_status_checks' as a single-line JSON object. 
@@ -170,7 +169,7 @@ add_rule_chunk()
                         then
                             #TODO: Make a status check in the rule that has an integration ID (some dummy action or something)
                             # Make sure you update the all-restrictions-example.json accordingly!
-                            echo "context =${SPACER}${SPACER}- Name: ${context} | Integration ID: ${integration_id}"
+                            [[ $VERBOSE == "true" ]] && echo "context =${SPACER}${SPACER}- Name: ${context} | Integration ID: ${integration_id}"
                         else
                             rule_chunk+="context =${SPACER}${SPACER}- Name: ${context} | Integration ID: any source $br"
                         fi
@@ -188,7 +187,7 @@ add_rule_chunk()
                     tool=$(echo "$scanning_tool_json" | jq -r '.tool')
                     security_alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.security_alerts_threshold' | sed 's/_/ /g' | sed 's/^./\U&/')
                     alerts_threshold=$(echo "$scanning_tool_json" | jq -r '.alerts_threshold' | sed 's/_/ /g' | sed 's/^./\U&/')
-                    echo "| ${tool} | ${security_alerts_threshold} | ${alerts_threshold} |"
+                    [[ $VERBOSE == "true" ]] && echo "| ${tool} | ${security_alerts_threshold} | ${alerts_threshold} |"
                 done
                 exit
             elif [[ "$rule_json_type" == "copilot_code_review" ]]
@@ -426,8 +425,6 @@ get_addl_details()
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
     #TODO: Descriptor section
-    echo "VERBOSE = $VERBOSE"
-    [[ $VERBOSE == "true" ]] && echo "!!VERBOSE = $VERBOSE"
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
     do
