@@ -17,8 +17,9 @@ on:
         type: choice
         options: 
           - 'all branches with rules'
-          - 'main'
           - 'env/qa1'
+          - 'env/qa2'
+          - 'main'
         default: 'all branches with rules'
       verbose:
         description: Verbose (shows several print statements for additional info/debugging)

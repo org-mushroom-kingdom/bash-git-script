@@ -444,7 +444,7 @@ mapfile -t ruleset_names_and_ids < <(gh api \
 -H "Accept: application/vnd.github+json" \
 -H "X-GitHub-Api-Version: 2022-11-28" \
 -H "Authorization: Bearer $REPO_READ_TOKEN" \
-repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: .id})')
+repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: .id,branches_effected: .conditions.ref_name.include})')
 # [{name:"",id:""}{name:"",id:""}]
 
 # FOR ONE RULESET
@@ -455,8 +455,6 @@ repos/org-mushroom-kingdom/bash-git-script/rulesets | jq  'map({name: .name,id: 
 
 if [[ "$GET_RULES_FOR" == 'all branches with rules' ]]
 then
-    echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
-    exit
     #TODO: Descriptor section
     descriptor="Details about rules are generally formatted in the following way ([Name of item as it appears on the Rulesets page UI]) ([Name of JSON key for ruleset item] [Additonial details about that item])"
     for id in "${ruleset_ids[@]}"
@@ -495,5 +493,6 @@ then
     # git push origin main
 
 else
-    echo "Specific logic TBD'"
+    # Given a branch, get the rulesets that apply to it
+    echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
 fi
