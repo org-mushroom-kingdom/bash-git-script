@@ -486,11 +486,26 @@ then
 
 else
     # Given a branch, get the rulesets that apply to it
-    mapfile -t ruleset_names_and_ids < <(gh api \
+
+    # This works but it's more about the rules in the ruleset. It's very verbose and we really want the ids of rulesets
+    mapfile -t branch_ruleset_nonuniq_ids < <(gh api \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     -H "Authorization: Bearer $REPO_READ_TOKEN" \
     repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR | jq -r '.[].ruleset_id')
     # repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR)
     echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
+    # Declare an associative array which has keys instead of indexes, and those keys MUST be unique
+    declare -A branch_ruleset_ids
+    for id in "${branch_ruleset_nonuniq_ids[@]}"
+    do
+        # Assign a key whose name is $id and give it a benign value (0)
+        # This way if the id already exists, you don't (or rather can't) add the same id to the array because keys must be unique
+        branch_ruleset_ids[$id]=0
+    done
+    echo "$GET_RULES_FOR is covered by the following rulesets (IDs)"
+    for id in "${branch_ruleset_ids[@]}"
+    do
+        echo "- $id"
+    done
 fi
