@@ -504,7 +504,7 @@ else
         branch_ruleset_ids[$id]=0
     done
     echo "$GET_RULES_FOR is covered by the following rulesets (IDs)"
-    for id in "${branch_ruleset_ids[@]}"
+    for id in "${!branch_ruleset_ids[@]}"
     do
         echo "- $id"
     done
