@@ -494,7 +494,7 @@ else
     -H "Authorization: Bearer $REPO_READ_TOKEN" \
     repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR | jq -r '.[].ruleset_id')
     # repos/org-mushroom-kingdom/bash-git-script/rules/branches/$GET_RULES_FOR)
-    echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
+    # echo "ruleset_names_and_ids = ${ruleset_names_and_ids[@]}"
     # Declare an associative array which has keys instead of indexes, and those keys MUST be unique
     declare -A branch_ruleset_ids
     for id in "${branch_ruleset_nonuniq_ids[@]}"
