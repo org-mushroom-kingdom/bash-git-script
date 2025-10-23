@@ -8,7 +8,11 @@ name: Get Branch Protection Rules
 
 on:
 
-  # This workflow should only ever be run manually from the Actions tab
+  # TODO: Implement this later...the Chrono Trigger!
+  # schedule: 
+    # - cron: 0 0 * * *' # This cron expression runs the workflow daily at midnight UTC
+  
+  # This workflow should can be run manually from the Actions tab
   workflow_dispatch:
     inputs:
       get_rules_for:
