@@ -500,8 +500,7 @@ else
     for id in "${branch_ruleset_nonuniq_ids[@]}"
     do
         # Assign a key whose name is $id and give it a benign value (0)
-        # This way if the id already exists, you don't (or rather can't) add the same id to the array because keys must be unique
-        echo "id = $id"
+        # This way if the id already exists, you don't (or rather can't) add the same id to the array because keys must be unique.
         branch_ruleset_ids[$id]=0
     done
     echo "$GET_RULES_FOR is covered by the following rulesets (IDs)"
