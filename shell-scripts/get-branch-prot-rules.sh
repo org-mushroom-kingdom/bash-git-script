@@ -508,5 +508,8 @@ else
     for id in "${!branch_ruleset_ids[@]}"
     do
         echo "- $id"
+        ruleset_json=$(gh api /repos/org-mushroom-kingdom/bash-git-script/rulesets/$id -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $REPO_READ_TOKEN") 
+        ruleset_json=$(echo "$ruleset_json" | jq '{name, effected_branches: .conditions.ref_name.include, enforcement, rules, updated_at}') 
+        echo "ruleset_json (NOT all branch rules)"
     done
 fi
