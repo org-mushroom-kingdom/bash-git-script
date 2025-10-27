@@ -111,7 +111,8 @@ jobs:
       #     gh api users/${{ inputs.pr_creator_manual }}
       #     echo "Exiting early with bad exit code"
       #     exit 1
-
+      # TODO: In this action (or another one with inputs, consolidate these three steps into one (should be able to assess if event is workflow dispatch) )
+      # TODO: This is also a candidate for showing how to use Github API manual trigger endpoint (Google this)
       - name: Assess pr_number_manual input
         # If input is not default value, this is a manual run and PR number should be overwritten with manual input
         # If input is default value (null), skip this step
