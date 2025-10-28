@@ -1,0 +1,30 @@
+name: Github API Tests
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # 8-28-25: These should probably be commented back in at some point, but I'm doing PR related testing and this is just static.
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # workflow_dispatch allows you to run this workflow manually from the Actions tab
+  # The inputs context allows you to put in inputs when you run a workflow manually (reference via github.event.inputs)
+  # They will appear when you hit the 'Run Workflow' buttons on the Action page, in a pop-up form format
+  # Inputs can be customized into types to be required and have default values (see below for an example of each input type)
+  # When a workflow is triggered (i.e. NOT manually), these inputs will be null if referenced.
+  workflow_dispatch:
+    inputs:
+      calls:
+        description: "Endpoint to call"
+        required: true
+        type: choice
+        options:
+          - Manually trigger test-action
+          - Manually trigger with args test-action
+  
+  steps:
+
+    - name: Echo call value
+      run: Triggering the call for "${{ inputs.calls }}"
