@@ -24,7 +24,11 @@ on:
           - Manually trigger test-action
           - Manually trigger with args test-action
   
-  steps:
+jobs:
+  execute-api-call:
+    name: Execute API call
+    runs-on: ubuntu-latest
+    steps:
 
-    - name: Echo call value
-      run: Triggering the call for "${{ inputs.calls }}"
+      - name: Echo call value
+        run: Triggering the call for "${{ inputs.calls }}"
