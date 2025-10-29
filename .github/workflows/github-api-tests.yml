@@ -10,6 +10,7 @@ on:
   #   branches: [ "main" ]
 
   # workflow_dispatch allows you to run this workflow manually from the Actions tab
+  # It can also be used from the Github API for external applications/scripts to trigger a workflow
   # The inputs context allows you to put in inputs when you run a workflow manually (reference via github.event.inputs)
   # They will appear when you hit the 'Run Workflow' buttons on the Action page, in a pop-up form format
   # Inputs can be customized into types to be required and have default values (see below for an example of each input type)
