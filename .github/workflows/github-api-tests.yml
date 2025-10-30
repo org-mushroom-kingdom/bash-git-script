@@ -24,6 +24,7 @@ on:
         options:
           - Manually trigger test-action
           - Manually trigger with args test-action
+          - Call the get labels endpoint
   
 jobs:
   execute-api-call:
