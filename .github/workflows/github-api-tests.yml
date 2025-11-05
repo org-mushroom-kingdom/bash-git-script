@@ -1,6 +1,7 @@
 name: Github API Tests
 # TODO: Have a trigger event here? Or in another action
 # ex. on: schedule: cron: [Every first Tuesday of the month]
+# TODO: Also use status check functions like success()
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
