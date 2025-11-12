@@ -1,0 +1,33 @@
+# Business: This automatically creates an issue using a schedule/cron. 
+# TODO: This is also an example of using matris
+# TODO: Replace all instances of placeholder!!
+
+name: Closing PR Comment w timestamp
+
+on:
+  schedule:
+    cron: '0 0 * * 3' # At 00:00, every month, every week, ONLY Wednesday (3)
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      placeholder:
+        description: "placeholder"
+        required: false
+        type: string
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      matrix:
+        placeholder1: ["A", "B"]
+        placeholder2: [1,2]
+    steps:
+      - name: "placeholder"
+        run: echo "placeholder"
