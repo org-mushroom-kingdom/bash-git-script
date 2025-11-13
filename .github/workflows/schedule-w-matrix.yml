@@ -47,8 +47,13 @@ jobs:
           echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
           echo "This step should get the issue template from above, and write its contents to env"
           # echo "This issue template for this job is ${{ matrix.issue_template }}."
-          # TEMPLATE=$(cat .github/ISSUE_TEMPLATE/log_report.md)
+          template_text=$(cat .github/ISSUE_TEMPLATE/log_report.md)
+          echo "TEMPLATE=template_text" >> GITHUB_ENV
 
 
       - name: Create Issue Using Template
-        run: echo "This should make a new issue using an issue template."
+        run: |
+          echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
+          first_line=$(echo "$TEMPLATE" | head -n 1)
+          echo "First line of the template:"
+          echo first_line
