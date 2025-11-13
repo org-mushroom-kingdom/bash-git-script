@@ -34,7 +34,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
-        issue_template: ["A", "B"]
+        issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml"]
         placeholder2: [1,2]
     steps:
       - name: "placeholder"
@@ -44,9 +44,11 @@ jobs:
         env:
           ISS_TEMP: ${{ matrix.issue_template }}
         run: |
-          echo "This issue template for this job is $ISS_TEMP."
+          echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
+          echo "This step should get the issue template from above, and write its contents to env"
           # echo "This issue template for this job is ${{ matrix.issue_template }}."
           # TEMPLATE=$(cat .github/ISSUE_TEMPLATE/log_report.md)
+
 
       - name: Get Issue Template
         run: echo "This should make a new issue using an issue template."
