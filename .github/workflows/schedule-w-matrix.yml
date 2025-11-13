@@ -35,7 +35,7 @@ jobs:
     strategy:
       matrix:
         issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml"]
-        placeholder2: [1,2]
+        # placeholder2: [1,2]
     steps:
       - name: "placeholder"
         run: echo "placeholder"
