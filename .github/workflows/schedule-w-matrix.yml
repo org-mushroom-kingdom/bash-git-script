@@ -42,7 +42,7 @@ jobs:
       
       - name: Get Issue Template
         env:
-          ISS_TEMP: ${{ matrix.issue_template }}
+          ISS_TEMP: "${{ matrix.issue_template }}"
         run: |
           echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
           echo "This step should get the issue template from above, and write its contents to env"
