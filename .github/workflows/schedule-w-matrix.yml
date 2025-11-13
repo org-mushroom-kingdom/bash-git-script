@@ -60,7 +60,7 @@ jobs:
         run: |
           echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
           first_line=$(echo "$TEMPLATE" | head -n 1)
-          string_length=${#$TEMPLATE}
+          string_length=${#TEMPLATE}
           echo "Length of template = ${string_length}"
           echo "First line of the template:"
           echo "${first_line} !!!"
