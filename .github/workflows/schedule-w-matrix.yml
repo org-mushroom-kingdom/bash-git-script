@@ -7,7 +7,7 @@
 
 # TODO: Idea --> Create two different issues with different templates but on same schedule?
 # TODO: Use github.event.schedule to get the precise cron expression that triggered the workflow
-name: Closing PR Comment w timestamp
+name: Schedule-Matrix Issue Creation 
 
 on:
   schedule:
