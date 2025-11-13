@@ -2,6 +2,11 @@
 # TODO: This is also an example of using matris
 # TODO: Replace all instances of placeholder!!
 
+# Per Github documentation "A matrix strategy lets you use variables in a single job definition to 
+# automatically create multiple job runs that are based on the combinations of the variables. "
+
+# TODO: Idea --> Create two different issues with different templates but on same schedule?
+# TODO: Use github.event.schedule to get the precise cron expression that triggered the workflow
 name: Closing PR Comment w timestamp
 
 on:
@@ -11,10 +16,13 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      placeholder:
-        description: "placeholder"
+      template:
+        description: "Issue Template"
         required: false
-        type: string
+        type: choice
+        options: 
+          - placeholder1
+          - placeholder2
 
 jobs:
   placeholder:
@@ -22,12 +30,25 @@ jobs:
     permissions:
       pull-requests: write
     env:
-      PR_NUMBER: ${{ github.event.pull_request.number }}
+      TEMPLATE_USED: ${{ github.event.schedule }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
-        placeholder1: ["A", "B"]
+        issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml"]
         placeholder2: [1,2]
     steps:
       - name: "placeholder"
         run: echo "placeholder"
+      
+      - name: Get Issue Template
+        env:
+          ISS_TEMP: ${{ matrix.issue_template }}
+        run: |
+          echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
+          echo "This step should get the issue template from above, and write its contents to env"
+          # echo "This issue template for this job is ${{ matrix.issue_template }}."
+          # TEMPLATE=$(cat .github/ISSUE_TEMPLATE/log_report.md)
+
+
+      - name: Get Issue Template
+        run: echo "This should make a new issue using an issue template."
