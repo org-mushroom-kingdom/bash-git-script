@@ -25,7 +25,7 @@ on:
           - placeholder2
 
 jobs:
-  placeholder:
+  create-sched-issue:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
