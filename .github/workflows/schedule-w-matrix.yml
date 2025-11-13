@@ -50,5 +50,5 @@ jobs:
           # TEMPLATE=$(cat .github/ISSUE_TEMPLATE/log_report.md)
 
 
-      - name: Get Issue Template
+      - name: Create Issue Using Template
         run: echo "This should make a new issue using an issue template."
