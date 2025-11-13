@@ -44,6 +44,8 @@ jobs:
         env:
           ISS_TEMP: "${{ matrix.issue_template }}"
         run: |
+          echo "pwd:"
+          pwd
           echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
           echo "This step should get the issue template from above, and write its contents to env"
           template_text=$(cat .github/ISSUE_TEMPLATE/$ISS_TEMP)
