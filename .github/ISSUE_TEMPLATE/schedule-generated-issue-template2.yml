@@ -16,3 +16,6 @@ body:
         This issue uses the template ```schedule-generated-issue-template2.yml```
         This issue that was generated on {{DATE}}
         2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+  - type: textarea
+    attributes:
+    label: "Literally only in here because it has to be. Otherwise you get 'Body must contain at least one non-markdown field' error"
