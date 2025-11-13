@@ -21,11 +21,11 @@ on:
         required: false
         type: choice
         options: 
-          - placeholder1
-          - placeholder2
+          - placeholder_val1
+          - placeholder_val2
 
 jobs:
-  placeholder:
+  create-sched-issue:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -37,8 +37,8 @@ jobs:
         issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml"]
         # placeholder2: [1,2]
     steps:
-      - name: "placeholder"
-        run: echo "placeholder"
+      - name: "placeholder step"
+        run: echo "placeholder step fired off"
       
       - name: Get Issue Template
         env:
