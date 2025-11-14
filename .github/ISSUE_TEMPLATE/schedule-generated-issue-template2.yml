@@ -14,8 +14,11 @@ body:
       # Using {{DATE}} makes it easy to replace {{DATE}} with an actual value
       value: |
         This issue uses the template ```schedule-generated-issue-template2.yml```
-        "This issue that was generated on {{DATE}}"
+        This issue that was generated on {{DATE}}
         2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-  - type: textarea
+  - type: input
+    id: contact
     attributes:
-      label: "Literally only in here because it has to be. Otherwise you get 'Body must contain at least one non-markdown field' error"
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
