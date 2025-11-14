@@ -14,7 +14,7 @@ body:
     attributes: 
       value: |
         This issue uses the template ```schedule-generated-issue-template1.yml```
-        This is an issue that was generated on {{DATE}}
+        "This is an issue that was generated on {{DATE}}"
         **BECAUSE I'M A NUMBER ONE** 
   - type: textarea
     attributes:
