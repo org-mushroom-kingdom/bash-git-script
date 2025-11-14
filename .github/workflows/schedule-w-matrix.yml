@@ -53,6 +53,12 @@ jobs:
           echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
           echo "This step should get the issue template from above, and write its contents to env"
           template_text=$(cat .github/ISSUE_TEMPLATE/$ISS_TEMP)
+          # In Bash, curly braces group a list of commands. << indicates a here-doc, which is used to redirect input
+          # Everything after <<EOF is considered input until the next EOF is reached. EOF here is a placeholder term--you could use DOG, PACMAN, or some other word.
+          # EOF is considered a delimiter. In our case we want the whole of the template to be written to the env var TEMPLATE
+          # So we should use a delimiter that WON'T be present in the template--"EOF" isn't present in either of files in martix.issue_template
+          # Github Actions will recognize << as you trying to assign whatever-named variable that is left of << (in our case, TEMPLATE) to a multiline value
+          # Thus TEMPLATE takes all of the template text, and we write TEMPLATE to GITHUB_ENV via the standard '>> $GITHUB_ENV' syntax
           {
             echo "TEMPLATE<<EOF"            
             echo "${template_text}"
@@ -63,7 +69,7 @@ jobs:
       - name: Create Issue Using Template
         run: |
           echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
-          first_line=$(echo "$TEMPLATE" | head -n 1)
+          first_line=$(echo "$TEMPLATE" | head -n 17)
           string_length=${#TEMPLATE}
           echo "Length of template = ${string_length}"
           echo "First line of the template:"
