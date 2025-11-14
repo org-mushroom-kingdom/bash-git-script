@@ -53,7 +53,7 @@ jobs:
           echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
           echo "This step should get the issue template from above, and write its contents to env"
           template_text=$(cat .github/ISSUE_TEMPLATE/$ISS_TEMP)
-          echo "TEMPLATE=${template_text}" >> $GITHUB_ENV
+          echo "TEMPLATE=$template_text" >> $GITHUB_ENV
 
 
       - name: Create Issue Using Template
