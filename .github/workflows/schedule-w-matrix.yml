@@ -95,4 +95,10 @@ jobs:
           # OFC you can't feed an issue template to Github API, why would you
           title_text=$(echo "$TEMPLATE" | grep "title:")
           echo "title_text = ${title_text}"
+          description_text=$(echo "$TEMPLATE" | grep "description:")
+          echo "description_text = ${description_text}"
+          labels_text=$(echo "$TEMPLATE" | grep "labels:")
+          echo "labels_text = ${labels_text}"
+          type_text=$(echo "$TEMPLATE" | grep "type:")
+          echo "type_text = ${type_text}"
           # gh issue create --title "My new issue title" --body "Detailed description of the issue."
