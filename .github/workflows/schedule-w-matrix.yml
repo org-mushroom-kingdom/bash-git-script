@@ -106,6 +106,10 @@ jobs:
           labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
           echo "labels_text = ${labels_text}" # "["something"]"
           
+          # Use first sed (stream editor) to find line that matches 'body:', then print that line and everything after ($p)
+          # sed prints every line automatically. So use -n to prevent that behavior. (Otherwise you'd be printing "body:" "body:", etc.) 
+          # When you use -n, you must tell sed what to print. So use $p to say "print this line and everything after it"
+          # Use second sed to delete (d) the first line (1) from that. These commands combine to '1d'
           body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p' | sed '1d')
           echo "body_text = ${body_text}" 
           
