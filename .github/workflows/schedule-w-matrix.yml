@@ -82,8 +82,9 @@ jobs:
             echo "17th line of the template:"
             echo "${first_line} !!!"
           fi
-          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-          TEMPLATE="${TEMPLATE//{{DATE}}/${TIMESTAMP}}"
+          timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+          date_placeholder="{{DATE}}"
+          TEMPLATE="${TEMPLATE//${date_placeholder}/${timestamp}}"
           if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
           then
             first_line=$(echo "$TEMPLATE" | head -n 18 | tail -n 1)
