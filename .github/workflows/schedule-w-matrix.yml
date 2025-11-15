@@ -94,7 +94,7 @@ jobs:
             echo "${first_line} !!!"
           fi
           # OFC you can't feed an issue template to Github API, why would you
-          title_text=$(echo "$TEMPLATE" | grep "title:" | tr -d '"')
+          title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
           echo "title_text = ${title_text}"
           description_text=$(echo "$TEMPLATE" | grep "description:")
           echo "description_text = ${description_text}"
