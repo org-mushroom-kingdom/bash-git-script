@@ -104,9 +104,9 @@ jobs:
           labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
           echo "labels_text = ${labels_text}" # "["something"]"
           
-          body_text=$(echo "$TEMPLATE" | sed -n  '/body: /,$p')
-          echo "body_text = ${body_text}" 
-          
+          # body_text=$(echo "$TEMPLATE" | sed -n  '/body: /,$p')
+          # echo "body_text = ${body_text}" 
+          echo $TEMPLATE
           # Only get the first match (-m1) because other types will be present in the YAML
           type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
           if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
@@ -119,6 +119,7 @@ jobs:
           
           # gh issue create --title "My new issue title" --body "Detailed description of the issue."
           
+          #TODO: incorporate type key conditional logic above
           # gh api \
           #   --method POST \
           #   -H "Accept: application/vnd.github+json" \
