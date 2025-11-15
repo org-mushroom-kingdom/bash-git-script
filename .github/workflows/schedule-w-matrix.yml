@@ -106,7 +106,7 @@ jobs:
           labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
           echo "labels_text = ${labels_text}" # "["something"]"
           
-          body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p')
+          body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p' | sed '1d')
           echo "body_text = ${body_text}" 
           
           # echo "$TEMPLATE"
