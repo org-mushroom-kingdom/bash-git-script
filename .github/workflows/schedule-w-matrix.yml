@@ -96,16 +96,16 @@ jobs:
           
           # Template extraction
           # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
+          # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
           title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
           echo "title_text = ${title_text}"
           description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
           echo "description_text = ${description_text}"
           labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
           echo "labels_text = ${labels_text}" # "["something"]"
-          body_text=$(echo "$TEMPLATE" | grep -P -o '(?<=body: ).*')
+          body_text=$(echo "$TEMPLATE" | grep -P -p '(?<=body: ).*')
           echo "body_text = ${body_text}" 
           
-          # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
           # Only get the first match (-m1) because other types will be present in the YAML
           type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
           if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
