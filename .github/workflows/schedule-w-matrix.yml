@@ -77,7 +77,7 @@ jobs:
           # The head commang gets the first X amt of lines (17). Tail gets the last X amt of lines (1).
           # So first would output the first 17 lines, use pipe to use this as input for tail --> tail looks at last line of the 17 lines (i.e. the 17th line in the var)
           first_line=$(echo "$TEMPLATE" | head -n 17 | tail -n 1)
-          if [[ "${{ github.event.inputs.my_boolean_input }}" == "true" ]]
+          if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
           then
             echo "First line of the template:"
             echo "${first_line} !!!"
