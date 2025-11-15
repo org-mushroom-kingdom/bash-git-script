@@ -35,6 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+      # contents: write ??? For issue template stuff. See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
     env:
       TEMPLATE_USED: ${{ github.event.schedule }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -107,10 +108,22 @@ jobs:
           if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
           then
             # Don't include the type as an arg in the call
-            echo "Not including 'type' in call to the Github API 'issue create' endpoint since the first 'type' key encountered was ${type_text}"
+            echo "Not including 'type' in call to the Github API 'issue create' endpoint since the first 'type' key encountered was '${type_text}'"
           else
             echo "!!! ${type_text}"
           fi
-          # ,markdown, input, textarea, dropdown, checkboxes
-          echo "type_text = ${type_text}"
+          
           # gh issue create --title "My new issue title" --body "Detailed description of the issue."
+          # gh api \
+          #   --method POST \
+          #   -H "Accept: application/vnd.github+json" \
+          #   -H "X-GitHub-Api-Version: 2022-11-28" \
+          #   /repos/org-mushroom-kingdom/bash-git-script/issues \
+          #   --input - <<< '{
+          #   "title": "$title_text",
+          #   "body": "TODO This will be fun to try",
+          #   "milestone": 1,
+          #   "labels": [
+          #     "bug"
+          #   ]
+          # }
