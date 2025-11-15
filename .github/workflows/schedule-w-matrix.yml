@@ -101,7 +101,7 @@ jobs:
           echo "labels_text = ${labels_text}"
 
           # Only get the first match because other types will be present in the YAML
-          type_text=$(echo "$TEMPLATE" | grep -m 1 "type: " | grep -P '(?<= :).*')
+          type_text=$(echo "$TEMPLATE" | grep -m1 -P '(?<=type:).*')
           # type: issue
           # markdown, input, textarea, dropdown, checkboxes
           echo "type_text = ${type_text}"
