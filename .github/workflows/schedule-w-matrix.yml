@@ -27,7 +27,8 @@ on:
         description: "Additional debug messages"
         required: false
         type: boolean
-        default: false
+        #TODO: Turn this to false once initial testing complete
+        default: true
 
 jobs:
   create-sched-issue:
