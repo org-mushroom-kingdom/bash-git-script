@@ -93,16 +93,19 @@ jobs:
             echo "18th line of the template (shows timestamp):"
             echo "${first_line} !!!"
           fi
-          # OFC you can't feed an issue template to Github API, why would you
+          
+          # Template extraction
+          # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
           title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
           echo "title_text = ${title_text}"
           description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
           echo "description_text = ${description_text}"
           labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
           echo "labels_text = ${labels_text}" # "["something"]"
-
+          body_text=$(echo "$TEMPLATE" | grep -P -o '(?<=body: ).*' | tr -d '"[]' )
+          echo "body_text = ${body_text}" 
+          
           # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
-          # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
           # Only get the first match (-m1) because other types will be present in the YAML
           type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
           if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
@@ -114,6 +117,7 @@ jobs:
           fi
           
           # gh issue create --title "My new issue title" --body "Detailed description of the issue."
+          
           # gh api \
           #   --method POST \
           #   -H "Accept: application/vnd.github+json" \
@@ -122,8 +126,8 @@ jobs:
           #   --input - <<< '{
           #   "title": "$title_text",
           #   "body": "TODO This will be fun to try",
-          #   "milestone": 1,
+          #   "type": "$type_text"
           #   "labels": [
-          #     "bug"
+          #     "$label_text"
           #   ]
           # }
