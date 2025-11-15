@@ -103,13 +103,13 @@ jobs:
           # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
           # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
           # Only get the first match (-m1) because other types will be present in the YAML
-          type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type:).*')
+          type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
           if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
           then
             # Don't include the type as an arg in the call
             echo "Not including 'type' in call to the Github API 'issue create' endpoint since the first 'type' key encountered was ${type_text}"
           else
-            echo "${type_text}"
+            echo "!!! ${type_text}"
           fi
           # ,markdown, input, textarea, dropdown, checkboxes
           echo "type_text = ${type_text}"
