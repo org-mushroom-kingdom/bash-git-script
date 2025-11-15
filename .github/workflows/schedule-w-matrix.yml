@@ -83,7 +83,7 @@ jobs:
             echo "${first_line} !!!"
           fi
           TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-          $TEMPLATE="${TEMPLATE//{{DATE}}/${TIMESTAMP}}"
+          TEMPLATE="${TEMPLATE//{{DATE}}/${TIMESTAMP}}"
           if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
           then
             first_line=$(echo "$TEMPLATE" | head -n 18 | tail -n 1)
