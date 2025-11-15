@@ -108,7 +108,7 @@ jobs:
           
           echo "-----------------"
 
-          body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p')
+          body_text=$(echo "$TEMPLATE" | sed -n '1,/body:/d')
           echo "body_text = ${body_text}" 
           
           # echo "$TEMPLATE"
