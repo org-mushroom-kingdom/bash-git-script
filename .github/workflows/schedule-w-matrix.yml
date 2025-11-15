@@ -103,7 +103,8 @@ jobs:
           echo "description_text = ${description_text}"
           labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
           echo "labels_text = ${labels_text}" # "["something"]"
-          body_text=$(echo "$TEMPLATE" | grep -P -p '(?<=body: ).*')
+          
+          body_text=$(echo "$TEMPLATE" | sed '1,/body: /d')
           echo "body_text = ${body_text}" 
           
           # Only get the first match (-m1) because other types will be present in the YAML
