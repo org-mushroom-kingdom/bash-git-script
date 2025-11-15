@@ -99,6 +99,10 @@ jobs:
           echo "description_text = ${description_text}"
           labels_text=$(echo "$TEMPLATE" | grep "labels:")
           echo "labels_text = ${labels_text}"
-          type_text=$(echo "$TEMPLATE" | grep "type:")
+
+          # Only get the first match because other types will be present in the YAML
+          type_text=$(echo "$TEMPLATE" | grep -m 1 "type: " | grep -P '(?<= :).*'
+          # type: issue
+          # markdown, input, textarea, dropdown, checkboxes
           echo "type_text = ${type_text}"
           # gh issue create --title "My new issue title" --body "Detailed description of the issue."
