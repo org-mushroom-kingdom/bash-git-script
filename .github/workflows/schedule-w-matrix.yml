@@ -102,7 +102,7 @@ jobs:
           echo "description_text = ${description_text}"
           labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
           echo "labels_text = ${labels_text}" # "["something"]"
-          body_text=$(echo "$TEMPLATE" | grep -P -o '(?<=body: ).*' | tr -d '"[]' )
+          body_text=$(echo "$TEMPLATE" | grep -P -o '(?<=body: ).*')
           echo "body_text = ${body_text}" 
           
           # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
