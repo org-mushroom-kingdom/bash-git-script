@@ -171,7 +171,6 @@ jobs:
                 /repos/org-mushroom-kingdom/bash-git-script/issues \
                 --input - <<< '{
                   "title": "$title_text",
-                  "body": "$body_text",
                   "type": "$type_text",
                   "labels": [
                     "$label_text"
