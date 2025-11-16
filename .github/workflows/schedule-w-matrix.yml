@@ -46,6 +46,7 @@ jobs:
         # placeholder2: [1,2]
         exclude: 
           - issue_template: "do-not-use"
+          - issue_template: "do-not-use-2"
           - issue_template: "schedule-generated-issue-template2.yml"
     steps:
       
