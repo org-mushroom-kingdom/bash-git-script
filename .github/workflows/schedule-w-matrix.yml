@@ -66,9 +66,9 @@ jobs:
             echo "For now (11-15-2025), the 'do-not-use' matrix template option should just fail if it's encountered. Failing this job."
             exit 1
           fi
-          echo "github.event = ${{ github.event }}"
+          echo "github.event = $GITHUB_EVENT"
           
-          if [[ "${{ github.event }}"  == "workflow_dispatch" && "${{ matrix.issue_template }}" == "do-not-use-2" ]]
+          if [[ "$GITHUB_EVENT"  == "workflow_dispatch" && "${{ matrix.issue_template }}" == "do-not-use-2" ]]
           then
             echo "This job uses 'do-not-use-2' as a value for matrix.issue_template. This doesn't point to a valid template."
             echo "This shouldn't be activated when fired off by a schedule."
