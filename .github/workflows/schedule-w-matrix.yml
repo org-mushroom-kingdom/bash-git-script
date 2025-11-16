@@ -174,8 +174,10 @@ jobs:
                 -H "Accept: application/vnd.github+json" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 /repos/org-mushroom-kingdom/bash-git-script/issues \
-                "title": "$title_text" \
-                "body": "$body_text" \
+                --input - <<< '{
+                  "title": "$title_text",
+                  "body": "$body_text"
+                }'
                 
                 # --raw-field "body=$body_text" \
             fi
