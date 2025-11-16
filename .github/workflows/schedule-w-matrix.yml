@@ -128,8 +128,7 @@ jobs:
             # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
             title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
             [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "title_text = ${title_text}"
-            echo "early exit"
-            exit 1
+
             description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
             [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "description_text = ${description_text}"
             
