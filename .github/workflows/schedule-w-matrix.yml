@@ -67,7 +67,6 @@ jobs:
             echo "For now (11-15-2025), the 'do-not-use' matrix template option should just fail if it's encountered. Failing this job."
             exit 1
           fi
-          echo "github.event = $GITHUB_EVENT_NAME"
           
           if [[ "$GITHUB_EVENT_NAME"  == "workflow_dispatch" && "${{ matrix.issue_template }}" == "do-not-use-2" ]]
           then
@@ -155,7 +154,7 @@ jobs:
             fi
             
             # gh issue create --title "My new issue title" --body "Detailed description of the issue."
-            
+            echo "Making API call now"
             #TODO: incorporate type key conditional logic above
             gh api \
               --method POST \
