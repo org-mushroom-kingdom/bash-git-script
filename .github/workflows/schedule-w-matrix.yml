@@ -71,93 +71,102 @@ jobs:
           if [[ "${{ github.event }}"  == "workflow_dispatch" && "${{ matrix.issue_template }}" == "do-not-use-2" ]]
           then
             echo "This job uses 'do-not-use-2' as a value for matrix.issue_template. This doesn't point to a valid template."
-            echo "This shouldn't be activated when fired off by a schedule. It will activate AND fail if called via workflow_dispatch."
-            exit 1
+            echo "This shouldn't be activated when fired off by a schedule."
+            template_text="do-not-use-2"
+            echo"TEMPLATE=$template_text" >> $GITHUB_ENV
+          else  
+            echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
+            echo "This step should get the issue template from above, and write its contents to env"
+            template_text=$(cat .github/ISSUE_TEMPLATE/$ISS_TEMP)
+            
+            # In Bash, curly braces group a list of commands. << indicates a here-doc, which is used to redirect input
+            # Everything after <<EOF is considered input until the next EOF is reached. EOF here is a placeholder term--you could use DOG, PACMAN, or some other word.
+            # EOF is considered a delimiter. In our case we want the whole of the template to be written to the env var TEMPLATE
+            # So we should use a delimiter that WON'T be present in the template--"EOF" isn't present in either of files in martix.issue_template
+            # Github Actions will recognize << as you trying to assign whatever-named variable that is left of << (in our case, TEMPLATE) to a multiline value
+            # Thus TEMPLATE takes all of the template text, and we write TEMPLATE to GITHUB_ENV via the standard '>> $GITHUB_ENV' syntax
+            {
+              echo "TEMPLATE<<EOF"            
+              echo "${template_text}"
+              echo "EOF"
+              } >> $GITHUB_ENV
           fi
-          
-          echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
-          echo "This step should get the issue template from above, and write its contents to env"
-          template_text=$(cat .github/ISSUE_TEMPLATE/$ISS_TEMP)
-          # In Bash, curly braces group a list of commands. << indicates a here-doc, which is used to redirect input
-          # Everything after <<EOF is considered input until the next EOF is reached. EOF here is a placeholder term--you could use DOG, PACMAN, or some other word.
-          # EOF is considered a delimiter. In our case we want the whole of the template to be written to the env var TEMPLATE
-          # So we should use a delimiter that WON'T be present in the template--"EOF" isn't present in either of files in martix.issue_template
-          # Github Actions will recognize << as you trying to assign whatever-named variable that is left of << (in our case, TEMPLATE) to a multiline value
-          # Thus TEMPLATE takes all of the template text, and we write TEMPLATE to GITHUB_ENV via the standard '>> $GITHUB_ENV' syntax
-          {
-            echo "TEMPLATE<<EOF"            
-            echo "${template_text}"
-            echo "EOF"
-          } >> $GITHUB_ENV
-
+              
 
       - name: Create Issue Using Template
         run: |
           echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
 
-          if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
+          if [[ "$TEMPLATE" == "do-not-use-2" ]]
           then
-            # The head commang gets the first X amt of lines (17). Tail gets the last X amt of lines (1).
-            # So first would output the first 17 lines, use pipe to use this as input for tail --> tail looks at last line of the 17 lines (i.e. the 17th line in the var)
-            first_line=$(echo "$TEMPLATE" | head -n 17 | tail -n 1)
-            echo "17th line of the template:"
-            echo "${first_line} !!!"
-          fi
-          timestamp=$(date +"%Y-%m-%d %H:%M:%S")
-          date_placeholder="{{DATE}}"
-          TEMPLATE="${TEMPLATE//${date_placeholder}/${timestamp}}"
-          if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
-          then
-            first_line=$(echo "$TEMPLATE" | head -n 18 | tail -n 1)
-            echo "18th line of the template (shows timestamp):"
-            echo "${first_line} !!!"
-          fi
-          
-          # Template extraction
-          
-          # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
-          # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
-          title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
-          echo "title_text = ${title_text}"
-          
-          description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
-          echo "description_text = ${description_text}"
-          
-          labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
-          echo "labels_text = ${labels_text}" # "["something"]"
-          
-          # Use first sed (stream editor) to find line that matches 'body:', then print that line and everything after ($p)
-          # sed prints every line automatically. So use -n to prevent that behavior. (Otherwise you'd be printing "body:" "body:", etc.) 
-          # When you use -n, you must tell sed what to print. So use $p to say "print this line and everything after it"
-          # Use second sed to delete (d) the first line (1) from that. These commands combine to '1d'
-          body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p' | sed '1d')
-          echo "body_text = ${body_text}" 
-          
-          # echo "$TEMPLATE"
-          
-          # Only get the first match (-m1) because other types will be present in the YAML
-          type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
-          if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
-          then
-            # Don't include the type as an arg in the call
-            echo "Not including 'type' in call to the Github API 'issue create' endpoint since the first 'type' key encountered was '${type_text}'"
+            echo "TEMPLATE = '$TEMPLATE' NOT doing any issue template stuff."
           else
-            echo "!!! ${type_text}"
+            if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
+            then
+              # The head commang gets the first X amt of lines (17). Tail gets the last X amt of lines (1).
+              # So first would output the first 17 lines, use pipe to use this as input for tail --> tail looks at last line of the 17 lines (i.e. the 17th line in the var)
+              first_line=$(echo "$TEMPLATE" | head -n 17 | tail -n 1)
+              echo "17th line of the template:"
+              echo "${first_line} !!!"
+            fi
+            
+            timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+            date_placeholder="{{DATE}}"
+            TEMPLATE="${TEMPLATE//${date_placeholder}/${timestamp}}"
+            
+            if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
+            then
+              first_line=$(echo "$TEMPLATE" | head -n 18 | tail -n 1)
+              echo "18th line of the template (shows timestamp):"
+              echo "${first_line} !!!"
+            fi
+            
+            # Template extraction
+            
+            # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
+            # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
+            title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
+            echo "title_text = ${title_text}"
+            
+            description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
+            echo "description_text = ${description_text}"
+            
+            labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
+            echo "labels_text = ${labels_text}" # "["something"]"
+            
+            # Use first sed (stream editor) to find line that matches 'body:', then print that line and everything after ($p)
+            # sed prints every line automatically. So use -n to prevent that behavior. (Otherwise you'd be printing "body:" "body:", etc.) 
+            # When you use -n, you must tell sed what to print. So use $p to say "print this line and everything after it"
+            # Use second sed to delete (d) the first line (1) from that. These commands combine to '1d'
+            body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p' | sed '1d')
+            echo "body_text = ${body_text}" 
+            
+            # echo "$TEMPLATE"
+            
+            # Only get the first match (-m1) because other types will be present in the YAML
+            type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
+            if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
+            then
+              # Don't include the type as an arg in the call
+              echo "Not including 'type' in call to the Github API 'issue create' endpoint since the first 'type' key encountered was '${type_text}'"
+            else
+              echo "!!! ${type_text}"
+            fi
+            
+            # gh issue create --title "My new issue title" --body "Detailed description of the issue."
+            
+            #TODO: incorporate type key conditional logic above
+            # gh api \
+            #   --method POST \
+            #   -H "Accept: application/vnd.github+json" \
+            #   -H "X-GitHub-Api-Version: 2022-11-28" \
+            #   /repos/org-mushroom-kingdom/bash-git-script/issues \
+            #   --input - <<< '{
+            #   "title": "$title_text",
+            #   "body": "$body_text",
+            #   "type": "$type_text"
+            #   "labels": [
+            #     "$label_text"
+            #   ]
+            # }
           fi
-          
-          # gh issue create --title "My new issue title" --body "Detailed description of the issue."
-          
-          #TODO: incorporate type key conditional logic above
-          # gh api \
-          #   --method POST \
-          #   -H "Accept: application/vnd.github+json" \
-          #   -H "X-GitHub-Api-Version: 2022-11-28" \
-          #   /repos/org-mushroom-kingdom/bash-git-script/issues \
-          #   --input - <<< '{
-          #   "title": "$title_text",
-          #   "body": "$body_text",
-          #   "type": "$type_text"
-          #   "labels": [
-          #     "$label_text"
-          #   ]
-          # }
