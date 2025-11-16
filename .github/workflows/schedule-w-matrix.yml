@@ -73,7 +73,7 @@ jobs:
             echo "This job uses 'do-not-use-2' as a value for matrix.issue_template. This doesn't point to a valid template."
             echo "This shouldn't be activated when fired off by a schedule."
             template_text="do-not-use-2"
-            echo"TEMPLATE=$template_text" >> $GITHUB_ENV
+            echo "TEMPLATE=$template_text" >> $GITHUB_ENV
           else  
             echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
             echo "This step should get the issue template from above, and write its contents to env"
