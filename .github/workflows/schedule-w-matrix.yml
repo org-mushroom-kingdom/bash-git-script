@@ -95,6 +95,7 @@ jobs:
           fi
           
           # Template extraction
+          
           # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
           # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
           title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
@@ -135,7 +136,7 @@ jobs:
           #   /repos/org-mushroom-kingdom/bash-git-script/issues \
           #   --input - <<< '{
           #   "title": "$title_text",
-          #   "body": "TODO This will be fun to try",
+          #   "body": "$body_text",
           #   "type": "$type_text"
           #   "labels": [
           #     "$label_text"
