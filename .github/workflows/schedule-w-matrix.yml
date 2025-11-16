@@ -167,6 +167,7 @@ jobs:
               #     ]
               #   }
             else
+              # TODO: Use and modify this syntax in the clause above. This will show two different ways to create an issue (one via Github CLI, other with Github CLI w Github API call)
               #Use the -i to get the HTTP status code (you can see it in the output for this step)
               # Use the --raw-field flag to have Bash variables be interpreted as strings
               # gh api -i \
@@ -180,7 +181,7 @@ jobs:
               #   }'
                 
               #   # --raw-field "body=$body_text" \
-              gh issue create --title "$title_text" --body "$body_text" --type "dummy"
+              gh issue create --title "$title_text" --body "$body_text"
             fi
             
             #TODO: incorporate type key conditional logic above
