@@ -180,7 +180,7 @@ jobs:
               #   }'
                 
               #   # --raw-field "body=$body_text" \
-              gh issue create --title "$title_text" --body "$body_text" ---type "dummy"
+              gh issue create --title "$title_text" --body "$body_text" --type "dummy"
             fi
             
             #TODO: incorporate type key conditional logic above
