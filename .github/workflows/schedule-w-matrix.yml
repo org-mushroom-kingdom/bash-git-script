@@ -96,6 +96,7 @@ jobs:
 
       - name: Create Issue Using Template
         run: |
+          # Use the TEMPLATE to make args for the API call
           if [[ "$TEMPLATE" == "do-not-use-2" ]]
           then
             echo "TEMPLATE = '$TEMPLATE' NOT doing any issue template stuff."
