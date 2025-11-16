@@ -70,7 +70,7 @@ jobs:
           
           if [[ "$GITHUB_EVENT_NAME"  == "workflow_dispatch" && "${{ matrix.issue_template }}" == "do-not-use-2" ]]
           then
-            echo "This job uses 'do-not-use-2' as a value for matrix.issue_template. This doesn't point to a valid template."
+            echo "This job uses 'do-not-use-2' as a value for matrix.issue_template (${{ matrix.issue_template }}). This doesn't point to a valid template."
             echo "This shouldn't be activated when fired off by a schedule."
             template_text="do-not-use-2"
             echo "TEMPLATE=$template_text" >> $GITHUB_ENV
@@ -161,11 +161,11 @@ jobs:
               -H "X-GitHub-Api-Version: 2022-11-28" \
               /repos/org-mushroom-kingdom/bash-git-script/issues \
               --input - <<< '{
-              "title": "$title_text",
-              "body": "$body_text",
-              "type": "$type_text"
-              "labels": [
-                "$label_text"
-              ]
-            }
+                "title": "$title_text",
+                "body": "$body_text",
+                "type": "$type_text"
+                "labels": [
+                  "$label_text"
+                ]
+              }
           fi
