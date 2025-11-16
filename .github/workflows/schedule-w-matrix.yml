@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-      # contents: write ??? For issue template stuff. See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
+      contents: write # ??? For issue template stuff. See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
     env:
       TEMPLATE_USED: ${{ github.event.schedule }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
