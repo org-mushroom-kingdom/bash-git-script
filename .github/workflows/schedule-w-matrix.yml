@@ -95,12 +95,11 @@ jobs:
 
       - name: Create Issue Using Template
         run: |
-          echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
-
           if [[ "$TEMPLATE" == "do-not-use-2" ]]
           then
             echo "TEMPLATE = '$TEMPLATE' NOT doing any issue template stuff."
           else
+            echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
             if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
             then
               # The head commang gets the first X amt of lines (17). Tail gets the last X amt of lines (1).
