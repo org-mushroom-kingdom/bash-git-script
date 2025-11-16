@@ -147,7 +147,7 @@ jobs:
             
             # Only get the first match (-m1) because other types will be present in the YAML
             type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
-            # [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "type_text = ${type_text}" 
+            [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "type_text = ${type_text}" 
 
             echo "Making API call now"
             if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
