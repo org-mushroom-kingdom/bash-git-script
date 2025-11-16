@@ -177,7 +177,7 @@ jobs:
                   "labels": [
                     "$label_text"
                   ]
-                }
+                }'
             fi
             
             # gh issue create --title "My new issue title" --body "Detailed description of the issue."
