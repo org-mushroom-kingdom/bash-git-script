@@ -45,7 +45,7 @@ jobs:
         issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml", "do-not-use", "do-not-use-2"]
         # placeholder2: [1,2]
         exclude: 
-          - issue_template: "do-not-use"
+          - issue_template: ["do-not-use", "schedule-generated-issue-template2.yml"]
     steps:
       
       - name: Check out repository
@@ -129,17 +129,17 @@ jobs:
             [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "title_text = ${title_text}"
             
             description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
-            echo "description_text = ${description_text}"
+            [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "description_text = ${description_text}"
             
             labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
-            echo "labels_text = ${labels_text}" # "["something"]"
+            [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "labels_text = ${labels_text}" # "["something"]"
             
             # Use first sed (stream editor) to find line that matches 'body:', then print that line and everything after ($p)
             # sed prints every line automatically. So use -n to prevent that behavior. (Otherwise you'd be printing "body:" "body:", etc.) 
             # When you use -n, you must tell sed what to print. So use $p to say "print this line and everything after it"
             # Use second sed to delete (d) the first line (1) from that. These commands combine to '1d'
             body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p' | sed '1d')
-            echo "body_text = ${body_text}" 
+            # [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "body_text = ${body_text}" 
             
             # echo "$TEMPLATE"
             
@@ -156,17 +156,17 @@ jobs:
             # gh issue create --title "My new issue title" --body "Detailed description of the issue."
             
             #TODO: incorporate type key conditional logic above
-            # gh api \
-            #   --method POST \
-            #   -H "Accept: application/vnd.github+json" \
-            #   -H "X-GitHub-Api-Version: 2022-11-28" \
-            #   /repos/org-mushroom-kingdom/bash-git-script/issues \
-            #   --input - <<< '{
-            #   "title": "$title_text",
-            #   "body": "$body_text",
-            #   "type": "$type_text"
-            #   "labels": [
-            #     "$label_text"
-            #   ]
-            # }
+            gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/org-mushroom-kingdom/bash-git-script/issues \
+              --input - <<< '{
+              "title": "$title_text",
+              "body": "$body_text",
+              "type": "$type_text"
+              "labels": [
+                "$label_text"
+              ]
+            }
           fi
