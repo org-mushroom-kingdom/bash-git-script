@@ -144,28 +144,40 @@ jobs:
             
             # Only get the first match (-m1) because other types will be present in the YAML
             type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
+            
+            echo "Making API call now"
             if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
             then
               # Don't include the type as an arg in the call
               echo "Not including 'type' in call to the Github API 'issue create' endpoint since the first 'type' key encountered was '${type_text}'"
+              # gh api \
+              #   --method POST \
+              #   -H "Accept: application/vnd.github+json" \
+              #   -H "X-GitHub-Api-Version: 2022-11-28" \
+              #   /repos/org-mushroom-kingdom/bash-git-script/issues \
+              #   --input - <<< '{
+              #     "title": "$title_text",
+              #     "body": "$body_text",
+              #     "labels": [
+              #       "$label_text"
+              #     ]
+              #   }
             else
-              echo "!!! ${type_text}"
+              gh api \
+                --method POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                /repos/org-mushroom-kingdom/bash-git-script/issues \
+                --input - <<< '{
+                  "title": "$title_text",
+                  "body": "$body_text",
+                  "type": "$type_text",
+                  "labels": [
+                    "$label_text"
+                  ]
+                }
             fi
             
             # gh issue create --title "My new issue title" --body "Detailed description of the issue."
-            echo "Making API call now"
             #TODO: incorporate type key conditional logic above
-            # gh api \
-            #   --method POST \
-            #   -H "Accept: application/vnd.github+json" \
-            #   -H "X-GitHub-Api-Version: 2022-11-28" \
-            #   /repos/org-mushroom-kingdom/bash-git-script/issues \
-            #   --input - <<< '{
-            #     "title": "$title_text",
-            #     "body": "$body_text",
-            #     "type": "$type_text"
-            #     "labels": [
-            #       "$label_text"
-            #     ]
-            #   }
           fi
