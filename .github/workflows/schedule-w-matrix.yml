@@ -155,17 +155,17 @@ jobs:
             # gh issue create --title "My new issue title" --body "Detailed description of the issue."
             echo "Making API call now"
             #TODO: incorporate type key conditional logic above
-            gh api \
-              --method POST \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              /repos/org-mushroom-kingdom/bash-git-script/issues \
-              --input - <<< '{
-                "title": "$title_text",
-                "body": "$body_text",
-                "type": "$type_text"
-                "labels": [
-                  "$label_text"
-                ]
-              }
+            # gh api \
+            #   --method POST \
+            #   -H "Accept: application/vnd.github+json" \
+            #   -H "X-GitHub-Api-Version: 2022-11-28" \
+            #   /repos/org-mushroom-kingdom/bash-git-script/issues \
+            #   --input - <<< '{
+            #     "title": "$title_text",
+            #     "body": "$body_text",
+            #     "type": "$type_text"
+            #     "labels": [
+            #       "$label_text"
+            #     ]
+            #   }
           fi
