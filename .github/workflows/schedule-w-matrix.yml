@@ -41,8 +41,11 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
-        issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml"]
+        # "do-not-use" does not point to an issue template. It's present here for testing purposes (TODO list purposes)
+        issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml", "do-not-use"]
         # placeholder2: [1,2]
+        exclude: 
+          - issue_template: "do-not-use"
     steps:
       
       - name: Check out repository
@@ -76,6 +79,13 @@ jobs:
       - name: Create Issue Using Template
         run: |
           echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
+          
+          if [[ "${{ matrix.issue_template }}" == "do-not-use" ]]
+          then
+            echo "For now (11-15-2025), the 'do-not-use' matrix template option should just fail if it's encountered. Failing this job."
+            exit 1
+          fi
+          
           if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
           then
             # The head commang gets the first X amt of lines (17). Tail gets the last X amt of lines (1).
