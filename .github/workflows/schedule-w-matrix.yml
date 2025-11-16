@@ -169,19 +169,19 @@ jobs:
             else
               #Use the -i to get the HTTP status code (you can see it in the output for this step)
               # Use the --raw-field flag to have Bash variables be interpreted as strings
-              gh api -i \
-                --method POST \
-                -H "Accept: application/vnd.github+json" \
-                -H "X-GitHub-Api-Version: 2022-11-28" \
-                /repos/org-mushroom-kingdom/bash-git-script/issues \
-                --input - <<< '{
-                  "title": "$title_text",
-                  "body": "$body_text"
-                }'
+              # gh api -i \
+              #   --method POST \
+              #   -H "Accept: application/vnd.github+json" \
+              #   -H "X-GitHub-Api-Version: 2022-11-28" \
+              #   /repos/org-mushroom-kingdom/bash-git-script/issues \
+              #   --input - <<< '{
+              #     "title": "$title_text",
+              #     "body": "$body_text"
+              #   }'
                 
-                # --raw-field "body=$body_text" \
+              #   # --raw-field "body=$body_text" \
+              gh issue create --title "$title_text" --body "$body_text"
             fi
             
-            # gh issue create --title "My new issue title" --body "Detailed description of the issue."
             #TODO: incorporate type key conditional logic above
           fi
