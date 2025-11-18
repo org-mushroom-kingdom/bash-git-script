@@ -30,6 +30,7 @@ on:
         #TODO: Turn this to false once initial testing complete
         default: true
 
+
 jobs:
   create-sched-issue:
     runs-on: ubuntu-latest
@@ -149,40 +150,26 @@ jobs:
             type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
             [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "type_text = ${type_text}" 
 
-            echo "Making API call now"
-            if [[ "$type_text" == "markdown" || "$type_text" == "input" || "$type_text" == "textarea" || "$type_text" == "dropdown" || "$type_text" == "checkboxes" ]]
-            then
-              # Don't include the type as an arg in the call
-              echo "Not including 'type' in call to the Github API 'issue create' endpoint since the first 'type' key encountered was '${type_text}'"
-              # gh api \
-              #   --method POST \
-              #   -H "Accept: application/vnd.github+json" \
-              #   -H "X-GitHub-Api-Version: 2022-11-28" \
-              #   /repos/org-mushroom-kingdom/bash-git-script/issues \
-              #   --input - <<< '{
-              #     "title": "$title_text",
-              #     "body": "$body_text",
-              #     "labels": [
-              #       "$label_text"
-              #     ]
-              #   }
-            else
-              # TODO: Use and modify this syntax in the clause above. This will show two different ways to create an issue (one via Github CLI, other with Github CLI w Github API call)
-              #Use the -i to get the HTTP status code (you can see it in the output for this step)
-              # Use the --raw-field flag to have Bash variables be interpreted as strings
-              # gh api -i \
-              #   --method POST \
-              #   -H "Accept: application/vnd.github+json" \
-              #   -H "X-GitHub-Api-Version: 2022-11-28" \
-              #   /repos/org-mushroom-kingdom/bash-git-script/issues \
-              #   --input - <<< '{
-              #     "title": "$title_text",
-              #     "body": "$body_text"
-              #   }'
-                
-              #   # --raw-field "body=$body_text" \
-              gh issue create --title "$title_text" --body "$body_text"
-            fi
             
-            #TODO: incorporate type key conditional logic above
+            # This commented out block shows how you could use the Github CLI to call the Github API 'create an issue' endpoint
+            
+            # gh api \
+            #   --method POST \
+            #   -H "Accept: application/vnd.github+json" \
+            #   -H "X-GitHub-Api-Version: 2022-11-28" \
+            #   /repos/org-mushroom-kingdom/bash-git-script/issues \
+            #   --input - <<< '{
+            #     "title": "$title_text",
+            #     "body": "$body_text",
+            #     "labels": [
+            #       "$label_text"
+            #     ]
+            #   }
+                
+            # This block shows the Github CLI command 'issue create' being used. Compare and contrast the more explicit API call above.
+            
+            echo "Creating issue via 'gh issue create' now"
+            # Use the -i to get the HTTP status code (you can see it in the output for this step)
+            gh issue create --title "$title_text" --body "$body_text"
+            
           fi
