@@ -45,7 +45,7 @@ jobs:
     strategy:
       matrix:
         # "do-not-use" does not point to an issue template. It's present here for testing purposes (TODO list purposes)
-        issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml", "do-not-use", "do-not-use-2"]
+        issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml", "do-not-use"]
         exclude: 
           - issue_template: "do-not-use"
     steps:
@@ -90,77 +90,72 @@ jobs:
       - name: Create Issue Using Template
         run: |
           # Use the TEMPLATE to make args for the API call
-          if [[ "$TEMPLATE" == "do-not-use-2" ]]
+          
+          echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
+          if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
           then
-            echo "TEMPLATE = '$TEMPLATE' NOT doing any issue template stuff."
-          else
-            echo "About to make a new issue using an issue template (${{ matrix.issue_template }})."
-            if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
-            then
-              # The head commang gets the first X amt of lines (17). Tail gets the last X amt of lines (1).
-              # So first would output the first 17 lines, use pipe to use this as input for tail --> tail looks at last line of the 17 lines (i.e. the 17th line in the var)
-              first_line=$(echo "$TEMPLATE" | head -n 17 | tail -n 1)
-              echo "17th line of the template:"
-              echo "${first_line} !!!"
-            fi
-            
-            timestamp=$(date +"%Y-%m-%d %H:%M:%S")
-            date_placeholder="{{DATE}}"
-            TEMPLATE="${TEMPLATE//${date_placeholder}/${timestamp}}"
-            
-            if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
-            then
-              first_line=$(echo "$TEMPLATE" | head -n 18 | tail -n 1)
-              echo "18th line of the template (shows timestamp):"
-              echo "${first_line} !!!"
-            fi
-            
-            # Template extraction
-            
-            # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
-            # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
-            title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
-            [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "title_text = ${title_text}"
-
-            description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
-            [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "description_text = ${description_text}"
-            
-            labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
-            [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "labels_text = ${labels_text}" # "["something"]"
-            
-            # Use first sed (stream editor) to find line that matches 'body:', then print that line and everything after ($p)
-            # sed prints every line automatically. So use -n to prevent that behavior. (Otherwise you'd be printing "body:" "body:", etc.) 
-            # When you use -n, you must tell sed what to print. So use $p to say "print this line and everything after it"
-            # Use second sed to delete (d) the first line (1) from that. These commands combine to '1d'
-            body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p' | sed '1d')
-            # [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "body_text = ${body_text}" 
-            
-            # echo "$TEMPLATE"
-            
-            # Only get the first match (-m1) because other types will be present in the YAML
-            type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
-            [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "type_text = ${type_text}" 
-
-            
-            # This commented out block shows how you could use the Github CLI to call the Github API 'create an issue' endpoint
-            
-            # gh api \
-            #   --method POST \
-            #   -H "Accept: application/vnd.github+json" \
-            #   -H "X-GitHub-Api-Version: 2022-11-28" \
-            #   /repos/org-mushroom-kingdom/bash-git-script/issues \
-            #   --input - <<< '{
-            #     "title": "$title_text",
-            #     "body": "$body_text",
-            #     "labels": [
-            #       "$label_text"
-            #     ]
-            #   }
-                
-            # This block shows the Github CLI command 'issue create' being used. Compare and contrast the more explicit API call above.
-            
-            echo "Creating issue via 'gh issue create' now"
-            # Use the -i to get the HTTP status code (you can see it in the output for this step)
-            gh issue create --title "$title_text" --body "$body_text"
-            
+            # The head commang gets the first X amt of lines (17). Tail gets the last X amt of lines (1).
+            # So first would output the first 17 lines, use pipe to use this as input for tail --> tail looks at last line of the 17 lines (i.e. the 17th line in the var)
+            first_line=$(echo "$TEMPLATE" | head -n 17 | tail -n 1)
+            echo "17th line of the template:"
+            echo "${first_line} !!!"
           fi
+          
+          timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+          date_placeholder="{{DATE}}"
+          TEMPLATE="${TEMPLATE//${date_placeholder}/${timestamp}}"
+          
+          if [[ "${{ github.event.inputs.verbose }}" == "true" ]]
+          then
+            first_line=$(echo "$TEMPLATE" | head -n 18 | tail -n 1)
+            echo "18th line of the template (shows timestamp):"
+            echo "${first_line} !!!"
+          fi
+            
+          # Template extraction
+          
+          # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
+          # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
+          title_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=title: ).*' | tr -d '"')
+          [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "title_text = ${title_text}"
+
+          description_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=description: ).*' | tr -d '"')
+          [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "description_text = ${description_text}"
+          
+          labels_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=labels: ).*' | tr -d '"[]' )
+          [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "labels_text = ${labels_text}" # "["something"]"
+          
+          # Use first sed (stream editor) to find line that matches 'body:', then print that line and everything after ($p)
+          # sed prints every line automatically. So use -n to prevent that behavior. (Otherwise you'd be printing "body:" "body:", etc.) 
+          # When you use -n, you must tell sed what to print. So use $p to say "print this line and everything after it"
+          # Use second sed to delete (d) the first line (1) from that. These commands combine to '1d'
+          body_text=$(echo "$TEMPLATE" | sed -n '/body:/,$p' | sed '1d')
+          # [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "body_text = ${body_text}" 
+          
+          # echo "$TEMPLATE"
+          
+          # Only get the first match (-m1) because other types will be present in the YAML
+          type_text=$(echo "$TEMPLATE" | grep -m1 -P -o '(?<=type: ).*')
+          [[ "${{ github.event.inputs.verbose }}" == "true" ]] && echo "type_text = ${type_text}" 
+
+          
+          # This commented out block shows how you could use the Github CLI to call the Github API 'create an issue' endpoint
+          
+          # gh api \
+          #   --method POST \
+          #   -H "Accept: application/vnd.github+json" \
+          #   -H "X-GitHub-Api-Version: 2022-11-28" \
+          #   /repos/org-mushroom-kingdom/bash-git-script/issues \
+          #   --input - <<< '{
+          #     "title": "$title_text",
+          #     "body": "$body_text",
+          #     "labels": [
+          #       "$label_text"
+          #     ]
+          #   }
+              
+          # This block shows the Github CLI command 'issue create' being used. Compare and contrast the more explicit API call above.
+          
+          echo "Creating issue via 'gh issue create' now"
+          # Use the -i to get the HTTP status code (you can see it in the output for this step)
+          gh issue create --title "$title_text" --body "$body_text"
