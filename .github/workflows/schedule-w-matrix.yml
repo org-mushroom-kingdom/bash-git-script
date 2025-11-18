@@ -1,11 +1,12 @@
-# Business: This automatically creates an issue using a schedule/cron. 
-# TODO: This is also an example of using matris
+# Business: This automatically creates two different issues with different templates but on the same schedule
+# That schedule is achieved by on: schedule: cron as seen below
+# This workflow is also a very basic example of using strategy: matrix (The exclude key here is also used as an example)
 # TODO: Replace all instances of placeholder!!
 
 # Per Github documentation "A matrix strategy lets you use variables in a single job definition to 
 # automatically create multiple job runs that are based on the combinations of the variables. "
 
-# TODO: Idea --> Create two different issues with different templates but on same schedule?
+
 # TODO: Use github.event.schedule to get the precise cron expression that triggered the workflow
 name: Schedule-Matrix Issue Creation 
 
@@ -45,11 +46,8 @@ jobs:
       matrix:
         # "do-not-use" does not point to an issue template. It's present here for testing purposes (TODO list purposes)
         issue_template: ["schedule-generated-issue-template1.yml", "schedule-generated-issue-template2.yml", "do-not-use", "do-not-use-2"]
-        # placeholder2: [1,2]
         exclude: 
           - issue_template: "do-not-use"
-          - issue_template: "do-not-use-2"
-          - issue_template: "schedule-generated-issue-template2.yml"
     steps:
       
       - name: Check out repository
@@ -67,33 +65,26 @@ jobs:
           
           if [[ "${{ matrix.issue_template }}" == "do-not-use" ]]
           then
-            echo "For now (11-15-2025), the 'do-not-use' matrix template option should just fail if it's encountered. Failing this job."
+            echo "The 'do-not-use' matrix template option should just fail if it's encountered. You shouldn't ever even see this message. Failing this job."
             exit 1
           fi
+           
+          echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
+          echo "This step should get the issue template from above, and write its contents to the env variable TEMPLATE"
+          template_text=$(cat .github/ISSUE_TEMPLATE/$ISS_TEMP)
           
-          if [[ "$GITHUB_EVENT_NAME"  == "workflow_dispatch" && "${{ matrix.issue_template }}" == "do-not-use-2" ]]
-          then
-            echo "This job uses 'do-not-use-2' as a value for matrix.issue_template (${{ matrix.issue_template }}). This doesn't point to a valid template."
-            echo "This shouldn't be activated when fired off by a schedule."
-            template_text="do-not-use-2"
-            echo "TEMPLATE=$template_text" >> $GITHUB_ENV
-          else  
-            echo "This issue template (ISS_TEMP) for this job is $ISS_TEMP."
-            echo "This step should get the issue template from above, and write its contents to env"
-            template_text=$(cat .github/ISSUE_TEMPLATE/$ISS_TEMP)
-            
-            # In Bash, curly braces group a list of commands. << indicates a here-doc, which is used to redirect input
-            # Everything after <<EOF is considered input until the next EOF is reached. EOF here is a placeholder term--you could use DOG, PACMAN, or some other word.
-            # EOF is considered a delimiter. In our case we want the whole of the template to be written to the env var TEMPLATE
-            # So we should use a delimiter that WON'T be present in the template--"EOF" isn't present in either of files in martix.issue_template
-            # Github Actions will recognize << as you trying to assign whatever-named variable that is left of << (in our case, TEMPLATE) to a multiline value
-            # Thus TEMPLATE takes all of the template text, and we write TEMPLATE to GITHUB_ENV via the standard '>> $GITHUB_ENV' syntax
-            {
-              echo "TEMPLATE<<EOF"            
-              echo "${template_text}"
-              echo "EOF"
-              } >> $GITHUB_ENV
-          fi
+          # In Bash, curly braces group a list of commands. << indicates a here-doc, which is used to redirect input
+          # Everything after <<EOF is considered input until the next EOF is reached. EOF here is a placeholder term--you could use DOG, PACMAN, or some other word.
+          # EOF is considered a delimiter. In our case we want the whole of the template to be written to the env var TEMPLATE
+          # So we should use a delimiter that WON'T be present in the template--"EOF" isn't present in either of files in martix.issue_template
+          # Github Actions will recognize << as you trying to assign whatever-named variable that is left of << (in our case, TEMPLATE) to a multiline value
+          # Thus TEMPLATE takes all of the template text, and we write TEMPLATE to GITHUB_ENV via the standard '>> $GITHUB_ENV' syntax
+          {
+            echo "TEMPLATE<<EOF"            
+            echo "${template_text}"
+            echo "EOF"
+          } >> $GITHUB_ENV
+          
               
 
       - name: Create Issue Using Template
