@@ -109,7 +109,8 @@ jobs:
             echo "${first_line} !!!"
           fi
             
-          # Template extraction
+          # Template extraction: 
+          # TODO: Configure these more so you can reliably make an issue from a template.
           
           # (?<=type:).* = Use positive lookbehind to match a pattern ONLY if it is preceded by another pattern. So we want everything (.*) after "type"
           # -m1 = first match, -P = enable Perl-regex, -o = only return what the regex matches, not the whole line
