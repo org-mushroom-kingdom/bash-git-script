@@ -5,4 +5,4 @@ TODO: Gee I dunno, fill this out?
 | Name | Description | Shows examples of | 
 |---|---|---|
 | TODO | TODO | TODO |
-| ```schedule-w-matrix.yml``` | Creates two different issues using a template on a scheduled time. | ```on: schedule``` event trigger <br> ```boolean``` input <br> use of ```matrix``` <br> Setting an environmental variable to a multiline string |
+| ```schedule-w-matrix.yml``` | Creates two different issues using a template on a scheduled time. | ```on: schedule``` event trigger <br> ```boolean``` input <br> use of ```matrix``` <br> Setting an environmental variable to a multiline string <br> writing a variable to GITHUB_ENV to use in later steps |
