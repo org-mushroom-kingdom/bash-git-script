@@ -1,6 +1,6 @@
 # bash-git-script
 
-A repo for testing various Bash and Github related things, often tied together. This repo also tests Github Actions.
+A repo for testing various Bash and Github related things, often tied together. This repo also tests Github Actions. :)
 
 # Background Info: Organization and Teams
 
