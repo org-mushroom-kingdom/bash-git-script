@@ -1,0 +1,35 @@
+# Informative: Example of a caller workflow calling a reusable workflow located in a different repo 
+
+# TODO: Use github.event.schedule to get the precise cron expression that triggered the workflow
+name: Example Caller Workflow 1 (Print msg via calling another repo's workflow)
+
+on:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+        defined_var: 
+            description: "Variable you want to be in the resulting string"
+            required: false
+            type: string
+
+jobs:
+  # Call reusable-workflow-1-print-msg from mcummings128/reusable-workflow-github-actions repo.
+  call-reusable-workflow-1:
+    runs-on: ubuntu-latest
+    # ???
+    # permissions:
+      # issues: write
+      # pull-requests: write
+      # contents: write # ??? For issue template stuff. See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
+    # env:
+      # TEMPLATE_USED: ${{ github.event.schedule }}
+      # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Call mcummings128/reusable-workflow-1... workflow
+        uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-1-print-msg.yml@a0ac798420e899465ccf75d80cb6625f106f2726
