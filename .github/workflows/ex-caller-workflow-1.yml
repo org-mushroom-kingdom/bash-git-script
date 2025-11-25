@@ -18,7 +18,7 @@ jobs:
   call-reusable-workflow-1:
     # runs-on: ubuntu-latest
     # name: Call mcummings128/reusable-workflow-1... workflow
-    uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-1-print-msg.yml
+    uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-1-print-msg.yml@a0ac798420e899465ccf75d80cb6625f106f2726
     # ???
     # permissions:
         # issues: write
