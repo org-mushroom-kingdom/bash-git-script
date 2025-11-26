@@ -17,13 +17,12 @@ jobs:
   # Call reusable-workflow-1-print-msg from mcummings128/reusable-workflow-github-actions repo.
   call-reusable-workflow-1:
     # runs-on: ubuntu-latest
-    # name: Call mcummings128/reusable-workflow-1... workflow
+    name: Call mcummings128/reusable-workflow-1... workflow
+    # NOTICE that when you call this manually, it will say the event was workflow_dispatch. Remember the workflow being called (see next line)
+    # is located in another repo, so it might be surprising this isn't workflow_call. This is because (see next line)
+    # The 'github' context will always reference the caller workflow's repository (this workflow is the caller workflow, and we call the workflow below (see next line)
+    # manually via workflow_dispatch, which is why you see that as the listed event
     uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-1-print-msg.yml@a0ac798420e899465ccf75d80cb6625f106f2726
     # ???
     # permissions:
-        # issues: write
-        # pull-requests: write
-        # contents: write # ??? For issue template stuff. See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
-        # env:
-            # TEMPLATE_USED: ${{ github.event.schedule }}
-            # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
