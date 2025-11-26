@@ -17,6 +17,9 @@ on:
               - team-luigi
               - team-peach
               - team-toad
+env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
@@ -30,7 +33,6 @@ jobs:
     # uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@a0ac798420e899465ccf75d80cb6625f106f2726
     # ???
     # permissions:
-    # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
         - name: Echo relevant vars
           run: echo "team_slug = ${{ inputs.team_slug }}"
