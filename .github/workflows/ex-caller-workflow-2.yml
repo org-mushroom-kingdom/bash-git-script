@@ -26,7 +26,7 @@ jobs:
   call-reusable-workflow-2:
     name: Call mcummings128/reusable-workflow-2... workflow
     # TODO: TOKEN STUFF EXPLAIN
-    uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@2a3004c1003ad1520a1d46019948340cc6875785
+    uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@b5d6356cf11ff36562b404cb8c98c4e79ee0911a
     with: 
         team_name: "${{ inputs.team_slug }}"
         token: "$TEAMS_READ_TOKEN"
