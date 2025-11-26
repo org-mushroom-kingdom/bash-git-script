@@ -19,9 +19,9 @@ on:
               - team-toad
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    TEAMS_READ_TOKEN: ${{ secrets.TEAMS_READ_ACCESS }}
 
-permissions:
-    members: read
+
 
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
@@ -42,5 +42,6 @@ jobs:
             gh api \
                 -H "Accept: application/vnd.github+json" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
+                -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
                 /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members
             echo "something"
