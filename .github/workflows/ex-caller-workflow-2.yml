@@ -40,6 +40,6 @@ jobs:
           run: echo "team_slug = ${{ inputs.team_slug }}"
         - name: Get team members
           run: |
-            mapfile -t team_members < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members | jq -r '.[].login)
-            # gh api \-H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members | jq -r '.[].login
+            mapfile -t team_members < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members | jq -r '.[].login')
+            # gh api \-H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members | jq -r '.[].login')
             # echo "something"
