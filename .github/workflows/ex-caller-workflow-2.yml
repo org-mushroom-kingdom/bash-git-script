@@ -34,14 +34,12 @@ jobs:
     # manually via workflow_dispatch, which is why you see that as the listed event
     # uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@a0ac798420e899465ccf75d80cb6625f106f2726
     # ???
+    #   mapfile -t team_names < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN" orgs/$ORG/teams | jq -r '.[].slug')
     steps:
         - name: Echo relevant vars
           run: echo "team_slug = ${{ inputs.team_slug }}"
         - name: Get team members
           run: |
-            gh api \
-                -H "Accept: application/vnd.github+json" \
-                -H "X-GitHub-Api-Version: 2022-11-28" \
-                -H "Authorization: Bearer $TEAMS_READ_TOKEN" \
-                /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members
-            echo "something"
+            mapfile -t team_members < <(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members | jq -r '.[].login)
+            # gh api \-H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $TEAMS_READ_TOKEN"  /orgs/org-mushroom-kingdom/teams/${{ inputs.team_slug }}/members | jq -r '.[].login
+            # echo "something"
