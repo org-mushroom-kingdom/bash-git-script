@@ -20,6 +20,8 @@ on:
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+permissions:
+    members: read
 
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
@@ -32,7 +34,6 @@ jobs:
     # manually via workflow_dispatch, which is why you see that as the listed event
     # uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@a0ac798420e899465ccf75d80cb6625f106f2726
     # ???
-    # permissions:
     steps:
         - name: Echo relevant vars
           run: echo "team_slug = ${{ inputs.team_slug }}"
