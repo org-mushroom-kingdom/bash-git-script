@@ -1,4 +1,4 @@
-# Informative: Example #2 of a caller workflow calling a reusable workflow located in a different repo 
+# Informative: Example #2 of a caller workflow calling a reusable workflow located in a different repo (Gets the team members of a given team)
 
 
 name: Example Caller Workflow 2 (Get users from a team)
