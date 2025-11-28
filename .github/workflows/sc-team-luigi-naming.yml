@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       
+      # If running manually, override source branch name with input used  
       - name: "Manual run: Use fb_name input"
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: echo "SOURCE_BRANCH=${{ github.event.inputs.fb_name }}" >> $GITHUB_ENV
@@ -45,4 +46,12 @@ jobs:
       - name: Echo relevant vars
         run: |
           echo "Source branch: $SOURCE_BRANCH"
-        #   if ${{  }}
+        
+      - name: Assess source branch naming conventions
+        run: |
+            if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
+            then
+                echo "HOORAY"
+            else
+                echo "NAY"
+            fi
