@@ -54,7 +54,7 @@ jobs:
         run: |
             if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
             then
-                echo "$GREEN HOORAY $DONE"
+                echo -e "$GREEN HOORAY $DONE"
             else
-                echo "$RED NAY $DONE"
+                echo -e "$RED NAY $DONE"
             fi
