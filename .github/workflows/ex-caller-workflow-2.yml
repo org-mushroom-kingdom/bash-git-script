@@ -1,4 +1,6 @@
 # Informative: Example #2 of a caller workflow calling a reusable workflow located in a different repo (Gets the team members of a given team)
+# Basically you leverage the reusable workflow's code, more or less. The code gets called within the context of the caller workflow's repo
+# In this case, we give a team_slug and a token in order to make an API call and use the results of that call to print individual usernames for a team.   
 
 
 name: Example Caller Workflow 2 (Get users from a team)
@@ -18,14 +20,13 @@ on:
               - team-peach
               - team-toad
 env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    TEAMS_READ_TOKEN: ${{ secrets.TEAMS_READ_ACCESS }}
+  # This token gets passed to the reusable workflow. It has org:read access, needed for the API call in the reusable workflow
+  TEAMS_READ_TOKEN: ${{ secrets.TEAMS_READ_ACCESS }}
 
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
   call-reusable-workflow-2:
     name: Call mcummings128/reusable-workflow-2... workflow
-    # TODO: TOKEN STUFF EXPLAIN
     uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@1baa928aa8ffd84ad367d1a6acd11542f269d63e
     secrets:
         teams_read_token: ${{ secrets. TEAMS_READ_ACCESS }}
