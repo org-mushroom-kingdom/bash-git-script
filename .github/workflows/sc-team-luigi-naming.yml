@@ -40,9 +40,9 @@ jobs:
       
       - name: "Manual run: Use fb_name input"
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: echo "Hello"
+        run: echo "SOURCE_BRANCH=${{ inputs.fb_name }}"
       
-      - name: Check crap TODO
+      - name: Echo relevant vars
         run: |
-          echo "Source branch: ${{ github.head_ref }}"
+          echo "Source branch: $SOURCE_BRANCH"
         #   if ${{  }}
