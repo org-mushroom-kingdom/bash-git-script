@@ -54,7 +54,7 @@ jobs:
         run: |
             if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
             then
-                echo -e "$GREEN The source branch '$SOURCE_BRANCH' matches the required naming convention $DONE"
+                echo -e "$GREEN Success: The source branch '$SOURCE_BRANCH' matches the required naming convention $DONE"
                 exit 0
             else
                 echo -e "$RED ERROR! The source branch '$SOURCE_BRANCH' does NOT match the required naming convention $DONE"
