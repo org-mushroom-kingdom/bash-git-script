@@ -30,9 +30,9 @@ on:
 env:
     # This token gets passed to the reusable workflow. It has org:read access, needed for the API call in the reusable workflow
     SOURCE_BRANCH: ${{ github.head_ref }}
-    GREEN: '\\033[1;32m'
-    RED: '\\033[1;31m'
-    DONE: '\\033[0m' 
+    GREEN: '\033[1;32m'
+    RED: '\033[1;31m'
+    DONE: '\033[0m' 
 
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
