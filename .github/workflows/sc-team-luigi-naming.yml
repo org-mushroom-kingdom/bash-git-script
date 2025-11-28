@@ -1,0 +1,48 @@
+# Business: Example of using a workflow as a status check for a branch protection rule
+# This particular status check applies to the team-luigi-rules ruleset, which requires all status checks to pass
+# A status check in this context can be considered passing if the exit code returned is 0
+# The check: For any PR whose target branch contains "team-luigi" (ex. team-luigi/v1.0) , the source branch must begin with "feature/team-luigi"
+
+name: Team Luigi Status Check
+
+on:
+
+  pull_request:
+    branches:
+      # This means anything that begins with team-luigi. So it'll apply to any future team-luigi branches ex. team-luigi/v1.1
+      - 'team-luigi/*'
+    # types: [opened]
+
+  # Allows manual runs--you can use a fake branch name
+  workflow_dispatch:
+    inputs:
+        fb_name: 
+            description: "Feature branch name"
+            required: false
+            type: choice
+            options:
+              # This should pass
+              - feature/team-luigi/refine-some-file
+              # This should fail
+              - feature/wrong-formatted
+
+# TODO: Probs trash
+env:
+  # This token gets passed to the reusable workflow. It has org:read access, needed for the API call in the reusable workflow
+  SOURCE_BRANCH: ${{ github.head_ref }}
+
+jobs:
+  # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
+  check-naming-convention:
+    name: Check source branch naming convention
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: "Manual run: Use fb_name input"
+        if: ${{ github.event == 'workflow_dispatch' }}
+        run: echo "Hello"
+      
+      - name: Check crap TODO
+        run: |
+          echo "Source branch: ${{ github.head_ref }}"
+          if ${{  }}
