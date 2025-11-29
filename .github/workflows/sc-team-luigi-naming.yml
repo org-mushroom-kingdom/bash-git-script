@@ -52,7 +52,7 @@ jobs:
       - name: "Manual run: Use pr_manual and pr_number_manual"
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-            if [[ "${{github.event.inputs.pr_manual}}" =~ \d{2} ]]' then 
+            if [[ "${{github.event.inputs.pr_manual}}" =~ \d{2} ]]; then 
                 pr_man_name=${BASH_REMATCH[1]}  
             fi
             # pr_man_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d " " -f 1)
