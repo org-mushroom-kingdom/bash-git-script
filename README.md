@@ -1,6 +1,6 @@
 # bash-git-script
 
-feature/wrong-lui-formatted: Dummy edit on README.
+feature/wrong-lui-formatted: Dummy edit on README..
 
 A repo for testing various Bash and Github related things, often tied together. This repo also tests Github Actions. :)
 
