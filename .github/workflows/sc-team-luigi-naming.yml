@@ -88,6 +88,6 @@ jobs:
                 exit 1
             fi
         
-        # - name: "Failure: Comment on PR"
-        #   if: failure()
-        #   run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
+        - name: "Failure: Comment on PR"
+          if: failure()
+          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
