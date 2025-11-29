@@ -48,8 +48,10 @@ jobs:
         pull-requests: write
     
     steps:
-  
-      # If running manually, override source branch name with input used  
+
+        - uses: actions/checkout@v4
+
+        # If running manually, override source branch name with input used  
         - name: "Manual run: Use inputs for spoofed PR fb name, PR num, team-luigi branch name"
           if: ${{ github.event_name == 'workflow_dispatch' }}
           run: |
