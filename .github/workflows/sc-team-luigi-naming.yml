@@ -58,7 +58,7 @@ jobs:
             echo "SOURCE_BRANCH=$pr_man_src_name" >> $GITHUB_ENV
             
             # This captures a 2 digit string between parentheses using regex capturing (basically, if string matches regex, able to access matching strings via the BASH_REMATCH array)
-            # Use [[:digit:]] (ERE/POSIX-based) here since Bash doesn't like to support /d (PCRE).  
+            # Use [[:digit:]] as shorthand (ERE/POSIX-based) here since Bash doesn't like to support /d shorthand (PCRE).  
             if [[ "${{github.event.inputs.pr_manual}}" =~ [[:digit:]]{2} ]]; then 
                 pr_man_number=${BASH_REMATCH[0]}  
             fi
