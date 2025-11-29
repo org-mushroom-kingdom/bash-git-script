@@ -29,9 +29,10 @@ on:
 
 
 env:
-    # This token gets passed to the reusable workflow. It has org:read access, needed for the API call in the reusable workflow
-    SOURCE_BRANCH: ${{ github.head_ref }}
     PR_NUMBER: ${{ github.event.number }}
+    SOURCE_BRANCH: ${{ github.head_ref }}
+    TARGET_BRANCH: ${{ github.base_ref }}
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     GREEN: '\033[1;32m'
     RED: '\033[1;31m'
     DONE: '\033[0m' 
@@ -64,14 +65,15 @@ jobs:
             fi
             echo "Setting env PR_NUMBER to ${pr_man_number}"
             echo "PR_NUMBER=$pr_man_number" >> $GITHUB_ENV
+            echo "Setting env TARGET_BRANCH to team-luigi/v1.0"
+            echo "TARGET_BRANCH=team-luigi/v1.0" >> $GITHUB_ENV
+
       
         - name: Echo relevant vars
           run: |
             echo "Source branch: $SOURCE_BRANCH"
             echo "PR Number: $PR_NUMBER"
             # echo "Source branch: $SOURCE_BRANCH"
-            echo "[ERROR] Temp early exit"
-            exit 1
         
         - name: Assess source branch naming conventions
           run: |
