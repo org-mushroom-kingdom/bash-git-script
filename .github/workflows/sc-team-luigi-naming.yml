@@ -23,7 +23,7 @@ on:
             options:
                 # TODO: Make these real pull requests
                 # This should pass.
-                - feature/team-luigi/refine-some-file (#TODO1)
+                - feature/team-luigi/refine-some-file (#44)
                 # This should fail
                 - feature/ex-team-luigi-wrong-formatted (#TODO2)
 
