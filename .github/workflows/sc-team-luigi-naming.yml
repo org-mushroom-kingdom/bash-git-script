@@ -50,9 +50,9 @@ jobs:
     steps:
   
       # If running manually, override source branch name with input used  
-      - name: "Manual run: Use inputs for spoofed PR fb name, PR num, team-luigi branch name"
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
+        - name: "Manual run: Use inputs for spoofed PR fb name, PR num, team-luigi branch name"
+          if: ${{ github.event_name == 'workflow_dispatch' }}
+          run: |
             # Use [[:digit:]] (ERE/POSIX-based) here since Bash doesn't like to support /d (PCRE).  
             if [[ "${{github.event.inputs.pr_manual}}" =~ [[:digit:]]{2} ]]; then 
                 pr_man_number=${BASH_REMATCH[0]}  
@@ -61,19 +61,18 @@ jobs:
             echo "PR_NUMBER=$pr_man_number" >> $GITHUB_ENV
             pr_man_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d " " -f 1)
             echo "Setting env SOURCE_BRANCH to ${pr_man_name}"
-            echo "SOURCE_BRANCGE=$pr_man_name" >> $GITHUB_ENV
-            
-            # echo "SOURCE_BRANCH=${{ github.event.inputs.pr_manual }}" >> $GITHUB_ENV
+            echo "SOURCE_BRANCH=$pr_man_name" >> $GITHUB_ENV
+      
+        - name: Echo relevant vars
+          run: |
+            echo "Source branch: $SOURCE_BRANCH"
+            echo "PR Number: $PR_NUMBER"
+            # echo "Source branch: $SOURCE_BRANCH"
             echo "[ERROR] Temp early exit"
             exit 1
-      - name: Echo relevant vars
-        run: |
-          echo "Source branch: $SOURCE_BRANCH"
-          echo "Source branch: $SOURCE_BRANCH"
-          echo "PR Number: $SOURCE_BRANCH"
         
-      - name: Assess source branch naming conventions
-        run: |
+        - name: Assess source branch naming conventions
+          run: |
             # Use the resulting status code to mark the status check as passed (0) or failed (1)
             # Combining this with the 'Required status checks must pass' will NOT allow the PR to merge if failed
             if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
@@ -85,6 +84,6 @@ jobs:
                 exit 1
             fi
         
-      - name: "Failure: Comment on PR"
-        if: failure()
-        run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
+        - name: "Failure: Comment on PR"
+          if: failure()
+          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
