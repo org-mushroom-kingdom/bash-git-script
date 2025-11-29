@@ -22,7 +22,7 @@ on:
             options:
                 # TODO: Make these real pull requests then update this comment about those PRs being dummy so manual tests work
                 # This should pass. # TODO: GET ACTUAL PR NUMBER
-                - feature/team-luigi/refine-some-file (#44)
+                - feature/team-luigi/refine-some-file (#91)
                 # This should fail # TODO: GET ACTUAL PR NUMBER
                 - feature/wrong-lui-formatted (#90)
 
