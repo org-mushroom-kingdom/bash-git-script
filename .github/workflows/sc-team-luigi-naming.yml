@@ -9,9 +9,8 @@ on:
 
   pull_request:
     branches:
-      # This means anything that begins with team-luigi. So it'll apply to any future team-luigi branches ex. team-luigi/v1.1
+      # This means anything target branch that begins with team-luigi. So it'll apply to any future team-luigi branches ex. team-luigi/v1.1
       - 'team-luigi/*'
-    # types: [opened]
 
   # Allows manual runs--you can use a pre-determined fake branch name here.
   workflow_dispatch:
@@ -21,11 +20,11 @@ on:
             required: false
             type: choice
             options:
-                # TODO: Make these real pull requests
-                # This should pass.
+                # TODO: Make these real pull requests then update this comment about those PRs being dummy so manual tests work
+                # This should pass. # TODO: GET ACTUAL PR NUMBER
                 - feature/team-luigi/refine-some-file (#44)
-                # This should fail
-                - feature/ex-team-luigi-wrong-formatted (#TODO2)
+                # This should fail # TODO: GET ACTUAL PR NUMBER
+                - feature/ex-team-luigi-wrong-formatted (#64)
 
 
 env:
@@ -65,6 +64,7 @@ jobs:
             fi
             echo "Setting env PR_NUMBER to ${pr_man_number}"
             echo "PR_NUMBER=$pr_man_number" >> $GITHUB_ENV
+            
             echo "Setting env TARGET_BRANCH to team-luigi/v1.0"
             echo "TARGET_BRANCH=team-luigi/v1.0" >> $GITHUB_ENV
 
