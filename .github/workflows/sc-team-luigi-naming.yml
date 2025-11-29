@@ -53,15 +53,17 @@ jobs:
         - name: "Manual run: Use inputs for spoofed PR fb name, PR num, team-luigi branch name"
           if: ${{ github.event_name == 'workflow_dispatch' }}
           run: |
+            pr_man_src_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d " " -f 1)
+            echo "Setting env SOURCE_BRANCH to ${pr_man_src_name}"
+            echo "SOURCE_BRANCH=$pr_man_src_name" >> $GITHUB_ENV
+            
+            # This captures a 2 digit string between parentheses using regex capturing (basically, if string matches regex, able to access matching strings via the BASH_REMATCH array)
             # Use [[:digit:]] (ERE/POSIX-based) here since Bash doesn't like to support /d (PCRE).  
             if [[ "${{github.event.inputs.pr_manual}}" =~ [[:digit:]]{2} ]]; then 
                 pr_man_number=${BASH_REMATCH[0]}  
             fi
             echo "Setting env PR_NUMBER to ${pr_man_number}"
             echo "PR_NUMBER=$pr_man_number" >> $GITHUB_ENV
-            pr_man_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d " " -f 1)
-            echo "Setting env SOURCE_BRANCH to ${pr_man_name}"
-            echo "SOURCE_BRANCH=$pr_man_name" >> $GITHUB_ENV
       
         - name: Echo relevant vars
           run: |
@@ -84,6 +86,6 @@ jobs:
                 exit 1
             fi
         
-        - name: "Failure: Comment on PR"
-          if: failure()
-          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
+        # - name: "Failure: Comment on PR"
+        #   if: failure()
+        #   run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
