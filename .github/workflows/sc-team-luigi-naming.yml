@@ -31,6 +31,7 @@ on:
 env:
     # This token gets passed to the reusable workflow. It has org:read access, needed for the API call in the reusable workflow
     SOURCE_BRANCH: ${{ github.head_ref }}
+    PR_NUMBER: ${{ github.event.number }}
     GREEN: '\033[1;32m'
     RED: '\033[1;31m'
     DONE: '\033[0m' 
@@ -49,15 +50,19 @@ jobs:
     steps:
   
       # If running manually, override source branch name with input used  
-      - name: "Manual run: Use pr_manual and pr_number_manual"
+      - name: "Manual run: Use inputs for spoofed PR fb name, PR num, team-luigi branch name"
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
             # Use [[:digit:]] (ERE/POSIX-based) here since Bash doesn't like to support /d (PCRE).  
             if [[ "${{github.event.inputs.pr_manual}}" =~ [[:digit:]]{2} ]]; then 
-                pr_man_name=${BASH_REMATCH[0]}  
+                pr_man_number=${BASH_REMATCH[0]}  
             fi
-            # pr_man_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d " " -f 1)
-            echo "pr_man_name = ${pr_man_name}"
+            echo "Setting env PR_NUMBER to ${pr_man_number}"
+            echo "PR_NUMBER=$pr_man_number" >> $GITHUB_ENV
+            pr_man_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d " " -f 1)
+            echo "Setting env SOURCE_BRANCH to ${pr_man_name}"
+            echo "SOURCE_BRANCGE=$pr_man_name" >> $GITHUB_ENV
+            
             # echo "SOURCE_BRANCH=${{ github.event.inputs.pr_manual }}" >> $GITHUB_ENV
             echo "[ERROR] Temp early exit"
             exit 1
@@ -65,7 +70,7 @@ jobs:
         run: |
           echo "Source branch: $SOURCE_BRANCH"
           echo "Source branch: $SOURCE_BRANCH"
-          echo "Source branch: $SOURCE_BRANCH"
+          echo "PR Number: $SOURCE_BRANCH"
         
       - name: Assess source branch naming conventions
         run: |
@@ -82,4 +87,4 @@ jobs:
         
       - name: "Failure: Comment on PR"
         if: failure()
-        run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }}"
+        run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
