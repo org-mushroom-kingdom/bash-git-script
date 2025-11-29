@@ -9,40 +9,87 @@ on:
 
   pull_request:
     branches:
-      # This means anything that begins with team-luigi. So it'll apply to any future team-luigi branches ex. team-luigi/v1.1
+      # This means anything target branch that begins with team-luigi. So it'll apply to any future team-luigi branches ex. team-luigi/v1.1
       - 'team-luigi/*'
-    # types: [opened]
 
-  # Allows manual runs--you can use a fake branch name
+  # Allows manual runs--you can use a pre-determined fake branch name here.
   workflow_dispatch:
     inputs:
-        fb_name: 
+        pr_manual: 
             description: "Feature branch name"
             required: false
             type: choice
             options:
-              # This should pass
-              - feature/team-luigi/refine-some-file
-              # This should fail
-              - feature/wrong-formatted
+                # TODO: Make these real pull requests then update this comment about those PRs being dummy so manual tests work
+                # This should pass. # TODO: GET ACTUAL PR NUMBER
+                - feature/team-luigi/refine-some-file (#44)
+                # This should fail # TODO: GET ACTUAL PR NUMBER
+                - feature/wrong-lui-formatted (#90)
 
-# TODO: Probs trash
+
 env:
-  # This token gets passed to the reusable workflow. It has org:read access, needed for the API call in the reusable workflow
-  SOURCE_BRANCH: ${{ github.head_ref }}
+    PR_NUMBER: ${{ github.event.number }}
+    SOURCE_BRANCH: ${{ github.head_ref }}
+    TARGET_BRANCH: ${{ github.base_ref }}
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    GREEN: '\033[1;32m'
+    RED: '\033[1;31m'
+    DONE: '\033[0m' 
 
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
   check-naming-convention:
+    
     name: Check source branch naming convention
+    
     runs-on: ubuntu-latest
+    
+    permissions:
+        pull-requests: write
+    
     steps:
+
+        - uses: actions/checkout@v4
+
+        # If running manually, override source branch name with input used  
+        - name: "Manual run: Use inputs for spoofed PR fb name, PR num, team-luigi branch name"
+          if: ${{ github.event_name == 'workflow_dispatch' }}
+          run: |
+            pr_man_src_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d " " -f 1)
+            echo "Setting env SOURCE_BRANCH to ${pr_man_src_name}"
+            echo "SOURCE_BRANCH=$pr_man_src_name" >> $GITHUB_ENV
+            
+            # This captures a 2 digit string between parentheses using regex capturing (basically, if string matches regex, able to access matching strings via the BASH_REMATCH array)
+            # Use [[:digit:]] as shorthand (ERE/POSIX-based) here since Bash doesn't like to support /d shorthand (PCRE).  
+            if [[ "${{github.event.inputs.pr_manual}}" =~ [[:digit:]]{2} ]]; then 
+                pr_man_number=${BASH_REMATCH[0]}  
+            fi
+            echo "Setting env PR_NUMBER to ${pr_man_number}"
+            echo "PR_NUMBER=$pr_man_number" >> $GITHUB_ENV
+            
+            echo "Setting env TARGET_BRANCH to team-luigi/v1.0"
+            echo "TARGET_BRANCH=team-luigi/v1.0" >> $GITHUB_ENV
+
       
-      - name: "Manual run: Use fb_name input"
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: echo "Hello"
-      
-      - name: Check crap TODO
-        run: |
-          echo "Source branch: ${{ github.head_ref }}"
-        #   if ${{  }}
+        - name: Echo relevant vars
+          run: |
+            echo "PR Number: $PR_NUMBER"
+            echo "Source branch: $SOURCE_BRANCH"
+            echo "Target branch: $TARGET_BRANCH"
+        
+        - name: Assess source branch naming conventions
+          run: |
+            # Use the resulting status code to mark the status check as passed (0) or failed (1)
+            # Combining this with the 'Required status checks must pass' will NOT allow the PR to merge if failed
+            if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
+            then
+                echo -e "$GREEN Success: The source branch '$SOURCE_BRANCH' matches the required naming convention $DONE"
+                exit 0
+            else
+                echo -e "$RED ERROR! The source branch '$SOURCE_BRANCH' does NOT match the required naming convention $DONE"
+                exit 1
+            fi
+        
+        - name: "Failure: Comment on PR"
+          if: failure()
+          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
