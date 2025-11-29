@@ -24,7 +24,7 @@ on:
                 # This should pass. # TODO: GET ACTUAL PR NUMBER
                 - feature/team-luigi/refine-some-file (#44)
                 # This should fail # TODO: GET ACTUAL PR NUMBER
-                - feature/ex-team-luigi-wrong-formatted (#64)
+                - feature/wrong-lui-formatted (#64)
 
 
 env:
