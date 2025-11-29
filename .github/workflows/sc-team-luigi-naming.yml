@@ -13,18 +13,19 @@ on:
       - 'team-luigi/*'
     # types: [opened]
 
-  # Allows manual runs--you can use a fake branch name
+  # Allows manual runs--you can use a pre-determined fake branch name here.
   workflow_dispatch:
     inputs:
-        fb_name: 
+        pr_manual: 
             description: "Feature branch name"
             required: false
             type: choice
             options:
-              # This should pass
-              - feature/team-luigi/refine-some-file
-              # This should fail
-              - feature/wrong-formatted
+                # TODO: Make these real pull requests
+                # This should pass.
+                - feature/team-luigi/refine-some-file (#TODO1)
+                # This should fail
+                - feature/ex-team-luigi-wrong-formatted (#TODO2)
 
 
 env:
@@ -37,17 +38,29 @@ env:
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
   check-naming-convention:
+    
     name: Check source branch naming convention
+    
     runs-on: ubuntu-latest
+    
+    permissions:
+        pull-requests: write
+    
     steps:
-      
+  
       # If running manually, override source branch name with input used  
-      - name: "Manual run: Use fb_name input"
+      - name: "Manual run: Use pr_manual and pr_number_manual"
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: echo "SOURCE_BRANCH=${{ github.event.inputs.fb_name }}" >> $GITHUB_ENV
-      
+        run: |
+            pr_man_name=$(echo "${{ github.event.inputs.pr_manual }}" | cut -d -f 1)
+            echo "pr_man_name = ${pr_man_name}"
+            # echo "SOURCE_BRANCH=${{ github.event.inputs.pr_manual }}" >> $GITHUB_ENV
+            echo "[ERROR] Temp early exit"
+            exit 1
       - name: Echo relevant vars
         run: |
+          echo "Source branch: $SOURCE_BRANCH"
+          echo "Source branch: $SOURCE_BRANCH"
           echo "Source branch: $SOURCE_BRANCH"
         
       - name: Assess source branch naming conventions
@@ -63,6 +76,6 @@ jobs:
                 exit 1
             fi
         
-      - name: Post-fail step
+      - name: "Failure: Comment on PR"
         if: failure()
-        run: echo "FAILED!"
+        run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }}"
