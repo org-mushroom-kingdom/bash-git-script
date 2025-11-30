@@ -37,7 +37,7 @@ env:
     DONE: '\033[0m' 
 
 jobs:
-  # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
+
   check-naming-convention:
     
     name: Check source branch naming convention
@@ -81,7 +81,7 @@ jobs:
           run: |
             # Use the resulting status code to mark the status check as passed (0) or failed (1)
             # Combining this with the 'Required status checks must pass' will NOT allow the PR to merge if failed
-            if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
+            if [[ "$SOURCE_BRANCH" == "feature/team-luigi/"* ]]
             then
                 echo -e "$GREEN Success: The source branch '$SOURCE_BRANCH' matches the required naming convention $DONE"
                 exit 0
@@ -92,4 +92,4 @@ jobs:
         
         - name: "Failure: Comment on PR"
           if: failure()
-          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
+          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name). Pull requests do not automatically update if your branch name is changed--you will have to open a new pull request with a properly-named branch."
