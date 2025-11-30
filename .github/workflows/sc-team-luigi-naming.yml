@@ -37,7 +37,7 @@ env:
     DONE: '\033[0m' 
 
 jobs:
-  # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
+
   check-naming-convention:
     
     name: Check source branch naming convention
