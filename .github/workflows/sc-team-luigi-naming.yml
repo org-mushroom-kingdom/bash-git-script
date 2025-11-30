@@ -79,7 +79,7 @@ jobs:
           run: |
             # Use the resulting status code to mark the status check as passed (0) or failed (1)
             # Combining this with the 'Required status checks must pass' will NOT allow the PR to merge if failed
-            if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
+            if [[ "$SOURCE_BRANCH" == "feature/team-luigi/"* ]]
             then
                 echo -e "$GREEN Success: The source branch '$SOURCE_BRANCH' matches the required naming convention $DONE"
                 exit 0
