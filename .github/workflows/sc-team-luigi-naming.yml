@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
         pr_manual: 
-            description: "Feature branch name"
+            description: "Feature (source) branch name"
             required: false
             type: choice
             options:
