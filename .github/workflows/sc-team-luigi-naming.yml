@@ -92,4 +92,4 @@ jobs:
         
         - name: "Failure: Comment on PR"
           if: failure()
-          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name). Pull requests do not automatically update if your branch name is changed--you will have to open a new pull request with a properly-named branch."
+          run: gh pr comment $PR_NUMBER -b "ERROR! The pull request cannot be merged. Branches being merged into $TARGET_BRANCH must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name). Pull requests do not automatically update if your branch name is changed--you will have to open a new pull request with a properly-named branch."
