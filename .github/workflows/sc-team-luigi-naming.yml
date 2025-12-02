@@ -12,19 +12,19 @@ on:
       # This means anything target branch that begins with team-luigi. So it'll apply to any future team-luigi branches ex. team-luigi/v1.1
       - 'team-luigi/*'
 
-  # Allows manual runs--you can use a pre-determined fake branch name here.
+  # Allows manual runs--you can use a pre-determined fake source branch name here.
   workflow_dispatch:
     inputs:
         pr_manual: 
-            description: "Feature branch name"
+            description: "Feature (source) branch name"
             required: false
             type: choice
             options:
-                # TODO: Make these real pull requests then update this comment about those PRs being dummy so manual tests work
-                # This should pass. # TODO: GET ACTUAL PR NUMBER
-                - feature/team-luigi/refine-some-file (#44)
-                # This should fail # TODO: GET ACTUAL PR NUMBER
-                - feature/wrong-lui-formatted (#64)
+                # Note: These numbers point to real pull requests, so go to that PR in the repo for more information
+                # This should pass. 
+                - feature/team-luigi/refine-some-file (#91)
+                # This should fail. 
+                - feature/wrong-lui-formatted (#90)
 
 
 env:
@@ -37,7 +37,7 @@ env:
     DONE: '\033[0m' 
 
 jobs:
-  # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
+
   check-naming-convention:
     
     name: Check source branch naming convention
@@ -51,7 +51,7 @@ jobs:
 
         - uses: actions/checkout@v4
 
-        # If running manually, override source branch name with input used  
+        # If running manually, override source branch name and PR with input used. Also overwrite target branch  
         - name: "Manual run: Use inputs for spoofed PR fb name, PR num, team-luigi branch name"
           if: ${{ github.event_name == 'workflow_dispatch' }}
           run: |
@@ -81,7 +81,7 @@ jobs:
           run: |
             # Use the resulting status code to mark the status check as passed (0) or failed (1)
             # Combining this with the 'Required status checks must pass' will NOT allow the PR to merge if failed
-            if [[ "$SOURCE_BRANCH" == "feature/team-luigi"* ]]
+            if [[ "$SOURCE_BRANCH" == "feature/team-luigi/"* ]]
             then
                 echo -e "$GREEN Success: The source branch '$SOURCE_BRANCH' matches the required naming convention $DONE"
                 exit 0
@@ -92,4 +92,4 @@ jobs:
         
         - name: "Failure: Comment on PR"
           if: failure()
-          run: gh pr comment ${{ github.event.number }} -b "ERROR! The pull request cannot be merged. Branches being merged into ${{ github.base_ref }} must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name)."
+          run: gh pr comment $PR_NUMBER -b "ERROR! The pull request cannot be merged. Branches being merged into $TARGET_BRANCH must have the format of 'feature/team-luigi/*' (where * is the rest of your feature branch name). Pull requests do not automatically update if your branch name is changed--you will have to open a new pull request with a properly-named branch."
