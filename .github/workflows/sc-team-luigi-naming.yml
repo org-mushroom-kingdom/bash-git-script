@@ -20,7 +20,7 @@ on:
             required: false
             type: choice
             options:
-                # Note: These numbers point to real pull requests, so go to that PR in the repo for more information
+                # Note: These numbers point to real pull requests, so go to that PR in the repo for more information (#90 is where all comments will go.)
                 # This should pass. 
                 - feature/team-luigi/refine-some-file (#91)
                 # This should fail. 
