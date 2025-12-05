@@ -12,7 +12,7 @@ on:
       # This means anything target branch that begins with team-luigi. So it'll apply to any future team-luigi branches ex. team-luigi/v1.1
       - 'team-luigi/*'
 
-  # Allows manual runs--you can use a pre-determined fake source branch name here.
+  # Allows manual runs--you can use a pre-determined source branch name here.
   workflow_dispatch:
     inputs:
         pr_manual: 
