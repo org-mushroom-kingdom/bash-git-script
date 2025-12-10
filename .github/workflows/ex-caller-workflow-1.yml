@@ -23,6 +23,3 @@ jobs:
     # The 'github' context will always reference the caller workflow's repository (this workflow is the caller workflow, and we call the workflow below (see next line)
     # manually via workflow_dispatch, which is why you see that as the listed event
     uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-1-print-msg.yml@a0ac798420e899465ccf75d80cb6625f106f2726
-    # ???
-    # permissions:
-        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
