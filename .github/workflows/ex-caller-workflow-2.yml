@@ -19,12 +19,10 @@ on:
               - team-luigi
               - team-peach
               - team-toad
-env:
-  # This token gets passed to the reusable workflow. It has org:read access, needed for the API call in the reusable workflow
-  TEAMS_READ_TOKEN: ${{ secrets.TEAMS_READ_ACCESS }}
 
 jobs:
   # Call reusable-workflow-2-teams from mcummings128/reusable-workflow-github-actions repo.
+  # The token that gets passed to the reusable workflow has org:read access, needed for the API call in the reusable workflow
   call-reusable-workflow-2:
     name: Call mcummings128/reusable-workflow-2... workflow
     uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@617df15168759ad1294e8e9bcba54156c684d5ee
