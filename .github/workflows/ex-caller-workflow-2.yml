@@ -25,7 +25,7 @@ jobs:
   # The token that gets passed to the reusable workflow has org:read access, needed for the API call in the reusable workflow
   call-reusable-workflow-2:
     name: Call mcummings128/reusable-workflow-2... workflow
-    uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@f4efbaebe82d4416f3e2e9eab126588c6c15b0b2
+    uses: mcummings128/reusable-workflow-github-actions/.github/workflows/reusable-workflow-2-teams.yml@c42e158ca67e4a2f8b1e9b917dd35323ec6def1f
     secrets:
         teams_read_token: ${{ secrets.TEAMS_READ_ACCESS }}
     with: 
